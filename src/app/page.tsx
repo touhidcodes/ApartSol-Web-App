@@ -4,9 +4,7 @@ const Homepage = () => {
   return (
     <div>
       <h2>Welcome to the Page page</h2>
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
+      <Button>Click Me</Button>
     </div>
   );
 };
