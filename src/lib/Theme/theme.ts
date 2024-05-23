@@ -35,4 +35,13 @@ export const theme = createTheme({
       },
     },
   },
+  typography: {
+    navItem: {
+      fontWeight: 700,
+      fontSize: "18px",
+      color: "#0B1134CC",
+    },
+  },
 });
+
+theme.shadows[1] = "0px 5px 22px lightgray";
