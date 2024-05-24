@@ -2,8 +2,8 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { FieldValues } from "react-hook-form";
-// import { userLogin } from "@/services/actions/userLogin";
-// import { storeUserInfo } from "@/services/auth.services";
+import { userLogin } from "@/services/actions/userLogin";
+import { storeUserInfo } from "@/services/auth.services";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PHForm from "@/components/Forms/PHForm";
@@ -22,19 +22,20 @@ const LoginPage = () => {
 
   const handleLogin = async (values: FieldValues) => {
     console.log(values);
-    // try {
-    //   const res = await userLogin(values);
-    //   if (res?.data?.accessToken) {
-    //     toast.success(res?.message);
-    //     storeUserInfo({ accessToken: res?.data?.accessToken });
-    //     // router.push("/dashboard");
-    //   } else {
-    //     setError(res.message);
-    //     // console.log(res);
-    //   }
-    // } catch (err: any) {
-    //   console.error(err.message);
-    // }
+    try {
+      const res = await userLogin(values);
+      console.log(res);
+      if (res?.data?.accessToken) {
+        toast.success(res?.message);
+        storeUserInfo({ accessToken: res?.data?.accessToken });
+        // router.push("/dashboard");
+      } else {
+        setError(res.message);
+        // console.log(res);
+      }
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   return (
