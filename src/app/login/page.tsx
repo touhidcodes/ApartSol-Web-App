@@ -13,7 +13,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
 export const validationSchema = z.object({
-  email: z.string().email("Please enter a valid email address!"),
+  identifier: z.string({
+    required_error: "Please enter a valid username or email address!",
+  }),
   password: z.string().min(6, "Must be at least 6 characters"),
 });
 
@@ -21,10 +23,8 @@ const LoginPage = () => {
   const [error, setError] = useState("");
 
   const handleLogin = async (values: FieldValues) => {
-    console.log(values);
     try {
       const res = await userLogin(values);
-      console.log(res);
       if (res?.data?.accessToken) {
         toast.success(res?.message);
         storeUserInfo({ accessToken: res?.data?.accessToken });
@@ -55,6 +55,7 @@ const LoginPage = () => {
             borderRadius: 1,
             p: 4,
             textAlign: "center",
+            background: "#FFF8F4",
           }}
         >
           <Stack
@@ -77,7 +78,14 @@ const LoginPage = () => {
               style={{ color: "#0B1134CC" }}
             >
               Still don&apos;t have an account?{" "}
-              <Link href="/register" className="text-[#ff793f] underline">
+              <Link
+                href="/register"
+                style={{
+                  color: "#ff793f",
+                  textDecoration: "underline",
+                  fontWeight: "500",
+                }}
+              >
                 Create an account
               </Link>
             </Typography>
@@ -97,28 +105,44 @@ const LoginPage = () => {
             </Box>
           )}
 
-          <Box m={6}>
+          <Box m={5}>
             <PHForm
               onSubmit={handleLogin}
               resolver={zodResolver(validationSchema)}
               defaultValues={{
-                email: "",
+                identifier: "",
                 password: "",
               }}
             >
               <Stack spacing={3} my={1}>
-                <PHInput
-                  name="email"
-                  label="Email"
-                  type="email"
-                  fullWidth={true}
-                />
-                <PHInput
-                  name="password"
-                  label="Password"
-                  type="password"
-                  fullWidth={true}
-                />
+                <Box
+                  fontWeight={400}
+                  style={{ color: "#0B1134CC", textAlign: "start" }}
+                >
+                  <Typography style={{ marginBottom: "10px" }}>
+                    Username or Email*
+                  </Typography>
+                  <PHInput
+                    name="identifier"
+                    label="Username or Email"
+                    type="text"
+                    fullWidth={true}
+                  />
+                </Box>
+                <Box
+                  fontWeight={400}
+                  style={{ color: "#0B1134CC", textAlign: "start" }}
+                >
+                  <Typography style={{ marginBottom: "10px" }}>
+                    Password*
+                  </Typography>
+                  <PHInput
+                    name="password"
+                    label="Password"
+                    type="password"
+                    fullWidth={true}
+                  />
+                </Box>
               </Stack>
 
               <Link href={"/forgot-password"}>

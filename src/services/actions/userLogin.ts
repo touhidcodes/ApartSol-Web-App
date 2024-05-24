@@ -6,7 +6,8 @@ import { setToLocalStorage } from "@/utils/local-storage";
 import { authKey } from "@/constants/authKey";
 
 export const userLogin = async (data: FieldValues) => {
-  const res = await fetch(`${process.env.LOCAL_URL}/login`, {
+  console.log(`${process.env.NEXT_PUBLIC_LOCAL_URL}/login`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -16,7 +17,6 @@ export const userLogin = async (data: FieldValues) => {
     // cache: "no-store",
   });
   const userInfo = await res.json();
-  console.log("user", userInfo);
 
   //   const passwordChangeRequired = userInfo.data.needPasswordChange;
 
