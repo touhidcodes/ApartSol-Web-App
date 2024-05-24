@@ -6,7 +6,7 @@ import { setToLocalStorage } from "@/utils/local-storage";
 import { authKey } from "@/constants/authKey";
 
 export const userLogin = async (data: FieldValues) => {
-  const res = await fetch(`http://localhost:5000/api/login`, {
+  const res = await fetch(`${process.env.LOCAL_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

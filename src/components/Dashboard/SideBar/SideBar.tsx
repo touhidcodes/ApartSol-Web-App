@@ -17,7 +17,7 @@ const SideBar = () => {
   }, []);
 
   return (
-    <Box>
+    <Box style={{ height: "100vh" }}>
       <Stack
         sx={{
           py: 1,
@@ -30,15 +30,16 @@ const SideBar = () => {
         component={Link}
         href="/"
       >
-        <Image src={assets.images.hero} width={40} height={40} alt="logo" />
+        <Image src={assets.images.logo} width={50} height={50} alt="logo" />
         <Typography
-          variant="h6"
+          variant="h5"
           component="h1"
           sx={{
             cursor: "pointer",
+            fontWeight: "600",
           }}
         >
-          PH Health Care
+          Flat Mate Finder
         </Typography>
       </Stack>
       <List>

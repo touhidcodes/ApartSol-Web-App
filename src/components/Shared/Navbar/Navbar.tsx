@@ -1,5 +1,7 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
+import assets from "@/assets/index";
 
 const Navbar = () => {
   return (
@@ -11,9 +13,19 @@ const Navbar = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="h4" component={Link} href="/" fontWeight={600}>
-            Flat Mate Finder
-          </Typography>
+          <Stack direction="row" alignItems="center">
+            <Image src={assets.images.logo} alt="logo" width={50} height={50} />
+
+            <Typography
+              variant="h4"
+              component={Link}
+              href="/"
+              fontWeight={600}
+              px={2}
+            >
+              Flat Mate Finder
+            </Typography>
+          </Stack>
 
           <Stack direction="row" justifyContent="space-between" gap={4}>
             <Typography variant="navItem">Home</Typography>

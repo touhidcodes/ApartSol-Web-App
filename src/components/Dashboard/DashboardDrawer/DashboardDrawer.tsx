@@ -11,11 +11,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import SideBar from "../SideBar/SideBar";
 import { Avatar, Badge, Stack } from "@mui/material";
+import assets from "@/assets";
 // import AccountMenu from "../AccountMenu/AccountMenu";
-// import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 // import { useGetSingleUserQuery } from "@/redux/api/userApi";
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 export default function DashboardDrawer({
   children,
@@ -44,16 +45,15 @@ export default function DashboardDrawer({
   // console.log(data);
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <Box sx={{ display: "flex", backgroundColor: "#FFF8F4", height: "100vh" }}>
+      {/* <CssBaseline /> */}
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          background: "#F4F7FE",
+          background: "#FFF8F4",
           boxShadow: 0,
-          borderBottom: "1px solid #ddd",
           py: 1,
         }}
       >
@@ -65,7 +65,7 @@ export default function DashboardDrawer({
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
-            <MenuIcon sx={{ color: "primary.main" }} />
+            <MenuIcon sx={{ color: "secondary.main" }} />
           </IconButton>
           <Box
             sx={{
@@ -88,18 +88,18 @@ export default function DashboardDrawer({
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ color: "primary.main" }}
+                sx={{ color: "secondary.main" }}
               >
-                Welcome to PH Health Care!
+                Welcome to Flat Mate Finder
               </Typography>
             </Box>
             <Stack direction="row" gap={3}>
               <Badge badgeContent={1} color="primary">
                 <IconButton sx={{ background: "#ffffff" }}>
-                  {/* <NotificationsNoneIcon color="action" /> */}
+                  <NotificationsNoneIcon color="action" />
                 </IconButton>
               </Badge>
-              {/* <Avatar alt={data?.name} src={data?.profilePhoto} /> */}
+              <Avatar alt={"name"} src={assets.images.logo} />
               {/* <AccountMenu /> */}
             </Stack>
           </Box>
@@ -152,7 +152,7 @@ export default function DashboardDrawer({
         }}
       >
         <Toolbar />
-        <Box>{children}</Box>
+        <Box style={{ backgroundColor: "#FFF8F4" }}>{children}</Box>
       </Box>
     </Box>
   );
