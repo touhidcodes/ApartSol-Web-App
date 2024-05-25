@@ -50,8 +50,8 @@ instance.interceptors.response.use(
       const response = await getNewAccessToken();
       const accessToken = response?.data?.accessToken;
       config.headers["Authorization"] = accessToken;
-      setToLocalStorage(authKey, accessToken);
-      setAccessToken(accessToken);
+      // setToLocalStorage(authKey, accessToken);
+      // setAccessToken(accessToken);
       return instance(config);
     } else {
       const responseObject: IGenericErrorResponse = {

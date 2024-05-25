@@ -5,12 +5,12 @@ import { FieldValues } from "react-hook-form";
 import { userLogin } from "@/services/actions/userLogin";
 import { storeUserInfo } from "@/services/auth.services";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const validationSchema = z.object({
   identifier: z.string({
@@ -21,14 +21,15 @@ export const validationSchema = z.object({
 
 const LoginPage = () => {
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleLogin = async (values: FieldValues) => {
     try {
       const res = await userLogin(values);
-      if (res?.data?.accessToken) {
+
+      if (res?.data?.token) {
         toast.success(res?.message);
-        storeUserInfo({ accessToken: res?.data?.accessToken });
-        // router.push("/dashboard");
+        router.push("/dashboard");
       } else {
         setError(res.message);
         // console.log(res);

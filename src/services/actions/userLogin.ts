@@ -6,7 +6,6 @@ import { setToLocalStorage } from "@/utils/local-storage";
 import { authKey } from "@/constants/authKey";
 
 export const userLogin = async (data: FieldValues) => {
-  console.log(`${process.env.NEXT_PUBLIC_LOCAL_URL}/login`);
   const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_URL}/login`, {
     method: "POST",
     headers: {
@@ -21,10 +20,10 @@ export const userLogin = async (data: FieldValues) => {
   //   const passwordChangeRequired = userInfo.data.needPasswordChange;
 
   if (userInfo.data.token) {
-    setAccessToken(userInfo.data.token, {
-      redirect: "/dashboard",
-      //   passwordChangeRequired,
-    });
+    // setAccessToken(userInfo.data.token, {
+    //   redirect: "/dashboard",
+    //   //   passwordChangeRequired,
+    // });
     setToLocalStorage(authKey, userInfo.data.token);
   }
 
