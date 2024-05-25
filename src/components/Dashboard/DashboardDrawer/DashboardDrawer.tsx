@@ -10,19 +10,17 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import SideBar from "../SideBar/SideBar";
-import { Avatar, Badge, Stack } from "@mui/material";
+import { Avatar, Badge, Button, Stack } from "@mui/material";
 import assets from "@/assets";
 // import AccountMenu from "../AccountMenu/AccountMenu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-// import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import { logoutUser } from "@/services/actions/logoutUser";
+import { useRouter } from "next/navigation";
+import { useGetSingleUserQuery } from "@/redux/api/userApi";
 
 const drawerWidth = 300;
 
-export default function DashboardDrawer({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
@@ -41,8 +39,14 @@ export default function DashboardDrawer({
     }
   };
 
-  // const { data, isLoading } = useGetSingleUserQuery({});
-  // console.log(data);
+  const { data, isLoading } = useGetSingleUserQuery({});
+  console.log(data);
+
+  const router = useRouter();
+
+  const handleLogOut = () => {
+    logoutUser(router);
+  };
 
   return (
     <Box sx={{ display: "flex", backgroundColor: "#FFF8F4", height: "100vh" }}>
@@ -82,7 +86,7 @@ export default function DashboardDrawer({
                 component="div"
                 sx={{ color: "rgba(11, 17, 52, 0.6)" }}
               >
-                {/* Hi, {isLoading ? "Loading..." : data?.name}, */}
+                Hi, {isLoading ? "Loading..." : data?.username}
               </Typography>
               <Typography
                 variant="h6"
@@ -93,13 +97,14 @@ export default function DashboardDrawer({
                 Welcome to Flat Mate Finder
               </Typography>
             </Box>
-            <Stack direction="row" gap={3}>
+            <Stack direction="row" gap={3} alignItems="center">
               <Badge badgeContent={1} color="primary">
                 <IconButton sx={{ background: "#ffffff" }}>
                   <NotificationsNoneIcon color="action" />
                 </IconButton>
               </Badge>
               <Avatar alt={"name"} src={assets.images.logo} />
+              <Button onClick={handleLogOut}>Logout</Button>
               {/* <AccountMenu /> */}
             </Stack>
           </Box>
@@ -156,4 +161,6 @@ export default function DashboardDrawer({
       </Box>
     </Box>
   );
-}
+};
+
+export default DashboardDrawer;
