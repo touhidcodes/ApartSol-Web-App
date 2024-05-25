@@ -12,8 +12,6 @@ import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
-// import { modifyPayload } from "@/utils/modifyPayload";
-// import { registerPatient } from "@/services/actions/registerPatient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { userLogin } from "@/services/actions/userLogin";
@@ -22,56 +20,49 @@ import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-export const patientValidationSchema = z.object({
-  name: z.string().min(1, "Please enter your name!"),
-  email: z.string().email("Please enter a valid email address!"),
-  contactNumber: z
-    .string()
-    .regex(/^\d{11}$/, "Please provide a valid phone number!"),
-  address: z.string().min(1, "Please enter your address!"),
-});
+import { userRegister } from "@/services/actions/userRegister";
+import { USER_ROLE } from "@/constants/role";
 
 export const validationSchema = z.object({
+  username: z.string().min(1, "Please enter your username!"),
+  email: z.string().email("Please enter a valid email address!"),
   password: z.string().min(6, "Must be at least 6 characters"),
-  patient: patientValidationSchema,
 });
 
 export const defaultValues = {
   password: "",
-  patient: {
-    name: "",
-    email: "",
-    contactNumber: "",
-    address: "",
-  },
+  username: "",
+  email: "",
 };
 
 const RegisterPage = () => {
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleRegister = async (values: FieldValues) => {
-    //   const data = modifyPayload(values);
-    // console.log(data);
-    //   try {
-    //     const res = await registerPatient(data);
-    //     // console.log(res);
-    //     if (res?.data?.id) {
-    //       toast.success(res?.message);
-    //       const result = await userLogin({
-    //         password: values.password,
-    //         email: values.patient.email,
-    //       });
-    //       if (result?.data?.accessToken) {
-    //         storeUserInfo({ accessToken: result?.data?.accessToken });
-    //         router.push("/dashboard");
-    //       }
-    //     }
-    //   } catch (err: any) {
-    //     console.error(err.message);
-    //   }
+    const data = {
+      ...values,
+      role: USER_ROLE.USER,
+    };
+
+    try {
+      const res = await userRegister(data);
+
+      if (res?.data?.id) {
+        toast.success(res?.message);
+        const result = await userLogin({
+          password: values.password,
+          identifier: values.email || values.username,
+        });
+        if (result?.data?.accessToken) {
+          storeUserInfo({ accessToken: result?.data?.accessToken });
+          router.push("/dashboard");
+        }
+      }
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
-  const error = null;
+
   return (
     <Container>
       <Stack
@@ -125,20 +116,6 @@ const RegisterPage = () => {
             </Typography>
           </Stack>
 
-          {/* {error && (
-            <Box>
-              <Typography
-                sx={{
-                  borderRadius: "2px",
-                  color: "#ff793f",
-                  marginTop: "5px",
-                }}
-              >
-                {error}
-              </Typography>
-            </Box>
-          )} */}
-
           <Box m={5}>
             <PHForm
               onSubmit={handleRegister}
@@ -157,9 +134,9 @@ const RegisterPage = () => {
                     Username*
                   </Typography>
                   <PHInput
-                    name="email"
-                    label="Email"
-                    type="email"
+                    name="username"
+                    label="Username"
+                    type="text"
                     fullWidth={true}
                   />
                 </Box>

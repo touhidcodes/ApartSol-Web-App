@@ -33,3 +33,10 @@ export interface DrawerItem {
   icon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string };
   child?: DrawerItem[];
 }
+
+export type TUserRegister = {
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+};

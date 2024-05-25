@@ -5,16 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import assets from "@/assets/index";
 import useUserInfo from "@/hooks/useUserInfo";
-import { userLogout } from "@/services/actions/userLogout";
 import { USER_ROLE } from "@/constants/role";
 import { useRouter } from "next/navigation";
+import { logoutUser } from "@/services/actions/logoutUser";
 
 const Navbar = () => {
   const userInfo = useUserInfo();
   const router = useRouter();
 
   const handleLogOut = () => {
-    userLogout(router);
+    logoutUser(router);
   };
   return (
     <div className="bg-[#FFF8F4]">
