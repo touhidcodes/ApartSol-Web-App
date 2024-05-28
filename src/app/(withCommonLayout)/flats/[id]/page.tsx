@@ -34,7 +34,7 @@ type PropTypes = {
 
 const FlatDetailCard = ({ params }: PropTypes) => {
   const { data, error, isLoading } = useGetFlatByIdQuery(params?.id);
-  const [flat, setFlat] = useState<TFlat | null>(null);
+  const [flat, setFlat] = useState<TFlat | undefined>(undefined);
 
   useEffect(() => {
     if (data) {
@@ -112,7 +112,7 @@ const FlatDetailCard = ({ params }: PropTypes) => {
                     <Typography
                       variant="h5"
                       fontWeight={600}
-                      sx={{ color: "#0B1134CC", textAlign: "center", my: 2 }}
+                      sx={{ color: "#0B1134CC", textAlign: "center", my: 5 }}
                     >
                       {flat?.title}
                     </Typography>
@@ -205,7 +205,7 @@ const FlatDetailCard = ({ params }: PropTypes) => {
                   </Stack>
                 </CardContent>
                 <Stack sx={{ alignItems: "center" }}>
-                  <Link href={`/bookings`} passHref>
+                  <Link href={`/bookings/${flat?.id}`} passHref>
                     <Button variant="contained">Book Flat</Button>
                   </Link>
                 </Stack>

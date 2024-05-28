@@ -8,7 +8,13 @@ export const userApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getUserWithProfile: build.query({
+      query: () => ({
+        url: "/user-profile",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetSingleUserQuery } = userApi;
+export const { useGetSingleUserQuery, useGetUserWithProfileQuery } = userApi;

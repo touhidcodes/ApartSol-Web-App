@@ -34,6 +34,9 @@ const Navbar = () => {
               href="/"
               fontWeight={600}
               px={2}
+              sx={{
+                color: "#0B1134CC",
+              }}
             >
               Flat Mate Finder
             </Typography>

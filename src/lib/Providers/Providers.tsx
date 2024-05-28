@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "@/lib/theme/theme";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
+import { Toaster } from "sonner";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
