@@ -60,6 +60,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
     undefined
   );
   const [flat, setFlat] = useState<TFlat | undefined>(undefined);
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
   const {
     data: flatData,
     error: flatError,
@@ -76,6 +77,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
 
   const handleBooking = async () => {
     const data = { flatId: flatData?.id };
+    setIsButtonDisabled(true);
     try {
       const res = await bookingRequest(data);
       toast.success("Flat share request submitted successfully!");
@@ -83,6 +85,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
     } catch (err: any) {
       console.error(err);
       setError(err.message);
+      toast.success("Something went wrong!");
     }
   };
 
@@ -241,7 +244,11 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
               </Stack>
             </Grid>
 
-            <Button variant="contained" onClick={handleBooking}>
+            <Button
+              variant="contained"
+              onClick={handleBooking}
+              disabled={isButtonDisabled}
+            >
               Book Flat
             </Button>
           </Stack>

@@ -205,7 +205,7 @@ const FlatDetailCard = ({ params }: PropTypes) => {
                   </Stack>
                 </CardContent>
                 <Stack sx={{ alignItems: "center" }}>
-                  <Link href={`/bookings/${flat?.id}`} passHref>
+                  <Link href={`/booking/${flat?.id}`} passHref>
                     <Button variant="contained">Book Flat</Button>
                   </Link>
                 </Stack>
