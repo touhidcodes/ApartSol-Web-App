@@ -25,6 +25,7 @@ export const userLogin = async (data: FieldValues) => {
     //   //   passwordChangeRequired,
     // });
     setToLocalStorage(authKey, userInfo.data.token);
+    setAccessToken(userInfo.data.token);
   }
 
   return userInfo;
