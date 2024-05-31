@@ -14,7 +14,14 @@ export const flatsApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getMyFlats: build.query({
+      query: () => ({
+        url: `/myFlats`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetAllFlatsQuery, useGetFlatByIdQuery } = flatsApi;
+export const { useGetAllFlatsQuery, useGetFlatByIdQuery, useGetMyFlatsQuery } =
+  flatsApi;
