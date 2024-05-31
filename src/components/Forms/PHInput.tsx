@@ -22,6 +22,7 @@ const PHInput = ({
   required,
 }: TInputProps) => {
   const { control } = useFormContext();
+  const isNumberType = type === "number";
   return (
     <Controller
       control={control}
@@ -39,6 +40,9 @@ const PHInput = ({
           required={required}
           error={!!error?.message}
           helperText={error?.message}
+          inputProps={
+            isNumberType ? { inputMode: "numeric", pattern: "[0-9]*" } : {}
+          }
         />
       )}
     />

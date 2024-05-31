@@ -1,63 +1,88 @@
 "use client";
 import { useState } from "react";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
+} from "@mui/material";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
 import PHFileUploader from "@/components/Forms/PHFileUploader";
+import { toast } from "sonner";
+import { useCreateFlatMutation } from "@/redux/api/flatApi";
+import { useRouter } from "next/navigation";
 
 // Define the validation schema
 const validationSchema = z.object({
-  title: z.string().nonempty("Flat title is required"),
-  image: z.string().optional(),
-  showImages: z.array(z.string()).optional(),
-  squareFeet: z.number().nonnegative("Square feet must be a positive number"),
-  totalBedrooms: z
-    .number()
-    .nonnegative("Total bedrooms must be a positive number"),
-  totalRooms: z.number().nonnegative("Total rooms must be a positive number"),
-  amenities: z.string().optional(),
-  location: z.string().nonempty("Location is required"),
-  description: z.string().optional(),
-  rent: z.number().nonnegative("Rent must be a positive number"),
-  advanceAmount: z
-    .number()
-    .nonnegative("Advance amount must be a positive number"),
+  title: z.string().min(1, "Flat title is required"),
+  image: z.string({ required_error: "Image file is required" }),
+  squareFeet: z.string().min(1, "Square feet must be a positive number"),
+  totalBedrooms: z.string().min(1, "Total bedrooms must be a positive number"),
+  totalRooms: z.string().min(1, "Total rooms must be a positive number"),
+  amenities: z.string().min(1, "Amenities description is required"),
+  location: z.string().min(1, "Location is required"),
+  description: z.string().min(1, "Description is required"),
+  rent: z.string().min(1, "Rent must be a positive number"),
+  advanceAmount: z.string().min(1, "Advance amount must be a positive number"),
 });
-
-const handlePost = async (values: any) => {
-  console.log(values);
-  // Handle form submission logic here
-};
 
 const PostFlatPage = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
-  const [showUrls, setShowUrls] = useState<string[]>([]);
+  const [createFlat] = useCreateFlatMutation();
+  const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleImageUpload = async (files: File[]) => {
     if (files.length > 0) {
+      setImageUploadLoading(true);
       try {
         const url = await uploadImageToImageBB(files[0]);
         setThumbnailUrl(url);
+        toast.success("Image uploaded successfully!");
       } catch (error) {
         console.error("Error uploading thumbnail image:", error);
+        toast.error("Please upload image again");
+      } finally {
+        setImageUploadLoading(false);
       }
     }
   };
 
-  const handleShowImagesUpload = async (files: File[]) => {
+  const handlePost = async (values: any) => {
     try {
-      const urls = await Promise.all(
-        files.map((file) => uploadImageToImageBB(file))
-      );
-      setShowUrls(urls);
-    } catch (error) {
-      console.error("Error uploading show images:", error);
+      if (thumbnailUrl) {
+        const flatData = {
+          ...values,
+          squareFeet: Number(values.squareFeet),
+          totalBedrooms: Number(values.totalBedrooms),
+          totalRooms: Number(values.totalRooms),
+          rent: Number(values.rent),
+          advanceAmount: Number(values.advanceAmount),
+          image: thumbnailUrl,
+        };
+
+        const res = await createFlat(flatData);
+
+        if (res?.data?.id) {
+          toast.success("Flat posted successfully!");
+          setThumbnailUrl("");
+          router.push("/flats");
+        } else {
+          toast.error("Something went wrong!");
+        }
+      } else {
+        toast.error("Please upload image");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
-
   return (
     <Box sx={{ p: 3, background: "#FFF8F4" }}>
       <Container>
@@ -107,15 +132,15 @@ const PostFlatPage = () => {
                 resolver={zodResolver(validationSchema)}
                 defaultValues={{
                   title: "",
-                  image: thumbnailUrl,
-                  squareFeet: 0,
-                  totalBedrooms: 0,
-                  totalRooms: 0,
+                  image: "",
+                  squareFeet: "",
+                  totalBedrooms: "",
+                  totalRooms: "",
                   amenities: "",
                   location: "",
                   description: "",
-                  rent: 0,
-                  advanceAmount: 0,
+                  rent: "",
+                  advanceAmount: "",
                 }}
               >
                 <Stack spacing={4} my={1} marginBottom={5}>
@@ -124,6 +149,19 @@ const PostFlatPage = () => {
                     uploadType="single"
                     onFileUpload={handleImageUpload}
                   />
+                  {imageUploadLoading && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
+                        Uploading image...
+                      </Typography>
+                    </Box>
+                  )}
                   {thumbnailUrl && (
                     <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
                       Image uploaded successfully!

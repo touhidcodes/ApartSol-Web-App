@@ -16,12 +16,23 @@ export const flatsApi = baseApi.injectEndpoints({
     }),
     getMyFlats: build.query({
       query: () => ({
-        url: `/myFlats`,
+        url: `/my-flats`,
         method: "GET",
+      }),
+    }),
+    createFlat: build.mutation({
+      query: (flatData) => ({
+        url: `/flats`,
+        method: "POST",
+        data: flatData,
       }),
     }),
   }),
 });
 
-export const { useGetAllFlatsQuery, useGetFlatByIdQuery, useGetMyFlatsQuery } =
-  flatsApi;
+export const {
+  useGetAllFlatsQuery,
+  useGetFlatByIdQuery,
+  useGetMyFlatsQuery,
+  useCreateFlatMutation,
+} = flatsApi;
