@@ -36,7 +36,7 @@ const PostFlatPage = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const [showUrls, setShowUrls] = useState<string[]>([]);
 
-  const handleThumbnailUpload = async (files: File[]) => {
+  const handleImageUpload = async (files: File[]) => {
     if (files.length > 0) {
       try {
         const url = await uploadImageToImageBB(files[0]);
@@ -69,11 +69,11 @@ const PostFlatPage = () => {
         >
           <Box
             sx={{
-              maxWidth: 600,
+              maxWidth: 700,
               width: "100%",
               boxShadow: 1,
               borderRadius: 2,
-              p: 4,
+              p: 8,
               textAlign: "center",
               background: "#fff",
             }}
@@ -108,7 +108,6 @@ const PostFlatPage = () => {
                 defaultValues={{
                   title: "",
                   image: thumbnailUrl,
-                  showImages: showUrls,
                   squareFeet: 0,
                   totalBedrooms: 0,
                   totalRooms: 0,
@@ -119,31 +118,23 @@ const PostFlatPage = () => {
                   advanceAmount: 0,
                 }}
               >
-                <Stack spacing={3} my={1}>
+                <Stack spacing={4} my={1} marginBottom={5}>
+                  <PHFileUploader
+                    accept="image/*"
+                    uploadType="single"
+                    onFileUpload={handleImageUpload}
+                  />
+                  {thumbnailUrl && (
+                    <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
+                      Image uploaded successfully!
+                    </Typography>
+                  )}
                   <PHInput
                     name="title"
                     label="Flat Title"
                     type="text"
                     fullWidth={true}
                   />
-                  <PHFileUploader
-                    label="Upload Thumbnail Image"
-                    accept="image/*"
-                    uploadType="single"
-                    onFileUpload={handleThumbnailUpload}
-                  />
-                  {thumbnailUrl && (
-                    <Typography>Thumbnail uploaded successfully!</Typography>
-                  )}
-                  <PHFileUploader
-                    label="Upload Show Images"
-                    accept="image/*"
-                    uploadType="multiple"
-                    onFileUpload={handleShowImagesUpload}
-                  />
-                  {showUrls.length > 0 && (
-                    <Typography>Show images uploaded successfully!</Typography>
-                  )}
                   <PHInput
                     name="squareFeet"
                     label="Square Feet"
