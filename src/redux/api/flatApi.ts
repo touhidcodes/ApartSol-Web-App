@@ -5,7 +5,7 @@ export const flatsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllFlats: build.query({
       query: () => ({
-        url: "/flats",
+        url: "/flats?availability=true",
         method: "GET",
       }),
       providesTags: [tagTypes.flat],

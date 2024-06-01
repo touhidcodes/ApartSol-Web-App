@@ -42,178 +42,189 @@ const FlatDetailCard = ({ params }: PropTypes) => {
     }
   }, [data]);
 
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          background: "#FFF8F4",
+          color: "#ff793f",
+        }}
+      >
+        Loading...
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ p: 3, height: "100%", background: "#FFF8F4" }}>
-      {isLoading ? (
-        <div className="text-center text-xl text-[#ff5722] mt-10 h-screen">
-          Your desired flat on the way...
-        </div>
-      ) : (
-        <Container>
-          <Grid container spacing={3}>
-            <Grid item lg={8} sm={12}>
-              <Card
-                sx={{
-                  height: "100%",
-                  borderRadius: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  p: "20px",
+      <Container>
+        <Grid container spacing={3}>
+          <Grid item lg={8} sm={12}>
+            <Card
+              sx={{
+                height: "100%",
+                borderRadius: "20px",
+                display: "flex",
+                flexDirection: "column",
+                p: "20px",
+              }}
+            >
+              <Image
+                src={flat?.image || placeholder}
+                alt="flat image"
+                width={500}
+                height={300}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "10px",
                 }}
-              >
-                <Image
-                  src={flat?.image || placeholder}
-                  alt="flat image"
-                  width={500}
-                  height={300}
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "10px",
-                  }}
-                />
-                <CardContent>
+              />
+              <CardContent>
+                <Typography
+                  variant="h5"
+                  fontWeight={600}
+                  sx={{ color: "#0B1134CC" }}
+                >
+                  {flat?.title}
+                </Typography>
+                <Typography sx={{ my: 2, color: "text.secondary" }}>
+                  <span className="font-semibold text-[#0B1134CC]">
+                    Flat Description:{" "}
+                  </span>
+                  {flat?.description}
+                </Typography>
+                <Typography sx={{ my: 2, color: "text.secondary" }}>
+                  <span className="font-semibold text-[#0B1134CC]">
+                    Amenities:{" "}
+                  </span>
+                  {flat?.amenities}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item lg={4} sm={12}>
+            <Card
+              sx={{
+                height: "100%",
+                borderRadius: "20px",
+                display: "flex",
+                flexDirection: "column",
+                p: "10px",
+                pb: "50px",
+              }}
+            >
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Stack spacing={2}>
                   <Typography
                     variant="h5"
                     fontWeight={600}
-                    sx={{ color: "#0B1134CC" }}
+                    sx={{ color: "#0B1134CC", textAlign: "center", my: 5 }}
                   >
                     {flat?.title}
                   </Typography>
-                  <Typography sx={{ my: 2, color: "text.secondary" }}>
-                    <span className="font-semibold text-[#0B1134CC]">
-                      Flat Description:{" "}
-                    </span>
-                    {flat?.description}
-                  </Typography>
-                  <Typography sx={{ my: 2, color: "text.secondary" }}>
-                    <span className="font-semibold text-[#0B1134CC]">
-                      Amenities:{" "}
-                    </span>
-                    {flat?.amenities}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item lg={4} sm={12}>
-              <Card
-                sx={{
-                  height: "100%",
-                  borderRadius: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  p: "10px",
-                  pb: "50px",
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Stack spacing={2}>
-                    <Typography
-                      variant="h5"
-                      fontWeight={600}
-                      sx={{ color: "#0B1134CC", textAlign: "center", my: 5 }}
-                    >
-                      {flat?.title}
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ color: "text.secondary", mt: 3 }}
+                  >
+                    <LocationOnIcon />
+                    <Typography>
+                      <span className="font-semibold text-[#0B1134CC]">
+                        Location:{" "}
+                      </span>
+                      {flat?.location}
                     </Typography>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary", mt: 3 }}
-                    >
-                      <LocationOnIcon />
-                      <Typography>
-                        <span className="font-semibold text-[#0B1134CC]">
-                          Location:{" "}
-                        </span>
-                        {flat?.location}
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary" }}
-                    >
-                      <SingleBedIcon />
-                      <Typography>
-                        <span className="font-semibold text-[#0B1134CC]">
-                          Total Bedrooms:{" "}
-                        </span>
-                        {flat?.totalBedrooms}
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary" }}
-                    >
-                      <SingleBedIcon />
-                      <Typography>
-                        <span className="font-semibold text-[#0B1134CC]">
-                          Total Rooms:{" "}
-                        </span>
-                        {flat?.totalRooms}
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary" }}
-                    >
-                      <SquareFootIcon />
-                      <Typography>
-                        <span className="font-semibold text-[#0B1134CC]">
-                          Square Feet:{" "}
-                        </span>
-                        {flat?.squareFeet}
-                      </Typography>
-                    </Stack>
-
-                    <Divider sx={{ my: 2 }} />
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary" }}
-                    >
-                      <AttachMoneyIcon />
-                      <Typography>
-                        <span className="font-semibold text-[#0B1134CC]">
-                          Rent Amount:{" "}
-                        </span>
-                        {flat?.rent} per month
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary" }}
-                    >
-                      <AttachMoneyIcon />
-                      <Typography>
-                        <span className="font-semibold text-[#0B1134CC]">
-                          Advance Amount:{" "}
-                        </span>
-                        {flat?.advanceAmount}
-                      </Typography>
-                    </Stack>
                   </Stack>
-                </CardContent>
-                <Stack sx={{ alignItems: "center" }}>
-                  <Link href={`/booking/${flat?.id}`} passHref>
-                    <Button variant="contained">Book Flat</Button>
-                  </Link>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <SingleBedIcon />
+                    <Typography>
+                      <span className="font-semibold text-[#0B1134CC]">
+                        Total Bedrooms:{" "}
+                      </span>
+                      {flat?.totalBedrooms}
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <SingleBedIcon />
+                    <Typography>
+                      <span className="font-semibold text-[#0B1134CC]">
+                        Total Rooms:{" "}
+                      </span>
+                      {flat?.totalRooms}
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <SquareFootIcon />
+                    <Typography>
+                      <span className="font-semibold text-[#0B1134CC]">
+                        Square Feet:{" "}
+                      </span>
+                      {flat?.squareFeet}
+                    </Typography>
+                  </Stack>
+
+                  <Divider sx={{ my: 2 }} />
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <AttachMoneyIcon />
+                    <Typography>
+                      <span className="font-semibold text-[#0B1134CC]">
+                        Rent Amount:{" "}
+                      </span>
+                      {flat?.rent} per month
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <AttachMoneyIcon />
+                    <Typography>
+                      <span className="font-semibold text-[#0B1134CC]">
+                        Advance Amount:{" "}
+                      </span>
+                      {flat?.advanceAmount}
+                    </Typography>
+                  </Stack>
                 </Stack>
-              </Card>
-            </Grid>
+              </CardContent>
+              <Stack sx={{ alignItems: "center" }}>
+                <Link href={`/booking/${flat?.id}`} passHref>
+                  <Button variant="contained">Book Flat</Button>
+                </Link>
+              </Stack>
+            </Card>
           </Grid>
-        </Container>
-      )}
+        </Grid>
+      </Container>
     </Box>
   );
 };

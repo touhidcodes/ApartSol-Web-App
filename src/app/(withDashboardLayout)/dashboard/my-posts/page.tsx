@@ -55,6 +55,8 @@ const MyPostsPage = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          background: "#FFF8F4",
+          color: "#ff793f",
         }}
       >
         Loading...

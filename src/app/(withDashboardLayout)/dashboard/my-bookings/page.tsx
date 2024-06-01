@@ -7,8 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import { useGetMyBookingsQuery } from "@/redux/api/bookingApi";
+import { TBookings } from "@/types/Bookings";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -27,8 +28,8 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 const MyBookingPage = () => {
-  const { data, isLoading } = useGetMyBookingsQuery({});
-  console.log(data);
+  const { data: bookings, isLoading } = useGetMyBookingsQuery({});
+
   if (isLoading) {
     return (
       <Box
@@ -37,6 +38,8 @@ const MyBookingPage = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          background: "#FFF8F4",
+          color: "#ff793f",
         }}
       >
         Loading...
@@ -54,53 +57,29 @@ const MyBookingPage = () => {
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Title</StyledTableCell>
-                <StyledTableCell align="right">Square Feet</StyledTableCell>
-                <StyledTableCell align="right">Bedrooms</StyledTableCell>
-                <StyledTableCell align="right">Rooms</StyledTableCell>
-                <StyledTableCell align="right">Edit</StyledTableCell>
-                <StyledTableCell align="right">Delete</StyledTableCell>
+                <StyledTableCell align="right">Title</StyledTableCell>
+                <StyledTableCell align="right">Location</StyledTableCell>
+                <StyledTableCell align="right">Rent</StyledTableCell>
+                <StyledTableCell align="right">Status</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {flats.map((flat: TFlat) => (
-              <StyledTableRow key={flat.id}>
-                <StyledTableCell component="th" scope="row">
-                  <Stack direction="row" spacing={2}>
-                    <Image
-                      src={flat?.image}
-                      alt="flat image"
-                      width={100}
-                      height={50}
-                    />
-                    <Stack spacing={1}>
-                      <Typography>{flat?.title}</Typography>
-                      <Typography>{flat?.location}</Typography>
-                      <Typography sx={{ fontWeight: "600" }}>
-                        $ {flat?.rent}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {flat.squareFeet}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {flat.totalBedrooms}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {flat.totalRooms}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button onClick={() => handleEditClick(flat)}>Edit</Button>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button onClick={() => handleDeleteClick(flat?.id)}>
-                    Delete
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))} */}
+              {bookings.map((booking: TBookings) => (
+                <StyledTableRow key={booking.id}>
+                  <StyledTableCell align="right">
+                    {booking?.flat?.title}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {booking?.flat?.location}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {booking?.flat?.rent}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {booking?.status}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

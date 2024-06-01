@@ -32,7 +32,6 @@ const UpdateFlatModal = ({
   //  set flat data which going to be update
   useEffect(() => {
     setUpdatedFlat(flat);
-    console.log(flat);
   }, [flat]);
 
   //  pass the updated data to parent component for update
