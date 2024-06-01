@@ -40,8 +40,6 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
   };
 
   const { data, isLoading } = useGetSingleUserQuery({});
-  console.log(data);
-
   const router = useRouter();
 
   const handleLogOut = () => {

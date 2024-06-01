@@ -8,6 +8,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import { USER_ROLE } from "@/constants/role";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "@/services/actions/logoutUser";
+import { getUserInfo } from "@/services/auth.services";
 
 const Navbar = () => {
   const userInfo = useUserInfo();

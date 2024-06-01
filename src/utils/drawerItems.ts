@@ -18,7 +18,7 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
   const defaultMenus = [
     {
       title: "Profile",
-      path: `${role}/profile`,
+      path: `profile`,
       icon: PersonIcon,
     },
     {
@@ -31,11 +31,6 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
   switch (role) {
     case USER_ROLE.ADMIN:
       roleMenus.push(
-        {
-          title: "Dashboard",
-          path: `${role}`,
-          icon: DashboardIcon,
-        },
         {
           title: "Specialties",
           path: `${role}/specialties`,
@@ -66,11 +61,11 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
 
     case USER_ROLE.USER:
       roleMenus.push(
-        {
-          title: "Dashboard",
-          path: `${role}`,
-          icon: DashboardIcon,
-        },
+        // {
+        //   title: "Dashboard",
+        //   path: `${role}`,
+        //   icon: DashboardIcon,
+        // },
         {
           title: "Schedules",
           path: `${role}/schedules`,
@@ -88,5 +83,5 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
       break;
   }
 
-  return [...roleMenus, ...defaultMenus];
+  return [...defaultMenus, ...roleMenus];
 };

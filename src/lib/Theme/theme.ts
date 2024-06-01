@@ -27,6 +27,32 @@ export const theme = createTheme({
             backgroundColor: "#ff5722",
           },
         },
+        outlined: {
+          padding: "12px 30px",
+          background: "#fff",
+          color: "#ff793f",
+          fontWeight: "700",
+          fontSize: "16px",
+          borderRadius: "10px",
+          textTransform: "none",
+          border: "2px solid #ff793f",
+          "&:hover": {
+            backgroundColor: "#ff5722",
+            color: "#fff",
+            border: "2px solid #ff5722",
+          },
+        },
+        text: {
+          padding: "12px 30px",
+          background: "#fff",
+          color: "#ff793f",
+          fontWeight: "700",
+          fontSize: "16px",
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#fff",
+          },
+        },
       },
     },
     MuiContainer: {
