@@ -1,13 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,8 +10,9 @@ import PHFileUploader from "@/components/Forms/PHFileUploader";
 import { toast } from "sonner";
 import { useCreateFlatMutation } from "@/redux/api/flatApi";
 import { useRouter } from "next/navigation";
+import { FieldValues } from "react-hook-form";
 
-// Define the validation schema
+// zod validation schema
 const validationSchema = z.object({
   title: z.string().min(1, "Flat title is required"),
   image: z.string({ required_error: "Image file is required" }),
@@ -34,10 +28,11 @@ const validationSchema = z.object({
 
 const PostFlatPage = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
-  const [createFlat] = useCreateFlatMutation();
   const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
+  const [createFlat] = useCreateFlatMutation();
   const router = useRouter();
 
+  //  image upload
   const handleImageUpload = async (files: File[]) => {
     if (files.length > 0) {
       setImageUploadLoading(true);
@@ -54,7 +49,8 @@ const PostFlatPage = () => {
     }
   };
 
-  const handlePost = async (values: any) => {
+  //  create post
+  const handlePost = async (values: FieldValues) => {
     try {
       if (thumbnailUrl) {
         const flatData = {
@@ -83,6 +79,7 @@ const PostFlatPage = () => {
       console.log(err);
     }
   };
+
   return (
     <Box sx={{ p: 3, background: "#FFF8F4" }}>
       <Container>

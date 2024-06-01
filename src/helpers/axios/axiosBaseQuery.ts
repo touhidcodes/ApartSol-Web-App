@@ -75,7 +75,7 @@ export const axiosBaseQuery =
         "Content-Type": contentType || "application/json",
       },
     };
-    console.log("Axios Config:", config); // Log the config to verify headers
+    // console.log("Axios Config:", config);
 
     try {
       const result = await axiosInstance(config);

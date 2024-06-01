@@ -1,26 +1,22 @@
 // components/UpdateFlatModal.tsx
 
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Stack,
-} from "@mui/material";
+import { Modal, Box, Typography, Button, Stack } from "@mui/material";
 import { TFlat } from "@/types/Flats";
 import PHInput from "@/components/Forms/PHInput";
 import PHFileUploader from "@/components/Forms/PHFileUploader";
 import PHForm from "@/components/Forms/PHForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues } from "react-hook-form";
+import { z } from "zod";
+import { toast } from "sonner";
+import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
 
 interface TUpdateFlatModalProps {
   open: boolean;
   flat: TFlat | null;
   onClose: () => void;
-  onSave: (updatedFlat: FieldValues) => void;
+  onSave: (updatedFlat: FieldValues, flatId: string) => void;
 }
 
 const UpdateFlatModal = ({
@@ -29,40 +25,42 @@ const UpdateFlatModal = ({
   onClose,
   onSave,
 }: TUpdateFlatModalProps) => {
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
+  const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
   const [updatedFlat, setUpdatedFlat] = useState<TFlat | null>(flat);
 
+  //  set flat data which going to be update
   useEffect(() => {
     setUpdatedFlat(flat);
+    console.log(flat);
   }, [flat]);
 
-  const handleUpdate = (data: FieldValues) => {
-    onSave(data);
+  //  pass the updated data to parent component for update
+  const handleUpdatePost = async (values: FieldValues) => {
+    if (thumbnailUrl && flat) {
+      onSave({ ...values, image: thumbnailUrl }, flat?.id);
+    } else if (flat) {
+      onSave(values, flat?.id);
+    }
     onClose();
+    setThumbnailUrl("");
   };
 
-  const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
-  const [showUrls, setShowUrls] = useState<string[]>([]);
-
-  const handleThumbnailUpload = async (files: File[]) => {
-    //   if (files.length > 0) {
-    //     try {
-    //       const url = await uploadImageToImageBB(files[0]);
-    //       setThumbnailUrl(url);
-    //     } catch (error) {
-    //       console.error("Error uploading thumbnail image:", error);
-    //     }
-    //   }
-  };
-
-  const handleShowImagesUpload = async (files: File[]) => {
-    //   try {
-    //     const urls = await Promise.all(
-    //       files.map((file) => uploadImageToImageBB(file))
-    //     );
-    //     setShowUrls(urls);
-    //   } catch (error) {
-    //     console.error("Error uploading show images:", error);
-    //   }
+  //  image upload
+  const handleImageUpload = async (files: File[]) => {
+    if (files.length > 0) {
+      setImageUploadLoading(true);
+      try {
+        const url = await uploadImageToImageBB(files[0]);
+        setThumbnailUrl(url);
+        toast.success("Image uploaded successfully!");
+      } catch (error) {
+        console.error("Error uploading thumbnail image:", error);
+        toast.error("Please upload image again");
+      } finally {
+        setImageUploadLoading(false);
+      }
+    }
   };
 
   return (
@@ -85,46 +83,49 @@ const UpdateFlatModal = ({
           }}
         >
           <PHForm
-            onSubmit={handleUpdate}
+            onSubmit={handleUpdatePost}
             defaultValues={{
-              title: "",
-              image: thumbnailUrl,
-              showImages: showUrls,
-              squareFeet: 0,
-              totalBedrooms: 0,
-              totalRooms: 0,
-              amenities: "",
-              location: "",
-              description: "",
-              rent: 0,
-              advanceAmount: 0,
+              title: updatedFlat?.title || "",
+              squareFeet: updatedFlat?.squareFeet || "",
+              totalBedrooms: updatedFlat?.totalBedrooms || "",
+              totalRooms: updatedFlat?.totalRooms || "",
+              amenities: updatedFlat?.amenities || "",
+              location: updatedFlat?.location || "",
+              description: updatedFlat?.description || "",
+              rent: updatedFlat?.rent || "",
+              advanceAmount: updatedFlat?.advanceAmount || "",
             }}
           >
-            <Stack spacing={3} my={1}>
+            <Stack spacing={4} my={1} marginBottom={5}>
+              <PHFileUploader
+                accept="image/*"
+                uploadType="single"
+                onFileUpload={handleImageUpload}
+              />
+              {imageUploadLoading && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
+                    Uploading image...
+                  </Typography>
+                </Box>
+              )}
+              {thumbnailUrl && (
+                <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
+                  Image uploaded successfully!
+                </Typography>
+              )}
               <PHInput
                 name="title"
                 label="Flat Title"
                 type="text"
                 fullWidth={true}
               />
-              <PHFileUploader
-                label="Upload Thumbnail Image"
-                accept="image/*"
-                uploadType="single"
-                onFileUpload={handleThumbnailUpload}
-              />
-              {thumbnailUrl && (
-                <Typography>Thumbnail uploaded successfully!</Typography>
-              )}
-              <PHFileUploader
-                label="Upload Show Images"
-                accept="image/*"
-                uploadType="multiple"
-                onFileUpload={handleShowImagesUpload}
-              />
-              {showUrls.length > 0 && (
-                <Typography>Show images uploaded successfully!</Typography>
-              )}
               <PHInput
                 name="squareFeet"
                 label="Square Feet"
@@ -174,16 +175,18 @@ const UpdateFlatModal = ({
                 fullWidth={true}
               />
             </Stack>
-
-            <Button
-              sx={{
-                margin: "10px 0px",
-              }}
-              fullWidth={true}
-              type="submit"
+            <Stack
+              direction="row"
+              sx={{ alignItems: "enter", justifyContent: "space-between" }}
+              spacing={5}
             >
-              Submit
-            </Button>
+              <Button fullWidth={true} type="submit">
+                Submit
+              </Button>
+              <Button fullWidth={true} onClick={() => onClose()}>
+                Cancel
+              </Button>
+            </Stack>
           </PHForm>
         </Box>
       </Stack>

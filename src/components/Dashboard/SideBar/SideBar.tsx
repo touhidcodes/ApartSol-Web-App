@@ -42,7 +42,7 @@ const SideBar = () => {
           Flat Mate Finder
         </Typography>
       </Stack>
-      <List>
+      <List sx={{ paddingLeft: "20px" }}>
         {drawerItems(userRole as UserRole).map((item, index) => (
           <SideBarItem key={index} item={item} />
         ))}

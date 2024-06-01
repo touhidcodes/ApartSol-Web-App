@@ -13,6 +13,21 @@ export type TFlat = {
   advanceAmount: number;
 };
 
+export type TFlatString = {
+  id: string;
+  image: string;
+  title: String;
+  squareFeet: string;
+  totalBedrooms: string;
+  totalRooms: string;
+  amenities: string;
+  location: string;
+  description: string;
+  rent: string;
+  availability: string;
+  advanceAmount: string;
+};
+
 // Assuming you also have a Booking type defined
 type Booking = {
   id: string;

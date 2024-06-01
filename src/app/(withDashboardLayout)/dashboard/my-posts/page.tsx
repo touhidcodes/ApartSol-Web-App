@@ -1,56 +1,54 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import {
-  Box,
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Container, Typography, CircularProgress } from "@mui/material";
 import FlatCardTable from "@/components/Card/FlatCardTable/FlatCardTable";
-import { useGetMyFlatsQuery } from "@/redux/api/flatApi";
-import { TFlat } from "@/types/Flats";
+import {
+  useDeleteFlatMutation,
+  useGetMyFlatsQuery,
+  useUpdateFlatMutation,
+} from "@/redux/api/flatApi";
 import { FieldValues } from "react-hook-form";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const MyPostsPage = () => {
-  const [posts, setPosts] = useState([]);
   const { data: flats, isLoading } = useGetMyFlatsQuery({});
-  console.log(flats);
+  const [updateFlat] = useUpdateFlatMutation();
+  const [deleteFlat] = useDeleteFlatMutation();
 
-  const handleUpdate = async (updatedFlat: FieldValues) => {
-    console.log(updatedFlat);
-    //  try {
-    //    await updatePost(updatedFlat).unwrap();
-    //    setFlats(
-    //      flats.map((flat) => (flat.id === updatedFlat.id ? updatedFlat : flat))
-    //    );
-    //  } catch (error) {
-    //    console.error("Failed to update flat", error);
-    //  }
+  const router = useRouter();
+
+  const handleUpdate = async (updatedFlat: FieldValues, flatId: string) => {
+    try {
+      const flatData = {
+        ...updatedFlat,
+        squareFeet: Number(updatedFlat?.squareFeet),
+        totalBedrooms: Number(updatedFlat?.totalBedrooms),
+        totalRooms: Number(updatedFlat?.totalRooms),
+        rent: Number(updatedFlat?.rent),
+        advanceAmount: Number(updatedFlat?.advanceAmount),
+      };
+
+      const res = await updateFlat({ flatId, flatData });
+
+      if (res?.data?.id) {
+        toast.success("Flat posted successfully!");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleDelete = async (flatId: string) => {
-    console.log(flatId);
-    //  try {
-    //    await deletePost(flatId).unwrap();
-    //    setFlats(flats.filter((flat) => flat.id !== flatId));
-    //  } catch (error) {
-    //    console.error("Failed to delete flat", error);
-    //  }
+    try {
+      const res = await deleteFlat(flatId);
+      if (res?.data?.id) {
+        toast.success("Flat deleted successfully!");
+      }
+    } catch (error) {
+      console.error("Failed to delete flat", error);
+    }
   };
-
-  //   const { data, error, isLoading } = useGetUserPostsQuery(user?.id);
-
-  //   useEffect(() => {
-  //     if (data) {
-  //       setPosts(data);
-  //     }
-  //   }, [data]);
 
   if (isLoading) {
     return (
@@ -67,29 +65,16 @@ const MyPostsPage = () => {
     );
   }
 
-  //   if (error) {
-  //     return (
-  //       <Box
-  //         sx={{
-  //           display: "flex",
-  //           justifyContent: "center",
-  //           alignItems: "center",
-  //           height: "100vh",
-  //         }}
-  //       >
-  //         <Typography variant="h6" color="error">
-  //           Failed to load posts
-  //         </Typography>
-  //       </Box>
-  //     );
-  //   }
-
   return (
     <Container>
       <Typography variant="h4" component="h1" gutterBottom>
         My Posts
       </Typography>
-      <FlatCardTable flats={flats} handleUpdate={handleUpdate} />
+      <FlatCardTable
+        flats={flats}
+        handleUpdate={handleUpdate}
+        handleDelete={handleDelete}
+      />
     </Container>
   );
 };

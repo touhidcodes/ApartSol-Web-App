@@ -10,7 +10,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TFlat } from "@/types/Flats";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
 import UpdateFlatModal from "@/components/Modal/UpdateFlatModal/updateFlatModal";
 import { FieldValues } from "react-hook-form";
@@ -37,33 +47,58 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 type TFlatCardProps = {
   flats: TFlat[];
-  handleUpdate: (flat: FieldValues) => void;
-  // handleDelete: (flatId: string) => void;
+  handleUpdate: (flat: FieldValues, flatId: string) => void;
+  handleDelete: (flatId: string) => void;
 };
 
 const FlatCardTable = ({
   flats,
   handleUpdate,
-}: // handleDelete,
-TFlatCardProps) => {
+  handleDelete,
+}: TFlatCardProps) => {
   const [selectedFlat, setSelectedFlat] = useState<TFlat | null>(null);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [flatIdToDelete, setFlatIdToDelete] = useState<string | null>(null);
 
+  // edit button & set selected flat data
   const handleEditClick = (flat: TFlat) => {
     setSelectedFlat(flat);
     setUpdateModalOpen(true);
   };
 
+  //  modal close
   const handleCloseUpdateModal = () => {
     setUpdateModalOpen(false);
     setSelectedFlat(null);
   };
 
-  const handleSaveUpdatedFlat = (updatedFlat: FieldValues) => {
-    handleUpdate(updatedFlat);
+  //  pass values to the parent component
+  const handleSaveUpdatedFlat = (updatedFlat: FieldValues, flatId: string) => {
+    handleUpdate(updatedFlat, flatId);
     setUpdateModalOpen(false);
     setSelectedFlat(null);
+  };
+
+  // open delete confirmation dialog
+  const handleDeleteClick = (flatId: string) => {
+    setFlatIdToDelete(flatId);
+    setDeleteDialogOpen(true);
+  };
+
+  // close delete confirmation dialog
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setFlatIdToDelete(null);
+  };
+
+  // handle delete action
+  const handleConfirmDelete = () => {
+    if (flatIdToDelete) {
+      handleDelete(flatIdToDelete);
+      setDeleteDialogOpen(false);
+      setFlatIdToDelete(null);
+    }
   };
   return (
     <>
@@ -112,19 +147,45 @@ TFlatCardProps) => {
                   <Button onClick={() => handleEditClick(flat)}>Edit</Button>
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  <Button>Delete</Button>
+                  <Button onClick={() => handleDeleteClick(flat?.id)}>
+                    Delete
+                  </Button>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      {/* update flat modal */}
       <UpdateFlatModal
         open={isUpdateModalOpen}
         flat={selectedFlat}
         onClose={handleCloseUpdateModal}
         onSave={handleSaveUpdatedFlat}
       />
+      {/* delete flat modal */}
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this flat? This action cannot be
+            undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

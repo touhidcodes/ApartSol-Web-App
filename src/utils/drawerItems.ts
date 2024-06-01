@@ -3,9 +3,12 @@ import { DrawerItem, UserRole } from "@/types";
 //icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupIcon from "@mui/icons-material/Group";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndividualSuite";
 import TryIcon from "@mui/icons-material/Try";
 import PersonIcon from "@mui/icons-material/Person";
@@ -61,20 +64,15 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
 
     case USER_ROLE.USER:
       roleMenus.push(
-        // {
-        //   title: "Dashboard",
-        //   path: `${role}`,
-        //   icon: DashboardIcon,
-        // },
         {
-          title: "Schedules",
-          path: `${role}/schedules`,
-          icon: CalendarMonthIcon,
+          title: "My Posts",
+          path: `my-posts`,
+          icon: HomeWorkIcon,
         },
         {
-          title: "Appointments",
-          path: `${role}/appointment`,
-          icon: CalendarMonthIcon,
+          title: "My Bookings",
+          path: `my-bookings`,
+          icon: ShoppingCartIcon,
         }
       );
       break;
