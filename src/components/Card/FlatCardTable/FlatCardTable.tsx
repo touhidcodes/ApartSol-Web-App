@@ -11,7 +11,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TFlat } from "@/types/Flats";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -36,10 +35,6 @@ const StyledTableCell = styled(TableCell)(() => ({
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  //   "&:nth-of-type(odd)": {
-  //     backgroundColor: "#EEEEEE",
-  //   },
-  // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },

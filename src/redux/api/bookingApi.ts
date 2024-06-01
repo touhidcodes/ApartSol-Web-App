@@ -1,12 +1,21 @@
+import { tagTypes } from "../tags";
 import { baseApi } from "./baseApi";
 
 export const bookingApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getSingleUser: build.query({
+    getAllBookings: build.query({
       query: () => ({
-        url: "/user",
+        url: "/booking-requests",
         method: "GET",
       }),
+      providesTags: [tagTypes.booking],
+    }),
+    getMyBookings: build.query({
+      query: () => ({
+        url: "/my-bookings",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.booking],
     }),
     bookingRequest: build.mutation({
       query: (flatId) => ({
@@ -14,8 +23,13 @@ export const bookingApi = baseApi.injectEndpoints({
         method: "POST",
         data: flatId,
       }),
+      invalidatesTags: [tagTypes.booking],
     }),
   }),
 });
 
-export const { useBookingRequestMutation } = bookingApi;
+export const {
+  useGetAllBookingsQuery,
+  useGetMyBookingsQuery,
+  useBookingRequestMutation,
+} = bookingApi;

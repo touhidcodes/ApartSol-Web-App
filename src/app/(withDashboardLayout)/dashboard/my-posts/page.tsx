@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, Typography, CircularProgress } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import FlatCardTable from "@/components/Card/FlatCardTable/FlatCardTable";
 import {
   useDeleteFlatMutation,
@@ -9,14 +9,11 @@ import {
 } from "@/redux/api/flatApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 const MyPostsPage = () => {
   const { data: flats, isLoading } = useGetMyFlatsQuery({});
   const [updateFlat] = useUpdateFlatMutation();
   const [deleteFlat] = useDeleteFlatMutation();
-
-  const router = useRouter();
 
   const handleUpdate = async (updatedFlat: FieldValues, flatId: string) => {
     try {
@@ -60,14 +57,14 @@ const MyPostsPage = () => {
           height: "100vh",
         }}
       >
-        <CircularProgress />
+        Loading...
       </Box>
     );
   }
 
   return (
     <Container>
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom my={3}>
         My Posts
       </Typography>
       <FlatCardTable
