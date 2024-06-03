@@ -56,11 +56,10 @@ const ProfilePage = () => {
 
   const handleSave = async (updatedUser: Partial<TUserWithProfile>) => {
     try {
-      const res = updateUser(updatedUser);
-      console.log(res);
-      // if (res?.data?.id) {
-      //   toast.success("Profile updated successfully!");
-      // }
+      const res = await updateUser(updatedUser);
+      if (res?.data?.id) {
+        toast.success("Profile updated successfully!");
+      }
     } catch (error) {
       toast.error("Failed to update profile. Please try again.");
     }
@@ -147,21 +146,21 @@ const ProfilePage = () => {
                 </StyledInformationBox>
                 <StyledInformationBox>
                   <Typography variant="caption" color="secondary">
-                    Address
-                  </Typography>
-                  <Typography>
-                    {profileData?.address
-                      ? profileData?.address
-                      : "Data not provided"}
-                  </Typography>
-                </StyledInformationBox>
-                <StyledInformationBox>
-                  <Typography variant="caption" color="secondary">
                     Profession
                   </Typography>
                   <Typography>
                     {profileData?.profession
                       ? profileData?.profession
+                      : "Data not provided"}
+                  </Typography>
+                </StyledInformationBox>
+                <StyledInformationBox>
+                  <Typography variant="caption" color="secondary">
+                    Address
+                  </Typography>
+                  <Typography>
+                    {profileData?.address
+                      ? profileData?.address
                       : "Data not provided"}
                   </Typography>
                 </StyledInformationBox>
