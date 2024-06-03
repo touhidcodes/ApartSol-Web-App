@@ -6,8 +6,6 @@ import {
   Stack,
   Typography,
   Grid,
-  FormControlLabel,
-  Checkbox,
   styled,
 } from "@mui/material";
 import { FieldValues } from "react-hook-form";
@@ -28,18 +26,6 @@ import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import { useBookingRequestMutation } from "@/redux/api/bookingApi";
 import { bookingRequestActions } from "@/services/actions/text";
 import { useRouter } from "next/navigation";
-
-// Define the validation schema using Zod
-const validationSchema = z.object({
-  contactInfo: z.string().min(1, "Contact information is required"),
-  additionalInfo: z.string().optional(),
-  terms: z
-    .boolean()
-    .refine(
-      (val) => val === true,
-      "You must agree to the terms and conditions"
-    ),
-});
 
 const StyledInformationBox = styled(Box)(({ theme }) => ({
   background: "#fff",
@@ -165,26 +151,6 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
                 </Typography>
                 <Typography>
                   {profileData?.name ? profileData?.name : "Data not provided"}
-                </Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography color="secondary" variant="caption">
-                  Gender
-                </Typography>
-                <Typography>
-                  {" "}
-                  {profileData?.gender
-                    ? profileData?.gender
-                    : "Data not provided"}
-                </Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Age
-                </Typography>
-                <Typography>
-                  {" "}
-                  {profileData?.age ? profileData?.age : "Data not provided"}
                 </Typography>
               </StyledInformationBox>
               <StyledInformationBox>

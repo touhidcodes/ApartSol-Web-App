@@ -53,8 +53,12 @@ const Navbar = () => {
             <Typography variant="navItem" component={Link} href="/login">
               Login
             </Typography>
-            {userInfo?.userRole === USER_ROLE.ADMIN ? (
-              <Typography component={Link} href="/dashboard">
+            {userInfo?.role === USER_ROLE.ADMIN ? (
+              <Typography
+                variant="navItem"
+                component={Link}
+                href="/dashboard/profile"
+              >
                 Dashboard
               </Typography>
             ) : (

@@ -4,43 +4,44 @@ import { TFlat } from "@/types/Flats";
 import PHInput from "@/components/Forms/PHInput";
 import PHFileUploader from "@/components/Forms/PHFileUploader";
 import PHForm from "@/components/Forms/PHForm";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues } from "react-hook-form";
-import { z } from "zod";
 import { toast } from "sonner";
 import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
+import { TUserWithProfile } from "@/types/User";
 
-interface TUpdateFlatModalProps {
+interface TUpdateUserModalProps {
   open: boolean;
-  flat: TFlat | null;
+  userProfile: TUserWithProfile | null;
   onClose: () => void;
-  onSave: (updatedFlat: FieldValues, flatId: string) => void;
+  onSave: (updatedUser: FieldValues) => void;
 }
 
-const UpdateFlatModal = ({
+const UpdateUserModal = ({
   open,
-  flat,
+  userProfile,
   onClose,
   onSave,
-}: TUpdateFlatModalProps) => {
-  const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
+}: TUpdateUserModalProps) => {
+  const [profileUrl, setProfileUrl] = useState<string>("");
   const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
-  const [updatedFlat, setUpdatedFlat] = useState<TFlat | null>(flat);
+  const [updatedUser, setUpdatedUser] = useState<TUserWithProfile | null>(
+    userProfile
+  );
 
-  //  set flat data which going to be update
+  //  set user data which going to be update
   useEffect(() => {
-    setUpdatedFlat(flat);
-  }, [flat]);
+    setUpdatedUser(userProfile);
+  }, [userProfile]);
 
   //  pass the updated data to parent component for update
-  const handleUpdatePost = async (values: FieldValues) => {
-    if (thumbnailUrl && flat) {
-      onSave({ ...values, image: thumbnailUrl }, flat?.id);
-    } else if (flat) {
-      onSave(values, flat?.id);
+  const handleUpdateUser = async (values: FieldValues) => {
+    if (profileUrl && userProfile) {
+      onSave({ ...values, image: profileUrl });
+    } else if (userProfile) {
+      onSave(values);
     }
     onClose();
-    setThumbnailUrl("");
+    setProfileUrl("");
   };
 
   //  image upload
@@ -49,7 +50,7 @@ const UpdateFlatModal = ({
       setImageUploadLoading(true);
       try {
         const url = await uploadImageToImageBB(files[0]);
-        setThumbnailUrl(url);
+        setProfileUrl(url);
         toast.success("Image uploaded successfully!");
       } catch (error) {
         console.error("Error uploading thumbnail image:", error);
@@ -80,17 +81,13 @@ const UpdateFlatModal = ({
           }}
         >
           <PHForm
-            onSubmit={handleUpdatePost}
+            onSubmit={handleUpdateUser}
             defaultValues={{
-              title: updatedFlat?.title || "",
-              squareFeet: updatedFlat?.squareFeet || "",
-              totalBedrooms: updatedFlat?.totalBedrooms || "",
-              totalRooms: updatedFlat?.totalRooms || "",
-              amenities: updatedFlat?.amenities || "",
-              location: updatedFlat?.location || "",
-              description: updatedFlat?.description || "",
-              rent: updatedFlat?.rent || "",
-              advanceAmount: updatedFlat?.advanceAmount || "",
+              email: updatedUser?.email || "",
+              username: updatedUser?.username || "",
+              name: updatedUser?.name || "",
+              profession: updatedUser?.profession || "",
+              address: updatedUser?.address || "",
             }}
           >
             <Stack spacing={4} my={1} marginBottom={5}>
@@ -112,63 +109,34 @@ const UpdateFlatModal = ({
                   </Typography>
                 </Box>
               )}
-              {thumbnailUrl && (
+              {profileUrl && (
                 <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
                   Image uploaded successfully!
                 </Typography>
               )}
               <PHInput
-                name="title"
-                label="Flat Title"
+                name="username"
+                label="Username"
                 type="text"
                 fullWidth={true}
               />
               <PHInput
-                name="squareFeet"
-                label="Square Feet"
-                type="number"
+                name="email"
+                label="Email"
+                type="email"
                 fullWidth={true}
               />
+              <PHInput name="name" label="Name" type="text" fullWidth={true} />
               <PHInput
-                name="totalBedrooms"
-                label="Total Bedrooms"
-                type="number"
-                fullWidth={true}
-              />
-              <PHInput
-                name="totalRooms"
-                label="Total Rooms"
-                type="number"
-                fullWidth={true}
-              />
-              <PHInput
-                name="amenities"
-                label="Amenities"
+                name="profession"
+                label="Profession"
                 type="text"
                 fullWidth={true}
               />
               <PHInput
-                name="location"
-                label="Location"
+                name="address"
+                label="Address"
                 type="text"
-                fullWidth={true}
-              />
-              <PHInput
-                name="description"
-                label="Description"
-                type="text"
-                fullWidth={true}
-              />
-              <PHInput
-                name="rent"
-                label="Rent"
-                type="number"
-                fullWidth={true}
-              />
-              <PHInput
-                name="advanceAmount"
-                label="Advance Amount"
-                type="number"
                 fullWidth={true}
               />
             </Stack>
@@ -191,4 +159,4 @@ const UpdateFlatModal = ({
   );
 };
 
-export default UpdateFlatModal;
+export default UpdateUserModal;
