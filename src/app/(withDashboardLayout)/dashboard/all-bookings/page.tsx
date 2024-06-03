@@ -7,8 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, Container, Stack, Typography } from "@mui/material";
-import { useGetMyBookingsQuery } from "@/redux/api/bookingApi";
+import { Box, Container, Typography } from "@mui/material";
+import { useGetAllBookingsQuery } from "@/redux/api/bookingApi";
 import { TBookings } from "@/types/Bookings";
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -27,9 +27,8 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
-const MyBookingPage = () => {
-  const { data: bookings, isLoading } = useGetMyBookingsQuery({});
-
+const AllBookingsPage = () => {
+  const { data: bookings, isLoading } = useGetAllBookingsQuery({});
   if (isLoading) {
     return (
       <Box
@@ -88,4 +87,4 @@ const MyBookingPage = () => {
   );
 };
 
-export default MyBookingPage;
+export default AllBookingsPage;

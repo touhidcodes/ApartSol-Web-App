@@ -105,6 +105,7 @@ const FlatCardTable = ({
               <StyledTableCell align="right">Square Feet</StyledTableCell>
               <StyledTableCell align="right">Bedrooms</StyledTableCell>
               <StyledTableCell align="right">Rooms</StyledTableCell>
+
               <StyledTableCell align="right">Edit</StyledTableCell>
               <StyledTableCell align="right">Delete</StyledTableCell>
             </TableRow>
@@ -138,6 +139,7 @@ const FlatCardTable = ({
                 <StyledTableCell align="right">
                   {flat.totalRooms}
                 </StyledTableCell>
+
                 <StyledTableCell align="right">
                   <Button onClick={() => handleEditClick(flat)}>Edit</Button>
                 </StyledTableCell>

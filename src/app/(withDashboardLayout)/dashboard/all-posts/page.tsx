@@ -4,14 +4,14 @@ import { Box, Container, Typography } from "@mui/material";
 import FlatCardTable from "@/components/Card/FlatCardTable/FlatCardTable";
 import {
   useDeleteFlatMutation,
-  useGetMyFlatsQuery,
+  useGetAllFlatsQuery,
   useUpdateFlatMutation,
 } from "@/redux/api/flatApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 
-const MyPostsPage = () => {
-  const { data: flats, isLoading } = useGetMyFlatsQuery({});
+const AllPostsPage = () => {
+  const { data: flats, isLoading } = useGetAllFlatsQuery({});
   const [updateFlat] = useUpdateFlatMutation();
   const [deleteFlat] = useDeleteFlatMutation();
 
@@ -78,4 +78,4 @@ const MyPostsPage = () => {
   );
 };
 
-export default MyPostsPage;
+export default AllPostsPage;

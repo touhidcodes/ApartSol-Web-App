@@ -8,7 +8,7 @@ const roleBasedPrivateRoutes = {
   USER: [/^\/dashboard\/my-bookings/, /^\/dashboard\/my-posts/],
   ADMIN: [
     /^\/dashboard\/all-user/,
-    /^\/dashboard\/all-flats/,
+    /^\/dashboard\/all-posts/,
     /^\/dashboard\/all-bookings/,
     /^\/dashboard\/update-flats/,
     /^\/dashboard\/update-bookings/,
