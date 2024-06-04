@@ -48,7 +48,7 @@ const RegisterPage = () => {
       const res = await userRegister(data);
 
       if (res?.data?.id) {
-        toast.success(res?.message);
+        toast.success("User registred successfully!");
         const result = await userLogin({
           password: values.password,
           identifier: values.email || values.username,

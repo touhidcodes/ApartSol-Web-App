@@ -3,7 +3,12 @@ import type { NextRequest } from "next/server";
 import { decodedToken } from "@/utils/jwt-decode";
 
 const AuthRoutes = ["/login", "/register"];
-const commonPrivateRoutes = ["/dashboard/profile", "/post", /^\/booking\/.+$/];
+const commonPrivateRoutes = [
+  "/dashboard/profile",
+  "/dashboard/change-password",
+  "/post",
+  /^\/booking\/.+$/,
+];
 const roleBasedPrivateRoutes = {
   USER: [/^\/dashboard\/my-bookings/, /^\/dashboard\/my-posts/],
   ADMIN: [
