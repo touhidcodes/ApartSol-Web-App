@@ -1,5 +1,7 @@
 "use client";
-import UpdateUserModal from "@/components/Modal/UpdateUserModal/UpdateUserModal";
+
+import UpdateUserProfileModal from "@/components/Modal/UpdateUserProfileModal/UpdateUserProfileModal";
+import useUserInfo from "@/hooks/useUserInfo";
 import {
   useGetUserWithProfileQuery,
   useUpdateUserProfileMutation,
@@ -39,6 +41,7 @@ const ProfilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { data, isLoading } = useGetUserWithProfileQuery({});
   const [updateUser] = useUpdateUserProfileMutation();
+  const user = useUserInfo();
 
   useEffect(() => {
     if (data) {
@@ -178,7 +181,7 @@ const ProfilePage = () => {
         </Container>
       </Box>
       {profileData && (
-        <UpdateUserModal
+        <UpdateUserProfileModal
           open={isModalOpen}
           userProfile={profileData}
           onClose={handleCloseModal}

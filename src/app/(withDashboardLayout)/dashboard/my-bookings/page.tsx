@@ -27,7 +27,7 @@ const StyledTableRow = styled(TableRow)(() => ({
   },
 }));
 
-const MyBookingPage = () => {
+const MyBookingsPage = () => {
   const { data: bookings, isLoading } = useGetMyBookingsQuery({});
 
   if (isLoading) {
@@ -88,4 +88,4 @@ const MyBookingPage = () => {
   );
 };
 
-export default MyBookingPage;
+export default MyBookingsPage;

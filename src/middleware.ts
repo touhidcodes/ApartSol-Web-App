@@ -10,8 +10,6 @@ const roleBasedPrivateRoutes = {
     /^\/dashboard\/all-user/,
     /^\/dashboard\/all-posts/,
     /^\/dashboard\/all-bookings/,
-    /^\/dashboard\/update-flats/,
-    /^\/dashboard\/update-bookings/,
   ],
 };
 

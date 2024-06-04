@@ -3,6 +3,13 @@ import { baseApi } from "./baseApi";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
+    getAllUser: build.query({
+      query: () => ({
+        url: "/all-users",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.user],
+    }),
     getSingleUser: build.query({
       query: () => ({
         url: "/user",
@@ -25,11 +32,21 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.user],
     }),
+    UpdateUserStatus: build.mutation({
+      query: ({ userId, updatedData }) => ({
+        url: `/status/${userId}`,
+        method: "PUT",
+        data: updatedData,
+      }),
+      invalidatesTags: [tagTypes.user],
+    }),
   }),
 });
 
 export const {
   useGetSingleUserQuery,
   useGetUserWithProfileQuery,
+  useGetAllUserQuery,
   useUpdateUserProfileMutation,
+  useUpdateUserStatusMutation,
 } = userApi;

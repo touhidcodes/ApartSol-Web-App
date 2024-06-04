@@ -10,6 +10,8 @@ type TInputProps = {
   sx?: SxProps;
   placeholder?: string;
   required?: boolean;
+  children?: React.ReactNode;
+  select?: boolean;
 };
 
 const PHInput = ({
@@ -20,6 +22,8 @@ const PHInput = ({
   fullWidth,
   sx,
   required,
+  children,
+  select = false,
 }: TInputProps) => {
   const { control } = useFormContext();
   const isNumberType = type === "number";
@@ -43,7 +47,10 @@ const PHInput = ({
           inputProps={
             isNumberType ? { inputMode: "numeric", pattern: "[0-9]*" } : {}
           }
-        />
+          select={select}
+        >
+          {children}
+        </TextField>
       )}
     />
   );

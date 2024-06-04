@@ -1,64 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Box, Typography, Button, Stack } from "@mui/material";
-import { TFlat } from "@/types/Flats";
+import { Modal, Box, Typography, Button, Stack, MenuItem } from "@mui/material";
 import PHInput from "@/components/Forms/PHInput";
-import PHFileUploader from "@/components/Forms/PHFileUploader";
 import PHForm from "@/components/Forms/PHForm";
 import { FieldValues } from "react-hook-form";
-import { toast } from "sonner";
-import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
-import { TUserWithProfile } from "@/types/User";
+import { TUser } from "@/types/User";
 
 interface TUpdateUserModalProps {
   open: boolean;
-  userProfile: TUserWithProfile | null;
+  user: TUser | null;
   onClose: () => void;
-  onSave: (updatedUser: FieldValues) => void;
+  onSave: (updatedUser: FieldValues, userId: string) => void;
 }
 
 const UpdateUserModal = ({
   open,
-  userProfile,
+  user,
   onClose,
   onSave,
 }: TUpdateUserModalProps) => {
-  const [profileUrl, setProfileUrl] = useState<string>("");
-  const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
-  const [updatedUser, setUpdatedUser] = useState<TUserWithProfile | null>(
-    userProfile
-  );
+  const [updatedUser, setUpdatedUser] = useState<TUser | null>(user);
 
-  //  set user data which going to be update
+  // Set user data to be updated
   useEffect(() => {
-    setUpdatedUser(userProfile);
-  }, [userProfile]);
+    setUpdatedUser(user);
+  }, [user]);
 
-  //  pass the updated data to parent component for update
+  // Pass the updated data to parent component for update
   const handleUpdateUser = async (values: FieldValues) => {
-    if (profileUrl && userProfile) {
-      onSave({ ...values, image: profileUrl });
-    } else if (userProfile) {
-      onSave(values);
+    if (user) {
+      onSave(values, user?.id);
     }
     onClose();
-    setProfileUrl("");
-  };
-
-  //  image upload
-  const handleImageUpload = async (files: File[]) => {
-    if (files.length > 0) {
-      setImageUploadLoading(true);
-      try {
-        const url = await uploadImageToImageBB(files[0]);
-        setProfileUrl(url);
-        toast.success("Image uploaded successfully!");
-      } catch (error) {
-        console.error("Error uploading thumbnail image:", error);
-        toast.error("Please upload image again");
-      } finally {
-        setImageUploadLoading(false);
-      }
-    }
   };
 
   return (
@@ -71,7 +43,6 @@ const UpdateUserModal = ({
           sx={{
             maxWidth: 600,
             width: "100%",
-            height: "100%",
             boxShadow: 1,
             borderRadius: 1,
             p: 5,
@@ -83,66 +54,35 @@ const UpdateUserModal = ({
           <PHForm
             onSubmit={handleUpdateUser}
             defaultValues={{
-              email: updatedUser?.email || "",
-              username: updatedUser?.username || "",
-              name: updatedUser?.name || "",
-              profession: updatedUser?.profession || "",
-              address: updatedUser?.address || "",
+              role: updatedUser?.role || "",
+              status: updatedUser?.status || "",
             }}
           >
             <Stack spacing={4} my={1} marginBottom={5}>
-              <PHFileUploader
-                accept="image/*"
-                uploadType="single"
-                onFileUpload={handleImageUpload}
-              />
-              {imageUploadLoading && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
-                    Uploading image...
-                  </Typography>
-                </Box>
-              )}
-              {profileUrl && (
-                <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
-                  Image uploaded successfully!
-                </Typography>
-              )}
               <PHInput
-                name="username"
-                label="Username"
+                name="role"
+                label="Role"
                 type="text"
                 fullWidth={true}
-              />
+                select
+              >
+                <MenuItem value="USER">User</MenuItem>
+                <MenuItem value="ADMIN">Admin</MenuItem>
+              </PHInput>
               <PHInput
-                name="email"
-                label="Email"
-                type="email"
-                fullWidth={true}
-              />
-              <PHInput name="name" label="Name" type="text" fullWidth={true} />
-              <PHInput
-                name="profession"
-                label="Profession"
+                name="status"
+                label="Status"
                 type="text"
+                select
                 fullWidth={true}
-              />
-              <PHInput
-                name="address"
-                label="Address"
-                type="text"
-                fullWidth={true}
-              />
+              >
+                <MenuItem value="ACTIVE">Active</MenuItem>
+                <MenuItem value="BLOCKED">Blocked</MenuItem>
+              </PHInput>
             </Stack>
             <Stack
               direction="row"
-              sx={{ alignItems: "enter", justifyContent: "space-between" }}
+              sx={{ alignItems: "center", justifyContent: "space-between" }}
               spacing={5}
             >
               <Button fullWidth={true} type="submit">

@@ -14,3 +14,11 @@ export type TUserWithProfile = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TUser = {
+  id: string;
+  email: string;
+  role: string;
+  username: string;
+  status: string;
+};

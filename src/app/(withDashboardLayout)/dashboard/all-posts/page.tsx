@@ -67,7 +67,7 @@ const AllPostsPage = () => {
   return (
     <Container sx={{ paddingBottom: "50px" }}>
       <Typography variant="h4" component="h1" gutterBottom my={3}>
-        My Posts
+        All Posts
       </Typography>
       <FlatCardTable
         flats={flats}

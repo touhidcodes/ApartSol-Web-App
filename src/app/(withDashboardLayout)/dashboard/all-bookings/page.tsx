@@ -49,7 +49,7 @@ const AllBookingsPage = () => {
     <>
       <Container sx={{ paddingBottom: "50px" }}>
         <Typography variant="h4" component="h1" gutterBottom my={3}>
-          My Bookings
+          All Bookings
         </Typography>
 
         <TableContainer component={Paper}>
