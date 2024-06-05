@@ -78,6 +78,7 @@ export const axiosBaseQuery =
     // console.log("Axios Config:", config);
 
     try {
+      console.log(url, "url");
       const result = await axiosInstance(config);
       return { data: result.data };
     } catch (axiosError) {

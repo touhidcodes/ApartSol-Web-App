@@ -1,17 +1,20 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import assets from "@/assets/index";
+import SearchBar from "../SearchBar/SearchBar";
 
 const HeroSection = () => {
   return (
-    <div className="bg-[#FFF8F4] pt-5 pb-20">
+    <div className="bg-[#FFF8F4] py-5 ">
       <Container
         sx={{
           position: "relative",
-          height: "124vh",
+          height: { xs: "auto", md: "124vh" },
+          minHeight: { xs: "80vh", md: "124vh" },
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          padding: { xs: 2, md: 0 },
         }}
       >
         <Box
@@ -24,6 +27,7 @@ const HeroSection = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            flexDirection: "column",
           }}
         >
           <Image
@@ -42,11 +46,15 @@ const HeroSection = () => {
               backgroundColor: "rgba(0, 0, 0, 0.3)",
             }}
           />
-          <Box
+          <Stack
             sx={{
               position: "relative",
               zIndex: 1,
+              padding: { xs: 2, md: 0 },
             }}
+            alignItems="center"
+            justifyContent="center"
+            spacing={2}
           >
             <Typography
               variant="h2"
@@ -54,39 +62,17 @@ const HeroSection = () => {
               gutterBottom
               sx={{
                 color: "#FFF8F4",
-                width: "600px",
+                width: { xs: "100%", md: "600px" },
                 fontWeight: "400",
                 textAlign: "center",
-                marginBottom: "100px",
-                fontStyle: "bold",
+                marginBottom: { xs: "50px", md: "100px" },
+                fontSize: { xs: "2rem", md: "3rem" },
               }}
             >
               Get the ideal flat for your family
             </Typography>
-            <Box
-              sx={{
-                backgroundColor: "white",
-                padding: 4,
-                borderRadius: 2,
-                boxShadow: 3,
-
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="h4" component="h1" gutterBottom>
-                Find Your Perfect Flat
-              </Typography>
-              <TextField
-                label="Search for flats"
-                variant="outlined"
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <Button variant="contained" color="primary" fullWidth>
-                Search
-              </Button>
-            </Box>
-          </Box>
+            <SearchBar />
+          </Stack>
         </Box>
       </Container>
     </div>

@@ -1,28 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface FlatState {
-  updatedFlatId: string;
+export interface SearchParams {
+  params: string;
 }
 
-const initialState: FlatState = {
-  updatedFlatId: "",
+const initialState: SearchParams = {
+  params: "",
 };
 
 export const flatSlice = createSlice({
   name: "flat",
   initialState,
   reducers: {
-    setUpdateFlatId: (state, action: PayloadAction<string>) => {
-      state.updatedFlatId = action.payload;
-    },
-    removeUpdateFlatId: (state) => {
-      state.updatedFlatId = "";
+    setSearchParams(state, action: PayloadAction<SearchParams>) {
+      state.params = action.payload.params;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUpdateFlatId, removeUpdateFlatId } = flatSlice.actions;
+export const { setSearchParams } = flatSlice.actions;
 
 export default flatSlice.reducer;

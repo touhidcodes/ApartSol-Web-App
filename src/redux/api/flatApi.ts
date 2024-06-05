@@ -4,8 +4,8 @@ import { baseApi } from "./baseApi";
 export const flatsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllFlats: build.query({
-      query: () => ({
-        url: "/flats?availability=true",
+      query: (params) => ({
+        url: `/flats?${params}`,
         method: "GET",
       }),
       providesTags: [tagTypes.flat],

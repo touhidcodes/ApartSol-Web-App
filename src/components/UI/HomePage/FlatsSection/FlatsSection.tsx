@@ -2,16 +2,13 @@
 
 import FlatCard from "@/components/Card/FlatCard/FlatsCard";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
-import { RootState } from "@/redux/store";
 import { TFlat } from "@/types/Flats";
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-const FlatsPage = () => {
-  const searchParams = useSelector((state: RootState) => state.flat.params);
+const FlatsSection = () => {
   const [flats, setFlats] = useState<TFlat[]>([]);
-  const { data, isLoading } = useGetAllFlatsQuery(searchParams);
+  const { data, isLoading } = useGetAllFlatsQuery({ limit: 6 });
 
   useEffect(() => {
     if (data) {
@@ -37,10 +34,13 @@ const FlatsPage = () => {
   }
 
   return (
-    <Box sx={{ p: 3, height: "100%", background: "#FFF8F4" }}>
+    <Box sx={{ py: 5, background: "#FFF8F4" }}>
       <Container>
-        <Grid container spacing={4}>
-          {flats.map((flat: TFlat) => (
+        <Typography variant="h4" sx={{ mb: 3, textAlign: "center" }}>
+          Featured Flats
+        </Typography>
+        <Grid container spacing={4} mt={2}>
+          {flats.slice(0, 6).map((flat: TFlat) => (
             <Grid item xs={12} sm={6} md={4} key={flat.id}>
               <FlatCard flat={flat} />
             </Grid>
@@ -51,4 +51,4 @@ const FlatsPage = () => {
   );
 };
 
-export default FlatsPage;
+export default FlatsSection;
