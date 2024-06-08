@@ -1,32 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
-import { Container, Typography, Box, Stack, Grid, Button } from "@mui/material";
-import * as z from "zod";
+import { Container, Typography, Stack, Button } from "@mui/material";
 import PHInput from "@/components/Forms/PHInput";
 import PHForm from "@/components/Forms/PHForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues } from "react-hook-form";
 import { useChangePasswordMutation } from "@/redux/api/userApi";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { logoutUser } from "@/services/actions/logoutUser";
 
-// Validation schema using Zod
-const validationSchema = z
-  .object({
-    oldPassword: z.string().min(1, "Old password is required"),
-    newPassword: z
-      .string()
-      .min(6, "New password must be at least 6 characters long"),
-    confirmPassword: z
-      .string()
-      .min(6, "Confirm password must be at least 6 characters long"),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+import { logoutUser } from "@/services/actions/logoutUser";
+import { useRouter } from "next/navigation";
+import { changePasswordValidationSchema } from "@/constants/schema";
 
 const ChangePasswordPage = () => {
   const [changePassword] = useChangePasswordMutation();
@@ -61,7 +45,7 @@ const ChangePasswordPage = () => {
         </Typography>
         <PHForm
           onSubmit={handleChange}
-          resolver={zodResolver(validationSchema)}
+          resolver={zodResolver(changePasswordValidationSchema)}
           defaultValues={{
             oldPassword: "",
             newPassword: "",

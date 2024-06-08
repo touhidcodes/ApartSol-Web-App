@@ -39,7 +39,7 @@ const FlatsPage = () => {
   return (
     <Box sx={{ p: 3, height: "100%", background: "#FFF8F4" }}>
       <Container>
-        <Grid container spacing={4}>
+        <Grid container spacing={4} mb={5}>
           {flats.map((flat: TFlat) => (
             <Grid item xs={12} sm={6} md={4} key={flat.id}>
               <FlatCard flat={flat} />

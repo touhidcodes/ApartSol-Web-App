@@ -1,39 +1,18 @@
 "use client";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Image from "next/image";
-import assets from "@/assets";
+
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Link from "next/link";
-import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { userLogin } from "@/services/actions/userLogin";
 import { storeUserInfo } from "@/services/auth.services";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userRegister } from "@/services/actions/userRegister";
 import { USER_ROLE } from "@/constants/role";
-
-export const validationSchema = z.object({
-  username: z.string().min(1, "Please enter your username!"),
-  email: z.string().email("Please enter a valid email address!"),
-  password: z.string().min(6, "Must be at least 6 characters"),
-});
-
-export const defaultValues = {
-  password: "",
-  username: "",
-  email: "",
-};
+import { registerValidationSchema } from "@/constants/schema";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -48,7 +27,7 @@ const RegisterPage = () => {
       const res = await userRegister(data);
 
       if (res?.data?.id) {
-        toast.success("User registred successfully!");
+        toast.success("User registered successfully!");
         const result = await userLogin({
           password: values.password,
           identifier: values.email || values.username,
@@ -119,7 +98,7 @@ const RegisterPage = () => {
           <Box m={5}>
             <PHForm
               onSubmit={handleRegister}
-              resolver={zodResolver(validationSchema)}
+              resolver={zodResolver(registerValidationSchema)}
               defaultValues={{
                 email: "",
                 password: "",

@@ -1,7 +1,7 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 import Image from "next/image";
-import assets from "@/assets/index";
 import SearchBar from "../SearchBar/SearchBar";
+import heroImage from "../../../../assets/images/hero.jpg";
 
 const HeroSection = () => {
   return (
@@ -30,12 +30,7 @@ const HeroSection = () => {
             flexDirection: "column",
           }}
         >
-          <Image
-            src={assets.images.hero}
-            alt="home"
-            layout="fill"
-            objectFit="cover"
-          />
+          <Image src={heroImage} alt="home" layout="fill" objectFit="cover" />
           <Box
             sx={{
               position: "absolute",

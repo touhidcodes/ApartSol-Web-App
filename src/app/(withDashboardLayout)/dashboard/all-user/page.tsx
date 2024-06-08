@@ -1,12 +1,6 @@
 "use client";
 
 import { Box, Container, Typography } from "@mui/material";
-import FlatCardTable from "@/components/Card/FlatCardTable/FlatCardTable";
-import {
-  useDeleteFlatMutation,
-  useGetAllFlatsQuery,
-  useUpdateFlatMutation,
-} from "@/redux/api/flatApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import UserCardTable from "@/components/Card/UserCardTable/UserCardTable";
@@ -15,7 +9,7 @@ import {
   useUpdateUserStatusMutation,
 } from "@/redux/api/userApi";
 
-const AllPostsPage = () => {
+const AllUserPage = () => {
   const { data: users, isLoading } = useGetAllUserQuery({});
   const [updateUser] = useUpdateUserStatusMutation();
 
@@ -58,4 +52,4 @@ const AllPostsPage = () => {
   );
 };
 
-export default AllPostsPage;
+export default AllUserPage;

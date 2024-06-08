@@ -4,27 +4,13 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
 import PHFileUploader from "@/components/Forms/PHFileUploader";
 import { toast } from "sonner";
 import { useCreateFlatMutation } from "@/redux/api/flatApi";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
-
-// zod validation schema
-const validationSchema = z.object({
-  title: z.string().min(1, "Flat title is required"),
-  image: z.string({ required_error: "Image file is required" }),
-  squareFeet: z.string().min(1, "Square feet must be a positive number"),
-  totalBedrooms: z.string().min(1, "Total bedrooms must be a positive number"),
-  totalRooms: z.string().min(1, "Total rooms must be a positive number"),
-  amenities: z.string().min(1, "Amenities description is required"),
-  location: z.string().min(1, "Location is required"),
-  description: z.string().min(1, "Description is required"),
-  rent: z.string().min(1, "Rent must be a positive number"),
-  advanceAmount: z.string().min(1, "Advance amount must be a positive number"),
-});
+import { flatPostValidationSchema } from "@/constants/schema";
 
 const PostFlatPage = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
@@ -126,7 +112,7 @@ const PostFlatPage = () => {
             <Box m={5}>
               <PHForm
                 onSubmit={handlePost}
-                resolver={zodResolver(validationSchema)}
+                resolver={zodResolver(flatPostValidationSchema)}
                 defaultValues={{
                   title: "",
                   image: "",

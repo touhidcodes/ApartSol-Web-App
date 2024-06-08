@@ -9,8 +9,6 @@ import {
   Stack,
   Typography,
   Divider,
-  useMediaQuery,
-  useTheme,
   Container,
   Button,
 } from "@mui/material";

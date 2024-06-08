@@ -1,23 +1,16 @@
 "use client";
+
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import { FieldValues } from "react-hook-form";
 import { userLogin } from "@/services/actions/userLogin";
-import { storeUserInfo } from "@/services/auth.services";
 import { toast } from "sonner";
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { loginValidationSchema } from "@/constants/schema";
 import { useRouter } from "next/navigation";
-
-export const validationSchema = z.object({
-  identifier: z.string({
-    required_error: "Please enter a valid username or email address!",
-  }),
-  password: z.string().min(6, "Must be at least 6 characters"),
-});
 
 const LoginPage = () => {
   const [error, setError] = useState("");
@@ -29,10 +22,10 @@ const LoginPage = () => {
 
       if (res?.data?.token) {
         toast.success(res?.message);
-        router.push("/dashboard/profile");
+        router.push("/"), router.refresh();
       } else {
         setError(res.message);
-        // console.log(res);
+        console.log(res.message);
       }
     } catch (err: any) {
       console.error(err.message);
@@ -109,7 +102,7 @@ const LoginPage = () => {
           <Box m={5}>
             <PHForm
               onSubmit={handleLogin}
-              resolver={zodResolver(validationSchema)}
+              resolver={zodResolver(loginValidationSchema)}
               defaultValues={{
                 identifier: "",
                 password: "",
@@ -146,7 +139,7 @@ const LoginPage = () => {
                 </Box>
               </Stack>
 
-              <Link href={"/forgot-password"}>
+              <Link href={"/"}>
                 <Typography
                   mb={1}
                   textAlign="end"

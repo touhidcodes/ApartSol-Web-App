@@ -3,26 +3,27 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import SideBar from "../SideBar/SideBar";
-import { Avatar, Badge, Button, Stack } from "@mui/material";
-import assets from "@/assets";
-// import AccountMenu from "../AccountMenu/AccountMenu";
+import { Avatar, Badge, Stack } from "@mui/material";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { logoutUser } from "@/services/actions/logoutUser";
-import { useRouter } from "next/navigation";
-import { useGetSingleUserQuery } from "@/redux/api/userApi";
+import {
+  useGetSingleUserQuery,
+  useGetUserWithProfileQuery,
+} from "@/redux/api/userApi";
+import AuthButton from "@/components/UI/AuthButton.tsx/AuthButton";
 
 const drawerWidth = 300;
 
 const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const { data, isLoading } = useGetSingleUserQuery({});
+  const { data: userProfile } = useGetUserWithProfileQuery({});
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -39,12 +40,8 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const { data, isLoading } = useGetSingleUserQuery({});
-  const router = useRouter();
-
-  const handleLogOut = () => {
-    logoutUser(router);
-  };
+  const placeholder =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUOdfo4lewXJYT_2xPo_Xu2Lj6XPn78X9UJA&s";
 
   return (
     <Box sx={{ display: "flex", backgroundColor: "#FFF8F4", height: "100vh" }}>
@@ -81,17 +78,11 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
               <Typography
                 variant="body2"
                 noWrap
-                component="div"
                 sx={{ color: "rgba(11, 17, 52, 0.6)" }}
               >
                 Hi, {isLoading ? "Loading..." : data?.username}
               </Typography>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ color: "secondary.main" }}
-              >
+              <Typography variant="h6" noWrap sx={{ color: "secondary.main" }}>
                 Welcome to Flat Mate Finder
               </Typography>
             </Box>
@@ -101,8 +92,8 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
                   <NotificationsNoneIcon color="action" />
                 </IconButton>
               </Badge>
-              <Avatar alt={"name"} src={assets.images.logo} />
-              <Button onClick={handleLogOut}>Logout</Button>
+              <Avatar alt={"name"} src={userProfile?.image || placeholder} />
+              <AuthButton />
               {/* <AccountMenu /> */}
             </Stack>
           </Box>
@@ -120,7 +111,7 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },

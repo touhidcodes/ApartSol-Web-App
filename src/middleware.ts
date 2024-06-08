@@ -53,7 +53,6 @@ export function middleware(request: NextRequest) {
   }
 
   const role = decodedData?.role?.toUpperCase();
-  console.log(role);
 
   // Check if the user role matches the role-based routes
   if (role && roleBasedPrivateRoutes[role as Role]) {

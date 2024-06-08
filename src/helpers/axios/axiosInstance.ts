@@ -4,7 +4,6 @@ import { getNewAccessToken } from "@/services/auth.services";
 import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import axios from "axios";
-import { toast } from "sonner";
 
 const instance = axios.create();
 instance.defaults.headers.post["Content-Type"] = "application/json";
@@ -44,7 +43,6 @@ instance.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     console.log(error);
-    toast.error(error);
     const config = error.config;
     // console.log(config);
     if (error?.response?.status === 500 && !config.sent) {

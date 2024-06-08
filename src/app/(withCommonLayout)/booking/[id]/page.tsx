@@ -8,23 +8,13 @@ import {
   Grid,
   styled,
 } from "@mui/material";
-import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import PHForm from "@/components/Forms/PHForm";
-import PHInput from "@/components/Forms/PHInput";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import {
-  useGetSingleUserQuery,
-  useGetUserWithProfileQuery,
-} from "@/redux/api/userApi";
+import { useGetUserWithProfileQuery } from "@/redux/api/userApi";
 import { TUserWithProfile } from "@/types/User";
 import { TFlat } from "@/types/Flats";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import { useBookingRequestMutation } from "@/redux/api/bookingApi";
-import { bookingRequestActions } from "@/services/actions/text";
 import { useRouter } from "next/navigation";
 
 const StyledInformationBox = styled(Box)(({ theme }) => ({

@@ -1,0 +1,11 @@
+GitHub Repository Links:
+Client Side: 
+Server Side: 
+
+Live Deployment Link:
+Client Side: https://flat-mate-finder.vercel.app/
+Server Side: https://flat-sharing-app.vercel.app/
+
+Project Showcase:
+Video Link: 
+

@@ -14,18 +14,14 @@ import Link from "next/link";
 import assets from "@/assets/index";
 import useUserInfo from "@/hooks/useUserInfo";
 import { USER_ROLE } from "@/constants/role";
-import { useRouter } from "next/navigation";
-import { logoutUser } from "@/services/actions/logoutUser";
+
 import { useState } from "react";
+import AuthButton from "@/components/UI/AuthButton.tsx/AuthButton";
 
 const Navbar = () => {
   const userInfo = useUserInfo();
-  const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogOut = () => {
-    logoutUser(router);
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -93,27 +89,24 @@ const Navbar = () => {
             <Typography variant="navItem" component={Link} href="/">
               Home
             </Typography>
+            <Typography variant="navItem" component={Link} href="/flats">
+              Flats
+            </Typography>
             <Typography variant="navItem" component={Link} href="/about">
               About Us
             </Typography>
-            <Typography variant="navItem" component={Link} href="/login">
-              Login
-            </Typography>
-            {userInfo?.role === USER_ROLE.ADMIN ? (
-              <Typography
-                variant="navItem"
-                component={Link}
-                href="/dashboard/profile"
-              >
-                Dashboard
+            {!userInfo?.userId && (
+              <Typography variant="navItem" component={Link} href="/register">
+                Register
               </Typography>
-            ) : (
+            )}
+            {userInfo?.userId && (
               <Typography
                 variant="navItem"
                 component={Link}
                 href="/dashboard/profile"
               >
-                My Profile
+                {userInfo.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
               </Typography>
             )}
           </Stack>
@@ -127,13 +120,7 @@ const Navbar = () => {
             >
               Post Flat
             </Button>
-            {userInfo?.userId ? (
-              <Button onClick={handleLogOut}>Logout</Button>
-            ) : (
-              <Button component={Link} href="/login">
-                Login
-              </Button>
-            )}
+            <AuthButton />
           </Stack>
         </Stack>
       </Container>

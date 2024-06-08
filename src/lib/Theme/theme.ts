@@ -29,7 +29,7 @@ export const theme = createTheme({
         },
         outlined: {
           padding: "12px 30px",
-          background: "#fff",
+          background: "#FFF8F4",
           color: "#ff793f",
           fontWeight: "700",
           fontSize: "16px",

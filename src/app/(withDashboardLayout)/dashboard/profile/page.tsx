@@ -1,7 +1,6 @@
 "use client";
 
 import UpdateUserProfileModal from "@/components/Modal/UpdateUserProfileModal/UpdateUserProfileModal";
-import useUserInfo from "@/hooks/useUserInfo";
 import {
   useGetUserWithProfileQuery,
   useUpdateUserProfileMutation,
@@ -17,7 +16,7 @@ import {
   styled,
   Avatar,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 const StyledInformationBox = styled(Box)(({ theme }) => ({
@@ -35,19 +34,9 @@ const placeholder =
 
 const ProfilePage = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
-  const [profileData, setProfileData] = useState<TUserWithProfile | undefined>(
-    undefined
-  );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { data, isLoading } = useGetUserWithProfileQuery({});
+  const { data: profileData, isLoading } = useGetUserWithProfileQuery({});
   const [updateUser] = useUpdateUserProfileMutation();
-  const user = useUserInfo();
-
-  useEffect(() => {
-    if (data) {
-      setProfileData(data);
-    }
-  }, [data]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
