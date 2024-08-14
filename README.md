@@ -72,7 +72,7 @@ npm run dev
 
 # User Login:
 · Username: user
-· Email: user@admin.com
+· Email: user@user.com
 · Password: password
 
 ```

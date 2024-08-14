@@ -16,7 +16,9 @@ const AuthButton = () => {
   return (
     <>
       {userInfo?.userId ? (
-        <Button onClick={handleLogOut}>Logout</Button>
+        <Button variant="contained" color="primary" onClick={handleLogOut}>
+          Logout
+        </Button>
       ) : (
         <Button component={Link} href="/login">
           Login

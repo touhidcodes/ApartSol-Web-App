@@ -1,11 +1,25 @@
 GitHub Repository Links:
-Client Side: 
-Server Side: 
+Client Side: https://github.com/touhidcodes/Level-2-Assignment-9-Flat-Mate-Finder-App-Client
+Server Side: https://github.com/touhidcodes/Level-2-Assignment-9-Flat-Mate-Finder-App-Server
 
 Live Deployment Link:
 Client Side: https://flat-mate-finder.vercel.app/
 Server Side: https://flat-sharing-app.vercel.app/
 
 Project Showcase:
-Video Link: 
+Video Link: https://drive.google.com/file/d/1bSqyQ_VdM4O8LQ3bCnSkWTrgDiZn7PW7/view
 
+# Super Admin Login:
+· Username: superadmin
+· Email: super@admin.com
+· Password: superadmin
+
+# Admin Login:
+· Username: admin
+· Email: admin@admin.com
+· Password: password
+
+# User Login:
+· Username: user
+· Email: user@user.com
+· Password: password
