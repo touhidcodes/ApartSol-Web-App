@@ -7,7 +7,6 @@ Flat Mate Finder is a platform designed to simplify the process of finding flatm
 - **User Authentication**: Secure user authentication system with login/register functionality.
 - **Flat Listings**: Browse through a wide range of flat listings with detailed information about location, price, and amenities.
 - **Search and Filter**: Easily search for flats based on location, price range, number of bedrooms, and more.
-- **Messaging System**: Communicate with potential flatmates through an integrated messaging system.
 - **Profile Management**: Manage your profile information and preferences to find the best match.
 - **Admin Dashboard**: Admin dashboard for managing user accounts, flat listings, and reported content.
 
