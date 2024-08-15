@@ -44,14 +44,14 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUOdfo4lewXJYT_2xPo_Xu2Lj6XPn78X9UJA&s";
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "#FFF8F4", height: "100vh" }}>
+    <Box sx={{ display: "flex", backgroundColor: "#EBF0F4", height: "full" }}>
       {/* <CssBaseline /> */}
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          background: "#FFF8F4",
+          background: "#EBF0F4",
           boxShadow: 0,
           py: 1,
         }}
@@ -146,7 +146,7 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <Toolbar />
-        <Box style={{ backgroundColor: "#FFF8F4" }}>{children}</Box>
+        <Box style={{ backgroundColor: "#EBF0F4" }}>{children}</Box>
       </Box>
     </Box>
   );
