@@ -1,65 +1,103 @@
 import { Avatar, Box, Container, Grid, Stack, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
+import { testimonialsData } from "@/data/testimonials";
 
 const Testimonial = () => {
-  const testimonials = [
-    {
-      text: "Efficient and friendly service, guided us perfectly. Satisfied with our new flat!",
-      image:
-        "https://images.unsplash.com/photo-1619895862022-09114b41f16f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D",
-      rating: 5,
-    },
-    {
-      text: "Found our dream home, great business with them. Thank you for excellent service!",
-      image:
-        "https://images.unsplash.com/photo-1619895862022-09114b41f16f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D",
-      rating: 4,
-    },
-    {
-      text: "Nice service and well decorated. You can find your flat here...",
-      image:
-        "https://images.unsplash.com/photo-1619895862022-09114b41f16f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D",
-      rating: 4,
-    },
-    // Add more testimonials as needed
-  ];
+  const testimonials = testimonialsData;
 
   const renderStars = (rating: number) => {
     const stars = [];
-    for (let i = 0; i < rating; i++) {
-      stars.push(<StarIcon key={i} />);
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <StarIcon
+          key={i}
+          sx={{ color: i < rating ? "#ff793f" : "#dcdcdc", fontSize: "1rem" }}
+        />
+      );
     }
     return stars;
   };
 
   return (
-    <Box sx={{ py: 5, background: "#EBF0F4", textAlign: "center" }}>
+    <Box
+      sx={{
+        py: { xs: 3, sm: 4, md: 5 },
+        background: "#EBF0F4",
+        textAlign: "center",
+      }}
+    >
       <Container>
-        <Typography variant="h4" sx={{ mb: 3, color: "#00026E" }}>
-          Testimonials
+        <Typography
+          variant="h4"
+          sx={{
+            mb: 3,
+            color: "#00026E",
+          }}
+        >
+          What Our Clients Say
         </Typography>
-        <Grid container spacing={4} justifyContent="center">
+        <Grid
+          container
+          spacing={{ xs: 2, sm: 3, md: 4 }}
+          justifyContent="center"
+        >
           {testimonials.map((testimonial, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index} gap={3} my={3}>
+            <Grid item xs={12} sm={6} md={4} key={index}>
               <Box
                 sx={{
-                  border: "2px solid #ff793f",
+                  display: "flex",
+                  flexDirection: "column",
+                  background: "#FFF",
                   borderRadius: "10px",
                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  padding: "20px",
+                  padding: { xs: "15px", sm: "20px" },
+                  textAlign: "center",
+                  height: "100%",
+                  minHeight: "300px",
                 }}
               >
-                <Stack alignItems="center" justifyContent="center">
+                <Stack
+                  alignItems="center"
+                  justifyContent="center"
+                  sx={{ flex: 1 }}
+                >
                   <Avatar
-                    alt="image"
+                    alt={testimonial.name}
                     src={testimonial.image}
-                    sx={{ width: 100, height: 100 }}
+                    sx={{
+                      width: { xs: 80, sm: 100 },
+                      height: { xs: 80, sm: 100 },
+                      mb: 2,
+                    }}
                   />
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      mb: 1,
+                      fontWeight: "bold",
+                      fontSize: { xs: "1rem", sm: "1.25rem" },
+                    }}
+                  >
+                    {testimonial.name}
+                  </Typography>
                 </Stack>
-                <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>
-                  {testimonial.text}
+                <Typography
+                  variant="body1"
+                  sx={{
+                    mt: 2,
+                    mb: 1,
+                    fontStyle: "italic",
+                  }}
+                >
+                  "{testimonial.text}"
                 </Typography>
-                <Box sx={{ color: "#ff793f" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "#ff793f",
+                  }}
+                >
                   {renderStars(testimonial.rating)}
                 </Box>
               </Box>
