@@ -50,29 +50,26 @@ const Navbar = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Stack direction="row" alignItems="center">
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <Image
-                src={assets.images.logo}
-                alt="logo"
-                width={50}
-                height={50}
-              />
-            </Box>
-            <Typography
-              variant="h4"
-              component={Link}
-              href="/"
-              fontWeight={600}
-              px={2}
-              sx={{
-                color: "#0B1134CC",
-                display: { xs: "none", sm: "block" },
-              }}
-            >
-              Flat Mate Finder
-            </Typography>
-          </Stack>
+          <Link href="/">
+            <Stack direction="row" alignItems="center" justifyContent="center">
+              <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                <Image
+                  src={assets.images.logo}
+                  alt="logo"
+                  width={50}
+                  height={50}
+                />
+              </Box>
+              <Box px={2} sx={{ display: { xs: "none", sm: "block" } }}>
+                <Image
+                  src={isHomepage ? assets.images.text : assets.images.text2}
+                  alt="logo"
+                  width={300}
+                  height={50}
+                />
+              </Box>
+            </Stack>
+          </Link>
 
           <IconButton
             edge="end"
@@ -95,7 +92,7 @@ const Navbar = () => {
               top: { xs: 64, sm: "auto" },
               left: 0,
               right: 0,
-              backgroundColor: { xs: "#FFF8F4", sm: "transparent" },
+              backgroundColor: { xs: "#EBF0F4", sm: "transparent" },
               zIndex: { xs: 1, sm: "auto" },
               padding: { xs: 2, sm: 0 },
             }}

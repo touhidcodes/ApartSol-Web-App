@@ -16,6 +16,8 @@ import { TFlat } from "@/types/Flats";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import { useBookingRequestMutation } from "@/redux/api/bookingApi";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/UI/Loading/Loading";
+import FlatCard from "@/components/Card/FlatCard/FlatsCard";
 
 const StyledInformationBox = styled(Box)(({ theme }) => ({
   background: "#fff",
@@ -54,7 +56,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
     try {
       const res = await bookingRequest(data);
       if (res?.data?.id) {
-        toast.success("Flat deleted successfully!");
+        toast.success("Flat booked successfully!");
         router.push("/flats");
       }
     } catch (err: any) {
@@ -64,25 +66,12 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  if (isLoading || flatLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#FFF8F4",
-          color: "#ff793f",
-        }}
-      >
-        Loading...
-      </Box>
-    );
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
-    <Box sx={{ background: "#FFF8F4" }}>
+    <Box sx={{ background: "#EBF0F4" }} mt={10}>
       <Container sx={{ paddingBottom: "50px" }}>
         <Stack
           sx={{
@@ -105,6 +94,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
           >
             Always we are with you!
           </Typography>
+          <Box mt={5}>{flat && <FlatCard flat={flat} />}</Box>
 
           <Grid item xs={12} md={8} my={4}>
             <Typography

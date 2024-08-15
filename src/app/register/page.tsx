@@ -85,7 +85,7 @@ const RegisterPage = () => {
               <Link
                 href="/login"
                 style={{
-                  color: "#ff793f",
+                  color: "#00026E",
                   textDecoration: "underline",
                   fontWeight: "500",
                 }}

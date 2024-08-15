@@ -1,6 +1,13 @@
 "use client";
 
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Modal,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import { FieldValues } from "react-hook-form";
 import { userLogin } from "@/services/actions/userLogin";
@@ -14,6 +21,7 @@ import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const [error, setError] = useState("");
+  const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (values: FieldValues) => {
@@ -30,6 +38,22 @@ const LoginPage = () => {
     } catch (err: any) {
       console.error(err.message);
     }
+  };
+
+  const handleTestLogin = async (role: "admin" | "user") => {
+    const credentials =
+      role === "admin"
+        ? {
+            identifier: `${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`,
+            password: `${process.env.NEXT_PUBLIC_ADMIN_PASSWORD}`,
+          }
+        : {
+            identifier: `${process.env.NEXT_PUBLIC_USER_EMAIL}`,
+            password: `${process.env.NEXT_PUBLIC_USER_PASSWORD}`,
+          };
+
+    handleLogin(credentials);
+    setOpenModal(false);
   };
 
   return (
@@ -49,7 +73,7 @@ const LoginPage = () => {
             borderRadius: 1,
             p: 4,
             textAlign: "center",
-            background: "#FFF8F4",
+            background: "#EBF0F4",
           }}
         >
           <Stack
@@ -75,7 +99,7 @@ const LoginPage = () => {
               <Link
                 href="/register"
                 style={{
-                  color: "#ff793f",
+                  color: "#00026E",
                   textDecoration: "underline",
                   fontWeight: "500",
                 }}
@@ -163,9 +187,55 @@ const LoginPage = () => {
                 Login
               </Button>
             </PHForm>
+
+            <Button
+              sx={{
+                marginTop: "20px",
+              }}
+              fullWidth={true}
+              onClick={() => setOpenModal(true)}
+            >
+              Login As
+            </Button>
           </Box>
         </Box>
       </Stack>
+
+      <Modal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Box
+          sx={{
+            backgroundColor: "white",
+            padding: 4,
+            borderRadius: 2,
+            boxShadow: 24,
+            width: 300,
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="h6" mb={2}>
+            Test Login
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ mb: 2 }}
+            fullWidth
+            onClick={() => handleTestLogin("admin")}
+          >
+            Login as Admin
+          </Button>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => handleTestLogin("user")}
+          >
+            Login as User
+          </Button>
+        </Box>
+      </Modal>
     </Container>
   );
 };

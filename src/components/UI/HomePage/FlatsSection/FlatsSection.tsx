@@ -6,6 +6,7 @@ import { TFlat } from "@/types/Flats";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Loading from "../../Loading/Loading";
 
 const FlatsSection = () => {
   const [flats, setFlats] = useState<TFlat[]>([]);
@@ -18,20 +19,7 @@ const FlatsSection = () => {
   }, [data]);
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#FFF8F4",
-          color: "#ff793f",
-        }}
-      >
-        Loading...
-      </Box>
-    );
+    return <Loading />;
   }
 
   return (
