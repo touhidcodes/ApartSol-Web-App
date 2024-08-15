@@ -89,7 +89,7 @@ const Testimonial = () => {
                     fontStyle: "italic",
                   }}
                 >
-                  "{testimonial.text}"
+                  {testimonial.text}
                 </Typography>
                 <Box
                   sx={{
