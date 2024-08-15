@@ -33,9 +33,9 @@ const Testimonial = () => {
   };
 
   return (
-    <Box sx={{ py: 5, background: "#FFF8F4", textAlign: "center" }}>
+    <Box sx={{ py: 5, background: "#EBF0F4", textAlign: "center" }}>
       <Container>
-        <Typography variant="h4" sx={{ mb: 3 }}>
+        <Typography variant="h4" sx={{ mb: 3, color: "#00026E" }}>
           Testimonials
         </Typography>
         <Grid container spacing={4} justifyContent="center">

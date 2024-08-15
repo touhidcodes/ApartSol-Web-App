@@ -25,7 +25,10 @@ const HowItWorks = () => {
   return (
     <Box sx={{ py: 5 }}>
       <Container>
-        <Typography variant="h4" sx={{ mb: 3, textAlign: "center" }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 3, textAlign: "center", color: "#00026E" }}
+        >
           How It Works
         </Typography>
         <Grid container spacing={4} justifyContent="center">

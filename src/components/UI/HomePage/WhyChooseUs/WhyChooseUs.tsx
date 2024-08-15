@@ -14,7 +14,7 @@ const WhyChooseUs = () => {
   return (
     <Box sx={{ py: 5, textAlign: "center" }}>
       <Container>
-        <Typography variant="h4" sx={{ mb: 3 }}>
+        <Typography variant="h4" sx={{ mb: 3, color: "#00026E" }}>
           Why Choose Us
         </Typography>
         <Grid container spacing={4} justifyContent="center">

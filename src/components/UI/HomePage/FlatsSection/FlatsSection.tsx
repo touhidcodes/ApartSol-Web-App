@@ -34,14 +34,17 @@ const FlatsSection = () => {
   }
 
   return (
-    <Box sx={{ py: 5, background: "#FFF8F4" }}>
+    <Box sx={{ py: 5, background: "#EBF0F4" }}>
       <Container>
-        <Typography variant="h4" sx={{ mb: 3, textAlign: "center" }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 3, textAlign: "center", color: "#00026E" }}
+        >
           Featured Flats
         </Typography>
         <Grid container spacing={4} mt={2}>
           {flats.slice(0, 6).map((flat: TFlat) => (
-            <Grid item xs={12} sm={6} md={4} key={flat.id}>
+            <Grid item xs={12} sm={6} md={6} key={flat.id}>
               <FlatCard flat={flat} />
             </Grid>
           ))}
