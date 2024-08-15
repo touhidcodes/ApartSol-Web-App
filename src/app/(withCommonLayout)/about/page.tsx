@@ -5,7 +5,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 
 const AboutPage = () => {
   return (
-    <Box sx={{ py: 5, background: "#FFF8F4" }}>
+    <Box sx={{ py: 5, background: "#EBF0F4", mt: 10 }}>
       <Container>
         {/* Mission Statement */}
         <Typography variant="h4" sx={{ mb: 3 }}>

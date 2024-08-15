@@ -1,6 +1,7 @@
 "use client";
 
 import FlatCard from "@/components/Card/FlatCard/FlatsCard";
+import Loading from "@/components/UI/Loading/Loading";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
 import { RootState } from "@/redux/store";
 import { TFlat } from "@/types/Flats";
@@ -20,28 +21,15 @@ const FlatsPage = () => {
   }, [data]);
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#FFF8F4",
-          color: "#ff793f",
-        }}
-      >
-        Loading...
-      </Box>
-    );
+    return <Loading />;
   }
 
   return (
-    <Box sx={{ p: 3, height: "100%", background: "#FFF8F4" }}>
+    <Box sx={{ p: 3, height: "100%", background: "#EBF0F4", mt: 10, pt: 5 }}>
       <Container>
         <Grid container spacing={4} mb={5}>
           {flats.map((flat: TFlat) => (
-            <Grid item xs={12} sm={6} md={4} key={flat.id}>
+            <Grid item xs={12} sm={6} md={6} key={flat.id}>
               <FlatCard flat={flat} />
             </Grid>
           ))}

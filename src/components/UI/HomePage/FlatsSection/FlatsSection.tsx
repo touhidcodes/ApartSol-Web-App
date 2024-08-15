@@ -3,7 +3,8 @@
 import FlatCard from "@/components/Card/FlatCard/FlatsCard";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
 import { TFlat } from "@/types/Flats";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const FlatsSection = () => {
@@ -49,6 +50,13 @@ const FlatsSection = () => {
             </Grid>
           ))}
         </Grid>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
+        >
+          <Button component={Link} href="/flats">
+            View All
+          </Button>
+        </Box>
       </Container>
     </Box>
   );

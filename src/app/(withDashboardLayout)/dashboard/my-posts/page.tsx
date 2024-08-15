@@ -9,6 +9,7 @@ import {
 } from "@/redux/api/flatApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
+import Loading from "@/components/UI/Loading/Loading";
 
 const MyPostsPage = () => {
   const { data: flats, isLoading } = useGetMyFlatsQuery({});
@@ -48,20 +49,7 @@ const MyPostsPage = () => {
   };
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#FFF8F4",
-          color: "#ff793f",
-        }}
-      >
-        Loading...
-      </Box>
-    );
+    return <Loading />;
   }
 
   return (

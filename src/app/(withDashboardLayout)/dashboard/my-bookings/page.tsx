@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import { useGetMyBookingsQuery } from "@/redux/api/bookingApi";
 import { TBookings } from "@/types/Bookings";
+import Loading from "@/components/UI/Loading/Loading";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -32,21 +33,9 @@ const MyBookingsPage = () => {
   const { data: bookings, isLoading } = useGetMyBookingsQuery({});
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#FFF8F4",
-          color: "#ff793f",
-        }}
-      >
-        Loading...
-      </Box>
-    );
+    return <Loading />;
   }
+
   return (
     <>
       <Container sx={{ paddingBottom: "50px" }}>

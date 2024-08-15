@@ -1,6 +1,7 @@
 "use client";
 
 import UpdateUserProfileModal from "@/components/Modal/UpdateUserProfileModal/UpdateUserProfileModal";
+import Loading from "@/components/UI/Loading/Loading";
 import {
   useGetUserWithProfileQuery,
   useUpdateUserProfileMutation,
@@ -58,21 +59,9 @@ const ProfilePage = () => {
   };
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#FFF8F4",
-          color: "#ff793f",
-        }}
-      >
-        Loading...
-      </Box>
-    );
+    return <Loading />;
   }
+
   return (
     <>
       <Box sx={{ background: "#FFF8F4" }}>

@@ -20,6 +20,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Loading from "@/components/UI/Loading/Loading";
 
 const placeholder =
   "https://images.unsplash.com/photo-1469022563428-aa04fef9f5a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZmxhdHN8ZW58MHx8MHx8fDA%3D";
@@ -41,20 +42,7 @@ const FlatDetailCard = ({ params }: PropTypes) => {
   }, [data]);
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#FFF8F4",
-          color: "#ff793f",
-        }}
-      >
-        Loading...
-      </Box>
-    );
+    return <Loading />;
   }
 
   return (

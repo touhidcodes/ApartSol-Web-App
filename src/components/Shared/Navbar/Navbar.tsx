@@ -17,23 +17,30 @@ import { USER_ROLE } from "@/constants/role";
 import { useState } from "react";
 import AuthButton from "@/components/UI/AuthButton.tsx/AuthButton";
 import ActiveLink from "@/components/UI/ActiveLink/ActiveLink";
+import { usePathname, useRouter } from "next/navigation";
 
 const Navbar = () => {
   const userInfo = useUserInfo();
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const currentPath = usePathname();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const isHomepage = currentPath === "/";
+
   return (
     <Box
       sx={{
-        position: "absolute",
+        position: isHomepage ? "absolute" : "fixed",
         top: 0,
         left: 0,
         width: "100%",
         zIndex: 10,
+        backgroundColor: isHomepage ? "transparent" : "#FFF",
+        boxShadow: isHomepage ? "none" : "0 2px 4px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Container maxWidth="xl">
