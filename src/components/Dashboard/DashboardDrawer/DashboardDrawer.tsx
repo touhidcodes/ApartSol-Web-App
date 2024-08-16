@@ -82,7 +82,7 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
               >
                 Hi, {isLoading ? "Loading..." : data?.username}
               </Typography>
-              <Typography variant="h6" noWrap sx={{ color: "secondary.main" }}>
+              <Typography variant="h6" noWrap sx={{ color: "#00026E" }}>
                 Welcome to Flat Mate Finder
               </Typography>
             </Box>

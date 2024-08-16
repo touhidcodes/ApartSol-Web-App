@@ -18,19 +18,6 @@ const SideBar = () => {
 
   return (
     <Box style={{ height: "100vh" }}>
-      {/* <Stack
-        sx={{
-          py: 1,
-          mt: 1,
-        }}
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        gap={1}
-        component={Link}
-        href="/"
-      > */}
-
       <Stack
         sx={{
           py: 1,
@@ -50,7 +37,6 @@ const SideBar = () => {
           <Image src={assets.images.text2} alt="logo" width={200} height={50} />
         </Box>
       </Stack>
-
       <List sx={{ paddingLeft: "20px" }}>
         {drawerItems(userRole as UserRole).map((item, index) => (
           <SideBarItem key={index} item={item} />
