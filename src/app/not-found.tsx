@@ -15,7 +15,7 @@ const NotFoundPage = () => {
   return (
     <Box
       sx={{
-        background: "#FFF8F4",
+        background: "#EBF0F4",
         height: "100vh",
         display: "flex",
         alignItems: "center",

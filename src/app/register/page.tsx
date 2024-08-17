@@ -59,7 +59,7 @@ const RegisterPage = () => {
             borderRadius: 1,
             p: 4,
             textAlign: "center",
-            background: "#FFF8F4",
+            background: "#EBF0F4",
           }}
         >
           <Stack

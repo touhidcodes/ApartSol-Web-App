@@ -31,11 +31,25 @@ const AllUserPage = () => {
   }
 
   return (
-    <Container sx={{ paddingBottom: "50px" }}>
-      <Typography variant="h4" component="h1" gutterBottom my={3}>
+    <Container
+      sx={{
+        paddingBottom: "50px",
+        minHeight: "100vh",
+        paddingX: { xs: "16px", sm: "24px", md: "32px" },
+      }}
+    >
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        my={3}
+        textAlign={{ xs: "center", sm: "left" }}
+      >
         All Users
       </Typography>
-      <UserCardTable users={users} handleUpdate={handleUpdate} />
+      <Box>
+        <UserCardTable users={users} handleUpdate={handleUpdate} />
+      </Box>
     </Container>
   );
 };

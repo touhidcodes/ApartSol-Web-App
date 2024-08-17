@@ -7,16 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import { FieldValues } from "react-hook-form";
 import { TUser } from "@/types/User";
@@ -67,35 +58,43 @@ const UserCardTable = ({ users, handleUpdate }: TUserCardProps) => {
   };
 
   return (
-    <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Username</StyledTableCell>
-              <StyledTableCell align="right">Email</StyledTableCell>
-              <StyledTableCell align="right">Role</StyledTableCell>
-              <StyledTableCell align="right">Status</StyledTableCell>
-              <StyledTableCell align="right">Update</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((user: TUser) => (
-              <StyledTableRow key={user.id}>
-                <StyledTableCell component="th" scope="row">
-                  {user.username}
-                </StyledTableCell>
-                <StyledTableCell align="right">{user.email}</StyledTableCell>
-                <StyledTableCell align="right">{user.role}</StyledTableCell>
-                <StyledTableCell align="right">{user.status}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button onClick={() => handleEditClick(user)}>Update</Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <Paper sx={{ width: "100%", overflow: "auto" }}>
+      <Box sx={{ width: "100%", overflow: "auto" }}>
+        <TableContainer sx={{ minWidth: "200px" }}>
+          <Table
+            stickyHeader
+            aria-label="sticky table"
+            sx={{ tableLayout: "fixed" }}
+          >
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Username</StyledTableCell>
+                <StyledTableCell align="right">Email</StyledTableCell>
+                <StyledTableCell align="right">Role</StyledTableCell>
+                <StyledTableCell align="right">Status</StyledTableCell>
+                <StyledTableCell align="right">Update</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user: TUser) => (
+                <StyledTableRow key={user.id}>
+                  <StyledTableCell component="th" scope="row">
+                    {user.username}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{user.email}</StyledTableCell>
+                  <StyledTableCell align="right">{user.role}</StyledTableCell>
+                  <StyledTableCell align="right">{user.status}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    <Button onClick={() => handleEditClick(user)}>
+                      Update
+                    </Button>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
       {/* update user modal */}
       <UpdateUserModal
         open={isUpdateModalOpen}
@@ -103,7 +102,7 @@ const UserCardTable = ({ users, handleUpdate }: TUserCardProps) => {
         onClose={handleCloseUpdateModal}
         onSave={handleSaveUpdatedUser}
       />
-    </>
+    </Paper>
   );
 };
 

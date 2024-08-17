@@ -67,7 +67,7 @@ const PostFlatPage = () => {
   };
 
   return (
-    <Box sx={{ p: 3, background: "#FFF8F4" }}>
+    <Box sx={{ p: 3, background: "#EBF0F4" }}>
       <Container>
         <Stack
           sx={{

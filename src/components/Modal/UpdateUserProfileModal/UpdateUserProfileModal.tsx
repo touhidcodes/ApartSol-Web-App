@@ -76,7 +76,7 @@ const UpdateUserProfileModal = ({
             borderRadius: 1,
             p: 5,
             textAlign: "center",
-            background: "#FFF8F4",
+            background: "#EBF0F4",
             overflowY: "auto",
           }}
         >
