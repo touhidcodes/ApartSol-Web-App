@@ -104,7 +104,7 @@ const Navbar = () => {
               <ActiveLink href="/register">Register</ActiveLink>
             )}
             {userInfo?.userId && (
-              <ActiveLink href="/dashboard/profile">
+              <ActiveLink href="/dashboard/home">
                 {userInfo.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
               </ActiveLink>
             )}

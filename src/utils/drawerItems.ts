@@ -6,6 +6,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import PersonIcon from "@mui/icons-material/Person";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import KeyIcon from "@mui/icons-material/Key";
 import { USER_ROLE } from "@/constants/role";
 
@@ -13,11 +14,6 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
   const roleMenus: DrawerItem[] = [];
 
   const defaultMenus = [
-    {
-      title: "Profile",
-      path: `profile`,
-      icon: PersonIcon,
-    },
     {
       title: "Change Password",
       path: `change-password`,
@@ -28,6 +24,16 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
   switch (role) {
     case USER_ROLE.ADMIN:
       roleMenus.push(
+        {
+          title: "Home",
+          path: `home`,
+          icon: DashboardIcon,
+        },
+        {
+          title: "Profile",
+          path: `profile`,
+          icon: PersonIcon,
+        },
         {
           title: "All Users",
           path: `all-user`,
@@ -49,6 +55,11 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
     case USER_ROLE.USER:
       roleMenus.push(
         {
+          title: "Profile",
+          path: `profile`,
+          icon: PersonIcon,
+        },
+        {
           title: "My Posts",
           path: `my-posts`,
           icon: HomeWorkIcon,
@@ -65,5 +76,5 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
       break;
   }
 
-  return [...defaultMenus, ...roleMenus];
+  return [...roleMenus, ...defaultMenus];
 };

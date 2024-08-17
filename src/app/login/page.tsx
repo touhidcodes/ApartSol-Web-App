@@ -195,7 +195,7 @@ const LoginPage = () => {
               fullWidth={true}
               onClick={() => setOpenModal(true)}
             >
-              Login As
+              Test Login
             </Button>
           </Box>
         </Box>
@@ -217,7 +217,7 @@ const LoginPage = () => {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Test Login
+            Login As
           </Typography>
           <Button
             variant="contained"
