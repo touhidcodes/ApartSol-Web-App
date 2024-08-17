@@ -1,8 +1,13 @@
 "use client";
 import Loading from "@/components/UI/Loading/Loading";
+import useUserInfo from "@/hooks/useUserInfo";
 import {
+  useGetBookingsByUserQuery,
+  useGetFlatPostByUserQuery,
   useGetMonthlyTotalUsersQuery,
+  useGetTotalBookingsByUserQuery,
   useGetTotalBookingsCountQuery,
+  useGetTotalFlatPostByUserQuery,
   useGetTotalPostCountQuery,
   useGetTotalUserCountQuery,
   useGetUserByRoleQuery,
@@ -22,6 +27,8 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
+  const userInfo = useUserInfo();
+
   const { data: registrationTrends, isLoading: isLoadingTrends } =
     useGetUserRegistrationTrendsQuery(undefined);
   const { data: monthlyUsers, isLoading: isLoadingTotal } =
@@ -34,6 +41,14 @@ const Dashboard = () => {
     useGetTotalBookingsCountQuery(undefined);
   const { data: totalPost, isLoading: totalPostLoading } =
     useGetTotalPostCountQuery(undefined);
+  const { data: userTotalFlat, isLoading: userTotalFlatLoading } =
+    useGetTotalFlatPostByUserQuery(undefined);
+  const { data: userTotalBookings, isLoading: userTotalBookingsLoading } =
+    useGetTotalBookingsByUserQuery(undefined);
+  const { data: userBookings, isLoading: userBookingsLoading } =
+    useGetBookingsByUserQuery(undefined);
+  const { data: userFlats, isLoading: userFlatsLoading } =
+    useGetFlatPostByUserQuery(undefined);
 
   if (
     isLoadingTrends ||
@@ -41,17 +56,20 @@ const Dashboard = () => {
     isLoadingRoles ||
     totalUserLoading ||
     totalBookingsLoading ||
-    totalPostLoading
+    totalPostLoading ||
+    userTotalFlatLoading ||
+    userTotalBookingsLoading ||
+    userBookingsLoading
   )
     return <Loading />;
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom textAlign="center">
         Dashboard
       </Typography>
 
-      <Grid container spacing={5}>
+      <Grid container spacing={5} my={3}>
         {/* Line Chart for Registration Trends */}
         <Grid item xs={12} md={8}>
           <Paper
@@ -61,11 +79,25 @@ const Dashboard = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              Registration Trends By This Month: ({monthlyUsers?.month})
-            </Typography>
+            {userInfo.Role === "ADMIN" ? (
+              <>
+                <Typography variant="h6" gutterBottom>
+                  Registration Trends By This Month: ({monthlyUsers?.month})
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography variant="h6" gutterBottom>
+                  My Bookings History:
+                </Typography>
+              </>
+            )}
             <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={registrationTrends}>
+              <AreaChart
+                data={
+                  userInfo.Role === "ADMIN" ? registrationTrends : userBookings
+                }
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis />
@@ -84,7 +116,7 @@ const Dashboard = () => {
 
         {/* 2nd row Card (Spans 4 columns) */}
         <Grid item xs={12} md={4}>
-          <Grid container gap={5}>
+          <Grid container gap={5} justifyContent="center">
             <Paper
               elevation={3}
               style={{
@@ -101,8 +133,17 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              <Typography variant="h6">Monthly Total Users</Typography>
-              <Typography variant="h4">{monthlyUsers?.count}</Typography>
+              {userInfo.Role === "ADMIN" ? (
+                <>
+                  <Typography variant="h6">Monthly Total Users</Typography>
+                  <Typography variant="h4">{monthlyUsers?.count}</Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="h6">My Flat Post</Typography>
+                  <Typography variant="h4">{userTotalFlat}</Typography>
+                </>
+              )}
             </Paper>
             <Paper
               elevation={3}
@@ -120,15 +161,24 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              <Typography variant="h6">Total Users</Typography>
-              <Typography variant="h4">{totalUsers}</Typography>
+              {userInfo.Role === "ADMIN" ? (
+                <>
+                  <Typography variant="h6">Total Users</Typography>
+                  <Typography variant="h4">{totalUsers}</Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="h6">My Bookings</Typography>
+                  <Typography variant="h4">{userTotalBookings}</Typography>
+                </>
+              )}
             </Paper>
           </Grid>
         </Grid>
 
         {/* 2nd row  */}
         <Grid item xs={12} md={4}>
-          <Grid container gap={5}>
+          <Grid container gap={5} justifyContent="center">
             <Paper
               elevation={3}
               style={{
@@ -145,8 +195,17 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              <Typography variant="h6">Total Post</Typography>
-              <Typography variant="h4">{totalPost}</Typography>
+              {userInfo.Role === "ADMIN" ? (
+                <>
+                  <Typography variant="h6">Total Post</Typography>
+                  <Typography variant="h4">{totalPost}</Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="h6">My Flat Post</Typography>
+                  <Typography variant="h4">{userTotalFlat}</Typography>
+                </>
+              )}
             </Paper>
             <Paper
               elevation={3}
@@ -164,8 +223,17 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              <Typography variant="h6">Total Bookings</Typography>
-              <Typography variant="h4">{totalBookings}</Typography>
+              {userInfo.Role === "ADMIN" ? (
+                <>
+                  <Typography variant="h6">Total Bookings</Typography>
+                  <Typography variant="h4">{totalBookings}</Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="h6">My Bookings</Typography>
+                  <Typography variant="h4">{userTotalBookings}</Typography>
+                </>
+              )}
             </Paper>
           </Grid>
         </Grid>
@@ -178,13 +246,24 @@ const Dashboard = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              User Count by Role
-            </Typography>
+            {userInfo.Role === "ADMIN" ? (
+              <>
+                <Typography variant="h6" gutterBottom>
+                  User Count by Role:
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography variant="h6" gutterBottom>
+                  My Flat Post History:
+                </Typography>
+              </>
+            )}
+
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={roles}>
+              <BarChart data={userInfo.Role === "ADMIN" ? roles : userFlats}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="role" />
+                <XAxis dataKey={userInfo.Role === "ADMIN" ? "role" : "date"} />
                 <YAxis />
                 <Tooltip />
                 <Bar dataKey="count" fill="#82ca9d" />

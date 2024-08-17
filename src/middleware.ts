@@ -4,6 +4,7 @@ import { decodedToken } from "@/utils/jwt-decode";
 
 const AuthRoutes = ["/login", "/register"];
 const commonPrivateRoutes = [
+  "/dashboard/home",
   "/dashboard/profile",
   "/dashboard/change-password",
   "/post",
@@ -12,7 +13,6 @@ const commonPrivateRoutes = [
 const roleBasedPrivateRoutes = {
   USER: [/^\/dashboard\/my-bookings/, /^\/dashboard\/my-posts/],
   ADMIN: [
-    /^\/dashboard\/home/,
     /^\/dashboard\/all-user/,
     /^\/dashboard\/all-posts/,
     /^\/dashboard\/all-bookings/,
