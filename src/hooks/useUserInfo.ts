@@ -9,17 +9,19 @@ const useUserInfo = async () => {
   const authToken = await getCookie(authKey);
   console.log(authToken);
 
-  // if (authToken) {
-  //   const decodedData: JwtPayload & { role: any } = jwtDecode(
-  //     authToken
-  //   ) as JwtPayload & {
-  //     role: any;
-  //   };
-  //   return {
-  //     ...decodedData,
-  //     role: decodedData.role || "",
-  //   };
-  // }
+  if (authToken) {
+    const decodedData: JwtPayload & { role: any } = jwtDecode(
+      authToken.value
+    ) as JwtPayload & {
+      role: any;
+    };
+
+    console.log(decodedData);
+    return {
+      ...decodedData,
+      role: decodedData.role || "",
+    };
+  }
   return authToken;
 };
 
