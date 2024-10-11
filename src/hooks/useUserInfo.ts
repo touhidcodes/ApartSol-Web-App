@@ -1,37 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getFromLocalStorage } from "@/utils/local-storage";
-import { JwtPayload } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import { authKey } from "@/constants/authKey";
 import { decodedToken } from "@/utils/jwt-decode";
+import { getCookie } from "@/utils/nextCookies";
 
-const useUserInfo = (): any | string => {
-  const [userInfo, setUserInfo] = useState<any | string>("");
+const useUserInfo = async () => {
+  const authToken = await getCookie(authKey);
+  console.log(authToken);
 
-  useEffect(() => {
-    const fetchUserInfo = () => {
-      const authToken = getFromLocalStorage(authKey);
-      if (authToken) {
-        const decodedData: JwtPayload & { role: any } = decodedToken(
-          authToken
-        ) as JwtPayload & {
-          role: any;
-        };
-        const userInfo: any = {
-          ...decodedData,
-          role: decodedData.role || "",
-        };
-        setUserInfo(userInfo);
-      } else {
-        setUserInfo("");
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
-
-  return userInfo;
+  // if (authToken) {
+  //   const decodedData: JwtPayload & { role: any } = jwtDecode(
+  //     authToken
+  //   ) as JwtPayload & {
+  //     role: any;
+  //   };
+  //   return {
+  //     ...decodedData,
+  //     role: decodedData.role || "",
+  //   };
+  // }
+  return authToken;
 };
 
 export default useUserInfo;

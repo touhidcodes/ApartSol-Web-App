@@ -3,8 +3,8 @@ import { deleteCookies } from "./deleteCookies";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export const logoutUser = (router: AppRouterInstance) => {
-  localStorage.removeItem(authKey);
-  localStorage.removeItem("refreshToken");
+  // localStorage.removeItem(authKey);
+  // localStorage.removeItem("refreshToken");
   deleteCookies([authKey, "refreshToken"]);
   router.push("/");
   router.refresh();
