@@ -7,7 +7,6 @@ import { getCookie } from "@/utils/nextCookies";
 
 const useUserInfo = async () => {
   const authToken = await getCookie(authKey);
-  console.log(authToken);
 
   if (authToken) {
     const decodedData: JwtPayload & { role: any } = jwtDecode(
@@ -16,7 +15,6 @@ const useUserInfo = async () => {
       role: any;
     };
 
-    console.log(decodedData);
     return {
       ...decodedData,
       role: decodedData.role || "",
