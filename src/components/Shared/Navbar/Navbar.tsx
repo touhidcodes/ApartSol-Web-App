@@ -1,26 +1,19 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, IconButton, Stack } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
 import Link from "next/link";
 import assets from "@/assets/index";
-import useUserInfo from "@/hooks/useUserInfo";
 import { USER_ROLE } from "@/constants/role";
 import { useState } from "react";
 import AuthButton from "@/components/UI/AuthButton.tsx/AuthButton";
 import ActiveLink from "@/components/UI/ActiveLink/ActiveLink";
 import { usePathname, useRouter } from "next/navigation";
+import useUserLoggedIn from "@/hooks/useUserLoggedIn";
 
 const Navbar = () => {
-  const userInfo = useUserInfo();
+  const userRole = useUserLoggedIn();
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
   const currentPath = usePathname();
@@ -100,12 +93,10 @@ const Navbar = () => {
             <ActiveLink href="/">Home</ActiveLink>
             <ActiveLink href="/flats">Flats</ActiveLink>
             <ActiveLink href="/about">About Us</ActiveLink>
-            {!userInfo?.userId && (
-              <ActiveLink href="/register">Register</ActiveLink>
-            )}
-            {userInfo?.userId && (
+            {!userRole && <ActiveLink href="/register">Register</ActiveLink>}
+            {userRole && (
               <ActiveLink href="/dashboard/home">
-                {userInfo.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
+                {userRole === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
               </ActiveLink>
             )}
           </Stack>

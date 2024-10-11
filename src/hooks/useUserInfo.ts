@@ -2,7 +2,6 @@
 
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { authKey } from "@/constants/authKey";
-import { decodedToken } from "@/utils/jwt-decode";
 import { getCookie } from "@/utils/nextCookies";
 
 const useUserInfo = async () => {
