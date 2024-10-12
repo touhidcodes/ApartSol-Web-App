@@ -3,6 +3,7 @@ import setAccessToken from "@/services/actions/setAccessToken";
 import { getNewAccessToken } from "@/services/auth.services";
 import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import { getCookie } from "@/utils/nextCookies";
 import axios from "axios";
 
 const instance = axios.create();
@@ -12,12 +13,13 @@ instance.defaults.timeout = 60000;
 
 // Add a request interceptor
 instance.interceptors.request.use(
-  function (config) {
+  async function (config) {
     // Do something before request is sent
-    const accessToken = getFromLocalStorage(authKey);
+    const accessToken = await getCookie(authKey);
+    // console.log(accessToken);
 
     if (accessToken) {
-      config.headers.Authorization = accessToken;
+      config.headers.Authorization = accessToken.value;
     }
     return config;
   },

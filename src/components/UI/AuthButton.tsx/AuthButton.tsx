@@ -6,12 +6,10 @@ import useUserLoggedIn from "@/hooks/useUserLoggedIn";
 
 const AuthButton = () => {
   const router = useRouter();
-
   const userRole = useUserLoggedIn();
 
   const handleLogOut = () => {
-    logoutUser(router);
-    router.refresh();
+    logoutUser();
   };
 
   return (
