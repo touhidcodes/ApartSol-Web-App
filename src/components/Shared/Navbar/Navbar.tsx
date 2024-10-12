@@ -6,23 +6,34 @@ import Image from "next/image";
 import Link from "next/link";
 import assets from "@/assets/index";
 import { USER_ROLE } from "@/constants/role";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthButton from "@/components/UI/AuthButton.tsx/AuthButton";
 import ActiveLink from "@/components/UI/ActiveLink/ActiveLink";
-import { usePathname, useRouter } from "next/navigation";
-import useUserLoggedIn from "@/hooks/useUserLoggedIn";
+import { usePathname } from "next/navigation";
+import useUserInfo from "@/hooks/useUserInfo";
+import AuthLoading from "@/components/UI/Loading/AuthLoading";
 
 const Navbar = () => {
-  const userRole = useUserLoggedIn();
+  const user = useUserInfo();
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const currentPath = usePathname();
+
+  useEffect(() => {
+    if (user) {
+      setIsLoading(false);
+    }
+  }, [user]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   const isHomepage = currentPath === "/";
+
+  if (isLoading) {
+    return <AuthLoading />;
+  }
 
   return (
     <Box
@@ -93,11 +104,12 @@ const Navbar = () => {
             <ActiveLink href="/">Home</ActiveLink>
             <ActiveLink href="/flats">Flats</ActiveLink>
             <ActiveLink href="/about">About Us</ActiveLink>
-            {!userRole && <ActiveLink href="/register">Register</ActiveLink>}
-            {userRole && (
+            {user ? (
               <ActiveLink href="/dashboard/home">
-                {userRole === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
+                {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
               </ActiveLink>
+            ) : (
+              <ActiveLink href="/register">Register</ActiveLink>
             )}
           </Stack>
 
