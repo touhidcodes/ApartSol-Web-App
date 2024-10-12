@@ -1,20 +1,15 @@
-import { Box, List, Stack, Typography } from "@mui/material";
+import { Box, List, Stack } from "@mui/material";
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
 import { drawerItems } from "@/utils/drawerItems";
 import { UserRole } from "@/types";
-import { getUserInfo } from "@/services/auth.services";
-import { useEffect, useState } from "react";
 import SideBarItem from "./SideBarItem";
+import useUserInfo from "@/hooks/useUserInfo";
 
 const SideBar = () => {
-  const [userRole, setUserRole] = useState("");
-
-  useEffect(() => {
-    const { role } = getUserInfo() as any;
-    setUserRole(role);
-  }, []);
+  const user = useUserInfo();
+  const userRole = user?.role || "";
 
   return (
     <Box style={{ height: "100vh" }}>

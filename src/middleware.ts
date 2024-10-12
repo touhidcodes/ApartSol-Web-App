@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { decodedToken } from "@/utils/jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const AuthRoutes = ["/login", "/register"];
 const commonPrivateRoutes = [
@@ -23,7 +23,7 @@ type Role = keyof typeof roleBasedPrivateRoutes;
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log("Middleware: Checking path:", pathname);
+  // console.log("Middleware: Checking path:", pathname);
 
   // Get the access token from cookies
   const accessToken = request.cookies.get("accessToken")?.value;
@@ -31,8 +31,7 @@ export function middleware(request: NextRequest) {
 
   // If no access token is found and the route is public, allow access
   if (!accessToken) {
-    console.log("Middleware: No access token found");
-    console.log("auth login", AuthRoutes.includes(pathname));
+    // console.log("Middleware: No access token found");
     if (AuthRoutes.includes(pathname)) {
       return NextResponse.next();
     } else {
@@ -42,9 +41,9 @@ export function middleware(request: NextRequest) {
 
   // If the access token is found and the route is common, allow access
   if (accessToken && commonPrivateRoutes.includes(pathname)) {
-    console.log(
-      "Middleware: Access token found and path is common private route"
-    );
+    // console.log(
+    //   "Middleware: Access token found and path is common private route"
+    // );
     return NextResponse.next();
   }
 
@@ -52,7 +51,7 @@ export function middleware(request: NextRequest) {
 
   // Decode the JWT token to get user data
   if (accessToken) {
-    decodedData = decodedToken(accessToken);
+    decodedData = jwtDecode(accessToken);
   }
 
   const role = decodedData?.role?.toUpperCase();

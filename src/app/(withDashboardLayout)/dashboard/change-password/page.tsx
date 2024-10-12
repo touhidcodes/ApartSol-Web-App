@@ -7,14 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues } from "react-hook-form";
 import { useChangePasswordMutation } from "@/redux/api/userApi";
 import { toast } from "sonner";
-
 import { logoutUser } from "@/services/actions/logoutUser";
-import { useRouter } from "next/navigation";
 import { changePasswordValidationSchema } from "@/constants/schema";
 
 const ChangePasswordPage = () => {
   const [changePassword] = useChangePasswordMutation();
-  const router = useRouter();
 
   //  change password
   const handleChange = async (values: FieldValues) => {
@@ -28,7 +25,7 @@ const ChangePasswordPage = () => {
 
       if (res?.data?.status === 200) {
         toast.success("Password changed successfully!");
-        logoutUser(router);
+        logoutUser();
       } else {
         toast.error("Something went wrong!");
       }

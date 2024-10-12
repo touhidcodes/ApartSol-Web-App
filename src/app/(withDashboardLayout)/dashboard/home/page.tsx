@@ -28,6 +28,7 @@ import {
 
 const Dashboard = () => {
   const userInfo = useUserInfo();
+  const userRole = userInfo?.role || "";
 
   const { data: registrationTrends, isLoading: isLoadingTrends } =
     useGetUserRegistrationTrendsQuery(undefined);
@@ -79,7 +80,7 @@ const Dashboard = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            {userInfo.role === "ADMIN" ? (
+            {userRole === "ADMIN" ? (
               <>
                 <Typography variant="h6" gutterBottom>
                   Registration Trends By This Month: ({monthlyUsers?.month})
@@ -94,9 +95,7 @@ const Dashboard = () => {
             )}
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart
-                data={
-                  userInfo.role === "ADMIN" ? registrationTrends : userBookings
-                }
+                data={userRole === "ADMIN" ? registrationTrends : userBookings}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
@@ -133,7 +132,7 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              {userInfo.role === "ADMIN" ? (
+              {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Monthly Total Users</Typography>
                   <Typography variant="h4">{monthlyUsers?.count}</Typography>
@@ -161,7 +160,7 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              {userInfo.role === "ADMIN" ? (
+              {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Total Users</Typography>
                   <Typography variant="h4">{totalUsers}</Typography>
@@ -195,7 +194,7 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              {userInfo.role === "ADMIN" ? (
+              {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Total Post</Typography>
                   <Typography variant="h4">{totalPost}</Typography>
@@ -223,7 +222,7 @@ const Dashboard = () => {
                 flexDirection: "column",
               }}
             >
-              {userInfo.role === "ADMIN" ? (
+              {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Total Bookings</Typography>
                   <Typography variant="h4">{totalBookings}</Typography>
@@ -246,7 +245,7 @@ const Dashboard = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            {userInfo.role === "ADMIN" ? (
+            {userRole === "ADMIN" ? (
               <>
                 <Typography variant="h6" gutterBottom>
                   User Count by Role:
@@ -261,9 +260,9 @@ const Dashboard = () => {
             )}
 
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={userInfo.role === "ADMIN" ? roles : userFlats}>
+              <BarChart data={userRole === "ADMIN" ? roles : userFlats}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={userInfo.role === "ADMIN" ? "role" : "date"} />
+                <XAxis dataKey={userRole === "ADMIN" ? "role" : "date"} />
                 <YAxis />
                 <Tooltip />
                 <Bar dataKey="count" fill="#82ca9d" />
