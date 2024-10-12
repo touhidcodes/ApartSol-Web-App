@@ -1,9 +1,8 @@
 import { authKey } from "@/constants/authKey";
-import { removeCookie } from "@/utils/nextCookies";
+import Cookies from "js-cookie";
 
 export const logoutUser = () => {
-  // localStorage.removeItem(authKey);
-  // localStorage.removeItem("refreshToken");
-  removeCookie([authKey, "refreshToken"]);
+  Cookies.remove(authKey);
+  Cookies.remove("refreshToken");
   window.location.reload();
 };

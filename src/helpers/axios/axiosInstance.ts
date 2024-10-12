@@ -16,7 +16,7 @@ instance.interceptors.request.use(
   async function (config) {
     // Do something before request is sent
     const accessToken = await getCookie(authKey);
-    // console.log(accessToken);
+    console.log(accessToken);
 
     if (accessToken) {
       config.headers.Authorization = accessToken.value;
