@@ -23,6 +23,7 @@ const Navbar = () => {
     if (user) {
       setIsLoading(false);
     }
+    setIsLoading(false);
   }, [user]);
 
   const toggleMenu = () => {

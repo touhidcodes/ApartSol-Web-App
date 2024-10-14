@@ -7,6 +7,8 @@ import {
   Typography,
   Grid,
   styled,
+  CardContent,
+  Card,
 } from "@mui/material";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
@@ -17,7 +19,11 @@ import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import { useBookingRequestMutation } from "@/redux/api/bookingApi";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/UI/Loading/Loading";
-import FlatCard from "@/components/Card/FlatCard/FlatsCard";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SingleBedIcon from "@mui/icons-material/SingleBed";
+import SquareFootIcon from "@mui/icons-material/SquareFoot";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import Image from "next/image";
 
 const StyledInformationBox = styled(Box)(({ theme }) => ({
   background: "#fff",
@@ -57,7 +63,9 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
       const res = await bookingRequest(data);
       if (res?.data?.id) {
         toast.success("Flat booked successfully!");
-        router.push("/flats");
+        router.push(`/checkout/${res?.data?.id}`);
+      } else {
+        toast.success("You have already booked this flat!");
       }
     } catch (err: any) {
       console.error(err);
@@ -94,8 +102,95 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
           >
             Always we are with you!
           </Typography>
-          <Box mt={5}>{flat && <FlatCard flat={flat} />}</Box>
+          <Box mt={5}>
+            <Card
+              sx={{
+                borderRadius: "15px",
+                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                height: { xs: "auto", md: 250 },
+              }}
+            >
+              <Grid container spacing={0}>
+                {/* Image Grid */}
+                <Grid item xs={12} md={6}>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      height: { xs: 200, md: "100%" },
+                      width: "100%",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {flat && (
+                      <Image
+                        src={flat?.image}
+                        alt="flat image"
+                        width={500}
+                        height={350}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
+                  </Box>
+                </Grid>
+                {/* Content Grid */}
+                <Grid item xs={12} md={6}>
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      padding: { xs: 2, md: 3 },
+                    }}
+                  >
+                    <Typography variant="h6" fontWeight={600}>
+                      {flat?.title}
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <LocationOnIcon />
+                      <Typography>{flat?.location}</Typography>
+                    </Stack>
 
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <SingleBedIcon />
+                      <Typography>{flat?.totalBedrooms} Bedrooms</Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <SquareFootIcon />
+                      <Typography>{flat?.squareFeet} sqft</Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <AttachMoneyIcon sx={{ mr: 0.5 }} />
+                      <Typography>{flat?.rent} USD</Typography>
+                    </Stack>
+                  </CardContent>
+                </Grid>
+              </Grid>
+            </Card>
+          </Box>
           <Grid item xs={12} md={8} my={4}>
             <Typography
               variant="h5"

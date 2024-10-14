@@ -130,9 +130,11 @@ const FlatDetailCard = ({ params }: PropTypes) => {
                     Book This Flat
                   </Button>
                 </Link>
-                <Button variant="outlined" color="secondary" fullWidth>
-                  Send Enquiry
-                </Button>
+                <Link href={`/review/${flat?.id}`} passHref>
+                  <Button variant="contained" color="primary" fullWidth>
+                    Make Review
+                  </Button>
+                </Link>
               </Stack>
             </Card>
           </Grid>
