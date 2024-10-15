@@ -8,10 +8,16 @@ const commonPrivateRoutes = [
   "/dashboard/profile",
   "/dashboard/change-password",
   "/post",
-  /^\/booking\/.+$/,
+  /^\/booking\/[^/].+$/,
 ];
 const roleBasedPrivateRoutes = {
-  USER: [/^\/dashboard\/my-bookings/, /^\/dashboard\/my-posts/],
+  USER: [
+    /^\/dashboard\/my-bookings/,
+    /^\/dashboard\/my-posts/,
+    /^\/checkout\/.+$/,
+    /^\/checkout\/success/,
+    /^\/checkout\/cancel/,
+  ],
   ADMIN: [
     /^\/dashboard\/all-user/,
     /^\/dashboard\/all-posts/,
@@ -27,7 +33,8 @@ export function middleware(request: NextRequest) {
 
   // Get the access token from cookies
   const accessToken = request.cookies.get("accessToken")?.value;
-  // console.log("access", accessToken);
+  console.log("access", accessToken);
+  console.log("access", request);
 
   // If no access token is found and the route is public, allow access
   if (!accessToken) {
@@ -39,11 +46,18 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // If the access token is found and the route is common, allow access
-  if (accessToken && commonPrivateRoutes.includes(pathname)) {
-    // console.log(
-    //   "Middleware: Access token found and path is common private route"
-    // );
+  // // If the access token is found and the route is common, allow access
+  // if (accessToken && commonPrivateRoutes.includes(pathname)) {
+  //   // console.log(
+  //   //   "Middleware: Access token found and path is common private route"
+  //   // );
+  //   return NextResponse.next();
+  // }
+
+  if (
+    accessToken &&
+    commonPrivateRoutes.some((route) => pathname.match(route))
+  ) {
     return NextResponse.next();
   }
 
@@ -71,5 +85,12 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/dashboard/:path*", "/post", "/booking"],
+  matcher: [
+    "/login",
+    "/register",
+    "/post",
+    "/dashboard/:path*",
+    "/booking/:path*",
+    "/checkout/:path*",
+  ],
 };

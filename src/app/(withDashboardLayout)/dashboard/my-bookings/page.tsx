@@ -8,10 +8,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useGetMyBookingsQuery } from "@/redux/api/bookingApi";
 import { TBookings } from "@/types/Bookings";
 import Loading from "@/components/UI/Loading/Loading";
+import Link from "next/link";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -31,6 +32,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 
 const MyBookingsPage = () => {
   const { data: bookings, isLoading } = useGetMyBookingsQuery({});
+  console.log(bookings);
 
   if (isLoading) {
     return <Loading />;
@@ -51,6 +53,7 @@ const MyBookingsPage = () => {
                 <StyledTableCell align="right">Location</StyledTableCell>
                 <StyledTableCell align="right">Rent</StyledTableCell>
                 <StyledTableCell align="right">Status</StyledTableCell>
+                <StyledTableCell align="right">Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -67,6 +70,17 @@ const MyBookingsPage = () => {
                   </StyledTableCell>
                   <StyledTableCell align="right">
                     {booking?.status}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {booking?.status === "PENDING" ? (
+                      <Link href={`/checkout/${booking.id}`} passHref>
+                        <Button variant="contained">Pay</Button>
+                      </Link>
+                    ) : (
+                      <Button variant="contained" disabled>
+                        Paid
+                      </Button>
+                    )}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
