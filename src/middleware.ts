@@ -33,8 +33,7 @@ export function middleware(request: NextRequest) {
 
   // Get the access token from cookies
   const accessToken = request.cookies.get("accessToken")?.value;
-  console.log("access", accessToken);
-  console.log("access", request);
+  // console.log("access", accessToken);
 
   // If no access token is found and the route is public, allow access
   if (!accessToken) {
@@ -45,14 +44,6 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
-
-  // // If the access token is found and the route is common, allow access
-  // if (accessToken && commonPrivateRoutes.includes(pathname)) {
-  //   // console.log(
-  //   //   "Middleware: Access token found and path is common private route"
-  //   // );
-  //   return NextResponse.next();
-  // }
 
   if (
     accessToken &&

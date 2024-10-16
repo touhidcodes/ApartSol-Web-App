@@ -76,6 +76,7 @@ import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { getCookie } from "@/utils/nextCookies";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const instance = axios.create();
 instance.defaults.headers.post["Content-Type"] = "application/json";
@@ -100,10 +101,11 @@ const onRefreshed = (token: string) => {
 // Add a request interceptor
 instance.interceptors.request.use(
   async function (config) {
-    const accessToken = await getCookie(authKey);
+    const accessToken = Cookies.get(authKey);
+    // console.log(accessToken);
 
     if (accessToken) {
-      config.headers.Authorization = accessToken.value;
+      config.headers.Authorization = accessToken;
     }
     return config;
   },

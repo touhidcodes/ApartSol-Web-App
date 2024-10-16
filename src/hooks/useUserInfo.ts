@@ -27,7 +27,7 @@
 "use client";
 
 import { jwtDecode, JwtPayload } from "jwt-decode";
-import Cookies from "js-cookie"; // Import js-cookie
+import Cookies from "js-cookie";
 import { authKey } from "@/constants/authKey";
 
 interface DecodedData extends JwtPayload {
@@ -35,8 +35,8 @@ interface DecodedData extends JwtPayload {
 }
 
 const useUserInfo = () => {
-  const authToken = Cookies.get(authKey); // Get the cookie using js-cookie
-  console.log(authToken);
+  const authToken = Cookies.get(authKey);
+  // console.log(authToken);
 
   if (authToken) {
     const decodedData: DecodedData = jwtDecode<DecodedData>(authToken);

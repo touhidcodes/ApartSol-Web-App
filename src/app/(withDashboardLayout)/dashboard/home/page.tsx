@@ -28,6 +28,7 @@ import {
 
 const Dashboard = () => {
   const userInfo = useUserInfo();
+  console.log(userInfo);
   const userRole = userInfo?.role || "";
 
   const { data: registrationTrends, isLoading: isLoadingTrends } =
@@ -60,7 +61,8 @@ const Dashboard = () => {
     totalPostLoading ||
     userTotalFlatLoading ||
     userTotalBookingsLoading ||
-    userBookingsLoading
+    userBookingsLoading ||
+    userFlatsLoading
   )
     return <Loading />;
 
