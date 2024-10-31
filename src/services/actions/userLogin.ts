@@ -2,8 +2,6 @@
 
 import { FieldValues } from "react-hook-form";
 import setAccessToken from "./setAccessToken";
-import { setToLocalStorage } from "@/utils/local-storage";
-import { authKey } from "@/constants/authKey";
 import { toast } from "sonner";
 
 export const userLogin = async (data: FieldValues) => {
