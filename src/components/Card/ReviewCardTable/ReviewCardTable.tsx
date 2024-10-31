@@ -122,7 +122,7 @@ const ReviewCardTable = ({
                 </StyledTableCell>
                 <StyledTableCell align="right">{review.rating}</StyledTableCell>
                 <StyledTableCell align="right">
-                  {new Date(review.comment).toLocaleDateString()}
+                  {review.comment}
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <Button onClick={() => handleEditClick(review)}>Edit</Button>

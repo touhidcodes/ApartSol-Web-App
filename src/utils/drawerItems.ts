@@ -7,6 +7,7 @@ import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import PersonIcon from "@mui/icons-material/Person";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import ReviewsIcon from "@mui/icons-material/Reviews";
 import KeyIcon from "@mui/icons-material/Key";
 import { USER_ROLE } from "@/constants/role";
 
@@ -48,6 +49,11 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
           title: "All Bookings",
           path: `all-bookings`,
           icon: ShoppingCartIcon,
+        },
+        {
+          title: "All Reviews",
+          path: `all-reviews`,
+          icon: ReviewsIcon,
         }
       );
       break;
