@@ -10,7 +10,6 @@ export const reviewApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.review],
     }),
-
     getFlatReviews: build.query({
       query: (flatId) => ({
         url: `/reviews/${flatId}`,
@@ -18,7 +17,6 @@ export const reviewApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.review],
     }),
-
     getSingleReview: build.query({
       query: (reviewId) => ({
         url: `/reviews/${reviewId}`,
@@ -26,7 +24,6 @@ export const reviewApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.review],
     }),
-
     createReview: build.mutation({
       query: ({ flatId, data }) => ({
         url: `/reviews/${flatId}`,
@@ -35,7 +32,6 @@ export const reviewApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.review],
     }),
-
     updateReview: build.mutation({
       query: ({ reviewId, data }) => ({
         url: `/reviews/${reviewId}`,
@@ -44,7 +40,6 @@ export const reviewApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.review],
     }),
-
     deleteReview: build.mutation({
       query: (reviewId) => ({
         url: `/reviews/${reviewId}`,

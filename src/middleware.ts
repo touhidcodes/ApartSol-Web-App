@@ -9,6 +9,7 @@ const commonPrivateRoutes = [
   "/dashboard/change-password",
   "/post",
   /^\/booking\/[^/].+$/,
+  /^\/review\/[^/].+$/,
 ];
 const roleBasedPrivateRoutes = {
   USER: [
@@ -83,5 +84,6 @@ export const config = {
     "/dashboard/:path*",
     "/booking/:path*",
     "/checkout/:path*",
+    "/review/:path*",
   ],
 };

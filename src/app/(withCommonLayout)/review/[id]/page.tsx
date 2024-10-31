@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { z } from "zod";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SingleBedIcon from "@mui/icons-material/SingleBed";
@@ -27,11 +27,15 @@ import { TFlat } from "@/types/Flats";
 import { FieldValues } from "react-hook-form";
 import PHDropdown from "@/components/Forms/PHDropdown";
 import { ratingOptions } from "@/constants/formOptions";
+import { useCreateReviewMutation } from "@/redux/api/reviewApi";
+import { toast } from "sonner";
 
 const ReviewPage = () => {
+  const router = useRouter();
   const params = useParams();
   const [flat, setFlat] = useState<TFlat | undefined>(undefined);
   const { data: flatData, isLoading } = useGetFlatByIdQuery(params?.id);
+  const [createReview] = useCreateReviewMutation();
 
   useEffect(() => {
     if (flatData) {
@@ -49,20 +53,21 @@ const ReviewPage = () => {
   }
 
   const handleMakeReview = async (values: FieldValues) => {
-    console.log(values);
-    // try {
-    //   const res = await userLogin(values);
+    const reviewData = { flatId: flat?.id, data: values };
+    try {
+      const res = await createReview(reviewData);
 
-    //   if (res?.data?.token) {
-    //     toast.success(res?.message);
-    //     router.push("/"), router.refresh();
-    //   } else {
-    //     setError(res.message);
-    //     console.log(res.message);
-    //   }
-    // } catch (err: any) {
-    //   console.error(err.message);
-    // }
+      if (res?.data) {
+        toast.success("Review added successfully!");
+        router.push(`/flats/${flat?.id}`);
+      } else {
+        toast.success("You have already submitted a review for this flat.");
+      }
+    } catch (err: any) {
+      const errorMessage =
+        (err as Error).message || "An unknown error occurred";
+      toast(errorMessage);
+    }
   };
 
   return (
