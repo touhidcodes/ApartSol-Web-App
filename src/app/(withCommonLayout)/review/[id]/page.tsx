@@ -10,12 +10,12 @@ import {
   Button,
   Card,
   CardContent,
+  Container,
   Grid,
   Stack,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { z } from "zod";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -25,6 +25,8 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useEffect, useState } from "react";
 import { TFlat } from "@/types/Flats";
 import { FieldValues } from "react-hook-form";
+import PHDropdown from "@/components/Forms/PHDropdown";
+import { ratingOptions } from "@/constants/formOptions";
 
 const ReviewPage = () => {
   const params = useParams();
@@ -38,7 +40,7 @@ const ReviewPage = () => {
   }, [flatData]);
 
   const reviewSchema = z.object({
-    rating: z.number().min(1).max(5),
+    rating: z.string().min(1).max(5),
     comment: z.string().min(5, "Comment should have at least 5 characters"),
   });
 
@@ -64,164 +66,186 @@ const ReviewPage = () => {
   };
 
   return (
-    <Box className="max-w-3xl mx-auto p-6 shadow-lg rounded-lg">
-      <Typography variant="h4" className="font-semibold mb-4">
-        Review Flat
-      </Typography>
-
-      {/* Flat Information */}
-      <Box mt={5}>
-        <Card
+    <Box sx={{ background: "#EBF0F4" }} mt={10}>
+      <Container sx={{ paddingBottom: "50px" }}>
+        <Stack
           sx={{
-            borderRadius: "15px",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            height: { xs: "auto", md: 250 },
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "20px",
           }}
         >
-          <Grid container spacing={0}>
-            {/* Image Grid */}
-            <Grid item xs={12} md={6}>
-              <Box
-                sx={{
-                  position: "relative",
-                  height: { xs: 200, md: "100%" },
-                  width: "100%",
-                  overflow: "hidden",
-                }}
-              >
-                {flat && (
-                  <Image
-                    src={flat?.image}
-                    alt="flat image"
-                    width={500}
-                    height={350}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                )}
-              </Box>
-            </Grid>
-            {/* Content Grid */}
-            <Grid item xs={12} md={6}>
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  padding: { xs: 2, md: 3 },
-                }}
-              >
-                <Typography variant="h6" fontWeight={600}>
-                  {flat?.title}
-                </Typography>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={1}
-                  sx={{ color: "text.secondary", mt: 1 }}
-                >
-                  <LocationOnIcon />
-                  <Typography>{flat?.location}</Typography>
-                </Stack>
-
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  spacing={1}
-                  sx={{ color: "text.secondary", mt: 1 }}
-                >
-                  <SingleBedIcon />
-                  <Typography>{flat?.totalBedrooms} Bedrooms</Typography>
-                </Stack>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  sx={{ color: "text.secondary", mt: 1 }}
-                >
-                  <SquareFootIcon />
-                  <Typography>{flat?.squareFeet} sqft</Typography>
-                </Stack>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  sx={{ color: "text.secondary", mt: 1 }}
-                >
-                  <AttachMoneyIcon sx={{ mr: 0.5 }} />
-                  <Typography>{flat?.rent} USD</Typography>
-                </Stack>
-              </CardContent>
-            </Grid>
-          </Grid>
-        </Card>
-      </Box>
-
-      {/* Review Form */}
-      <PHForm
-        onSubmit={handleMakeReview}
-        resolver={zodResolver(reviewSchema)}
-        defaultValues={{
-          identifier: "",
-          password: "",
-        }}
-      >
-        <Stack spacing={3} my={1}>
-          <Box
-            fontWeight={400}
-            style={{ color: "#0B1134CC", textAlign: "start" }}
-          >
-            <Typography style={{ marginBottom: "10px" }}>
-              Username or Email*
-            </Typography>
-            <PHInput
-              name="identifier"
-              label="Username or Email"
-              type="text"
-              fullWidth={true}
-            />
-          </Box>
-          <Box
-            fontWeight={400}
-            style={{ color: "#0B1134CC", textAlign: "start" }}
-          >
-            <Typography style={{ marginBottom: "10px" }}>Password*</Typography>
-            <PHInput
-              name="password"
-              label="Password"
-              type="password"
-              fullWidth={true}
-            />
-          </Box>
-        </Stack>
-
-        <Link href={"/"}>
           <Typography
-            mb={1}
-            textAlign="end"
+            variant="h4"
+            component="h1"
+            style={{ color: "#0B1134CC", marginTop: "20px" }}
+          >
+            Make a Review of Your Desired Flat
+          </Typography>
+          <Typography
             component="p"
-            fontWeight={300}
+            fontWeight={400}
+            style={{ color: "#0B1134CC", marginTop: "5px" }}
+          >
+            Always we are with you!
+          </Typography>
+
+          {/* Flat Information */}
+          <Box mt={5}>
+            <Card
+              sx={{
+                borderRadius: "15px",
+                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                height: { xs: "auto", md: 250 },
+              }}
+            >
+              <Grid container spacing={0}>
+                {/* Image Grid */}
+                <Grid item xs={12} md={6}>
+                  <Box
+                    sx={{
+                      position: "relative",
+                      height: { xs: 200, md: "100%" },
+                      width: "100%",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {flat && (
+                      <Image
+                        src={flat?.image}
+                        alt="flat image"
+                        width={500}
+                        height={350}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
+                  </Box>
+                </Grid>
+                {/* Content Grid */}
+                <Grid item xs={12} md={6}>
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      padding: { xs: 2, md: 3 },
+                    }}
+                  >
+                    <Typography variant="h6" fontWeight={600}>
+                      {flat?.title}
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <LocationOnIcon />
+                      <Typography>{flat?.location}</Typography>
+                    </Stack>
+
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <SingleBedIcon />
+                      <Typography>{flat?.totalBedrooms} Bedrooms</Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <SquareFootIcon />
+                      <Typography>{flat?.squareFeet} sqft</Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      sx={{ color: "text.secondary", mt: 1 }}
+                    >
+                      <AttachMoneyIcon sx={{ mr: 0.5 }} />
+                      <Typography>{flat?.rent} USD</Typography>
+                    </Stack>
+                  </CardContent>
+                </Grid>
+              </Grid>
+            </Card>
+          </Box>
+
+          {/* Review Form */}
+          <Box
             sx={{
-              textDecoration: "underline",
+              maxWidth: 600,
+              width: "100%",
+              boxShadow: 1,
+              borderRadius: 1,
+              p: 4,
+              textAlign: "center",
+              background: "#FFF",
+              marginTop: 5,
             }}
           >
-            Forgot Password?
-          </Typography>
-        </Link>
+            <PHForm
+              onSubmit={handleMakeReview}
+              resolver={zodResolver(reviewSchema)}
+              defaultValues={{
+                identifier: "",
+                password: "",
+              }}
+            >
+              <Stack spacing={3} my={1}>
+                <Box
+                  fontWeight={400}
+                  style={{ color: "#0B1134CC", textAlign: "start" }}
+                >
+                  <Typography style={{ marginBottom: "10px" }}>
+                    Rating (1-5)*
+                  </Typography>
+                  <PHDropdown
+                    name="rating"
+                    fullWidth={true}
+                    options={ratingOptions}
+                  />
+                </Box>
+                <Box
+                  fontWeight={400}
+                  style={{ color: "#0B1134CC", textAlign: "start" }}
+                >
+                  <Typography style={{ marginBottom: "10px" }}>
+                    Comment*
+                  </Typography>
+                  <PHInput
+                    name="comment"
+                    label="Comment"
+                    type="text"
+                    fullWidth={true}
+                  />
+                </Box>
+              </Stack>
 
-        <Button
-          sx={{
-            margin: "10px 0px",
-          }}
-          fullWidth={true}
-          type="submit"
-        >
-          Submit
-        </Button>
-      </PHForm>
+              <Button
+                sx={{
+                  margin: "10px 0px",
+                  marginTop: 3,
+                }}
+                fullWidth={true}
+                type="submit"
+              >
+                Submit
+              </Button>
+            </PHForm>
+          </Box>
+        </Stack>
+      </Container>
     </Box>
   );
 };
