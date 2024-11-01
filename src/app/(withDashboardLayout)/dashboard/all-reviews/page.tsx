@@ -19,10 +19,11 @@ const AllReviewsPage = () => {
   const handleUpdate = async (updatedReview: FieldValues, reviewId: string) => {
     try {
       const reviewData = {
-        ...updatedReview,
+        reviewId,
+        data: updatedReview,
       };
 
-      const res = await updateReview({ reviewId, reviewData });
+      const res = await updateReview(reviewData);
 
       if (res?.data?.id) {
         toast.success("Review updated successfully!");

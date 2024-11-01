@@ -5,6 +5,8 @@ import PHForm from "@/components/Forms/PHForm";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { TReview } from "@/types/Review";
+import PHDropdown from "@/components/Forms/PHDropdown";
+import { ratingOptions } from "@/constants/formOptions";
 
 interface TUpdateReviewModalProps {
   open: boolean;
@@ -28,6 +30,7 @@ const UpdateReviewModal = ({
 
   // Handle form submission to pass the updated review to the parent component
   const handleUpdateReview = async (values: FieldValues) => {
+    console.log(values);
     if (review) {
       onSave(values, review.id);
       toast.success("Review updated successfully!");
@@ -64,7 +67,11 @@ const UpdateReviewModal = ({
             }}
           >
             <Stack spacing={4} my={1} marginBottom={5}>
-              <PHInput name="rating" type="text" fullWidth={true} />
+              <PHDropdown
+                name="rating"
+                fullWidth={true}
+                options={ratingOptions}
+              />
               <PHInput name="comment" type="text" fullWidth={true} />
             </Stack>
             <Stack
