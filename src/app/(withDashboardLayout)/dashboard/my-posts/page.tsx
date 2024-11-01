@@ -30,7 +30,7 @@ const MyPostsPage = () => {
       const res = await updateFlat({ flatId, flatData });
 
       if (res?.data?.id) {
-        toast.success("Flat posted successfully!");
+        toast.success("Flat updated successfully!");
       }
     } catch (err) {
       console.log(err);

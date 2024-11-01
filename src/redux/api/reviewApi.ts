@@ -10,6 +10,13 @@ export const reviewApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.review],
     }),
+    getUsersReviews: build.query({
+      query: () => ({
+        url: "/reviews/user",
+        method: "GET",
+      }),
+      providesTags: [tagTypes.review],
+    }),
     getFlatReviews: build.query({
       query: (flatId) => ({
         url: `/reviews/${flatId}`,
@@ -52,6 +59,7 @@ export const reviewApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllReviewsQuery,
+  useGetUsersReviewsQuery,
   useGetFlatReviewsQuery,
   useGetSingleReviewQuery,
   useCreateReviewMutation,

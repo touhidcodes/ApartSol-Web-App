@@ -74,6 +74,11 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
           title: "My Bookings",
           path: `my-bookings`,
           icon: ShoppingCartIcon,
+        },
+        {
+          title: "My Reviews",
+          path: `my-reviews`,
+          icon: ReviewsIcon,
         }
       );
       break;

@@ -15,6 +15,7 @@ const roleBasedPrivateRoutes = {
   USER: [
     /^\/dashboard\/my-bookings/,
     /^\/dashboard\/my-posts/,
+    /^\/dashboard\/my-reviews/,
     /^\/checkout\/.+$/,
     /^\/checkout\/success/,
     /^\/checkout\/cancel/,
