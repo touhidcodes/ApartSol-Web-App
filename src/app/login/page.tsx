@@ -297,7 +297,7 @@ const LoginPage = () => {
       sx={{
         width: "100vw",
         height: "100vh",
-        background: `url('https://plus.unsplash.com/premium_photo-1684175656320-5c3f701c082c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center`,
+        background: `url('assets/images/flat1.jpg')`,
         backgroundSize: "cover",
         position: "relative",
       }}
@@ -397,7 +397,7 @@ const LoginPage = () => {
               <Typography
                 variant="h4"
                 fontWeight="bold"
-                color="#0B1134"
+                color="#0B1134CC"
                 gutterBottom
               >
                 Welcome Back!
@@ -427,21 +427,46 @@ const LoginPage = () => {
                   password: "",
                 }}
               >
-                <Stack spacing={3} mb={2}>
-                  <PHInput
-                    name="identifier"
-                    label="Username or Email"
-                    type="text"
-                    fullWidth
-                  />
-                  <PHInput
-                    name="password"
-                    label="Password"
-                    type="password"
-                    fullWidth
-                  />
+                <Stack spacing={2} mb={2}>
+                  <Box
+                    fontWeight={700}
+                    style={{
+                      textAlign: "start",
+                      color: "#00026E",
+                    }}
+                  >
+                    <Typography
+                      style={{ marginBottom: "3px", fontWeight: "500" }}
+                    >
+                      Email or Username*
+                    </Typography>
+                    <PHInput
+                      name="identifier"
+                      label="Username or Email"
+                      type="text"
+                      fullWidth
+                    />
+                  </Box>
+                  <Box
+                    fontWeight={700}
+                    style={{
+                      textAlign: "start",
+                      color: "#00026E",
+                    }}
+                  >
+                    <Typography
+                      style={{ marginBottom: "3px", fontWeight: "500" }}
+                    >
+                      Password*
+                    </Typography>
+                    <PHInput
+                      name="password"
+                      label="Password"
+                      type="password"
+                      fullWidth={true}
+                    />
+                  </Box>
                 </Stack>
-
                 <Button
                   fullWidth
                   type="submit"
@@ -449,7 +474,7 @@ const LoginPage = () => {
                   sx={{
                     backgroundColor: "#0B1134",
                     color: "white",
-                    marginBottom: 2,
+                    marginY: 2,
                     "&:hover": {
                       backgroundColor: "#061022",
                     },
@@ -498,13 +523,14 @@ const LoginPage = () => {
               </Box>
 
               {/* Additional Links */}
-              <Typography>
+              <Typography sx={{ mt: 2 }}>
                 Dont have an account?{" "}
                 <Link href="/register">
                   <Typography
                     component="span"
                     sx={{
-                      color: "#0B1134",
+                      color: "#00026E",
+                      fontWeight: "500",
                       textDecoration: "underline",
                       cursor: "pointer",
                     }}
