@@ -299,7 +299,10 @@ const LoginPage = () => {
         height: "100vh",
         background: `url('assets/images/flat1.jpg')`,
         backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
         position: "relative",
+        overflow: "hidden",
       }}
     >
       {/* Overlay to darken the background */}
