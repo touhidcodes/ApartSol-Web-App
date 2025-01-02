@@ -527,7 +527,7 @@ const LoginPage = () => {
 
               {/* Additional Links */}
               <Typography sx={{ mt: 2 }}>
-                Dont have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link href="/register">
                   <Typography
                     component="span"
