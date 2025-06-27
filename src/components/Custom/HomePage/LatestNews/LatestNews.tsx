@@ -1,72 +1,144 @@
-import React from "react";
-import {
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Box,
-  Container,
-} from "@mui/material";
-import Image from "next/image";
-import { newsData } from "@/data/latestNews";
+"use client";
 
-const LatestNews = () => {
+import React, { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import { ArrowRight, Clock, CalendarDays } from "lucide-react";
+import Image from "next/image";
+import Autoplay from "embla-carousel-autoplay";
+import { useGetAllBlogsQuery } from "@/redux/api/blogApi";
+import { TBlog } from "@/types/blog";
+import { calculateReadTime, formatDate, truncateText } from "@/lib/utils";
+
+const LatestNewsCarousel = () => {
+  const [blogs, setBlogs] = useState<TBlog[]>([]);
+  const { data, isLoading } = useGetAllBlogsQuery({ limit: 6 });
+
+  useEffect(() => {
+    if (data) {
+      setBlogs(data);
+    }
+  }, [data]);
+
+  console.log(data);
+
+  const placeholder =
+    "https://images.unsplash.com/photo-1469022563428-aa04fef9f5a2";
+
   return (
-    <Box sx={{ padding: 1, mb: 5 }}>
-      <Container>
-        <Typography
-          variant="h4"
-          align="center"
-          gutterBottom
-          sx={{ color: "#00026E", mb: 3 }}
+    <section className="w-full py-16 px-4 bg-[#1C2D37]">
+      <div className="container mx-auto">
+        {/* Section Header */}
+        <div className="mb-12">
+          <div className="flex-1 max-w-2xl text-white">
+            <div className="inline-flex items-center gap-2 mb-3">
+              <div className="w-8 h-[1px] bg-gray-400"></div>
+              <span className="text-sm font-medium uppercase tracking-wide">
+                Who We Are
+              </span>
+            </div>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-2 leading-tight">
+              News & Articles
+            </h2>
+            <p className="text-sm leading-relaxed text-slate-300">
+              Explore the latest updates, market insights, and expert tips in
+              real estate. From smart property deals to urban living trends our
+              articles help you stay informed and make smarter housing
+              decisions.
+            </p>
+          </div>
+        </div>
+
+        {/* Blog Carousel */}
+        <Carousel
+          className="w-full"
+          plugins={[
+            Autoplay({
+              delay: 5000,
+              stopOnInteraction: true,
+            }),
+          ]}
+          opts={{
+            align: "start",
+            loop: true,
+          }}
         >
-          Latest News
-        </Typography>
-        <Grid container spacing={3}>
-          {newsData.map((news) => (
-            <Grid item xs={12} sm={6} md={4} key={news.id}>
-              <Card
-                sx={{ height: "100%", position: "relative", cursor: "pointer" }}
-              >
-                <Box sx={{ position: "relative", width: "100%", height: 200 }}>
-                  <Image
-                    src={news.image}
-                    alt={news.title}
-                    layout="fill"
-                    objectFit="cover"
-                    style={{ borderRadius: "4px 4px 0 0" }}
-                  />
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 8,
-                      left: 8,
-                      backgroundColor: "#00026E",
-                      color: "white",
-                      padding: "4px 8px",
-                      borderRadius: 1,
-                    }}
-                  >
-                    <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                      {news.date}
-                    </Typography>
-                  </Box>
-                </Box>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    {news.title}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {news.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+          <CarouselContent className="gap-10">
+            {blogs.map((blog) => (
+              <CarouselItem key={blog.id} className="pl-2 md:pl-4 md:basis-1/2">
+                <Card className="bg-[#1C2D37] border-0 rounded-2xl overflow-hidden transition-transform duration-300 transform hover:scale-[1.02] h-full">
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    <Image
+                      src={blog.image || placeholder}
+                      alt={blog.title}
+                      fill
+                      className="object-cover rounded-2xl"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <CardContent className="p-6">
+                    {/* Meta Info */}
+                    <div className="flex items-center gap-6 text-slate-400 text-sm mb-3">
+                      <div className="flex items-center gap-1">
+                        <CalendarDays className="w-4 h-4" />
+                        {formatDate(blog.updatedAt)}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {calculateReadTime(blog.content)}
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-xl font-semibold text-white mb-3 line-clamp-2 leading-tight">
+                      {blog.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-slate-300 text-sm leading-relaxed mb-6 line-clamp-3">
+                      {truncateText(blog.content, 150)}
+                    </p>
+
+                    {/* CTA Button */}
+                    <Button
+                      variant="outline"
+                      className="bg-transparent border-slate-600 text-white hover:bg-white hover:text-slate-800 hover:border-white rounded-full px-6 py-2 font-medium transition-all duration-200 group"
+                    >
+                      Read More
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+
+      {/* Clamp Utility */}
+      <style jsx>{`
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .line-clamp-3 {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
+    </section>
   );
 };
 
-export default LatestNews;
+export default LatestNewsCarousel;

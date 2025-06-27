@@ -90,7 +90,7 @@ const FlatCard = ({ flat }: { flat: TFlat }) => {
             <span>{flat?.rent}</span>
           </div>
           <Link href={`/flats/${flat?.id}`}>
-            <Button size="lg" className="bg-[#1C2D37] hover:bg-[#2a4453]">
+            <Button size="lg" className="bg-[#1C2D37] hover:bg-slate-700">
               Details
             </Button>
           </Link>

@@ -22,10 +22,10 @@ export default function FlatsSection() {
   if (isLoading) return <Loading />;
 
   return (
-    <section className="py-12 bg-[#EBF0F4]" id="featured">
+    <section className="py-16 bg-[#EBF0F4]" id="featured">
       <div className="container mx-auto">
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           {/* Left Side - Title and Description */}
           <div className="flex-1 max-w-2xl">
             {/* Category Tag */}
@@ -52,16 +52,16 @@ export default function FlatsSection() {
           {/* Right Side - CTA Button */}
           <div className="flex-shrink-0">
             <Button
-              className=" text-white px-6 py-3 rounded-full font-medium transition-all duration-200 group bg-[#1C2D37] hover:bg-[#2a4453]"
+              className=" text-white px-6 py-3 rounded-full font-medium transition-all duration-200 group bg-[#1C2D37] hover:bg-slate-700"
               size="lg"
             >
               <Link href="/flats"> View All Properties</Link>
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mt-12 mb-10">
           {flats.slice(0, 6).map((flat: TFlat) => (
             <FlatCard key={flat.id} flat={flat} />
           ))}

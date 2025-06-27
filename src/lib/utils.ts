@@ -11,3 +11,21 @@ export const truncateText = (text: string, maxLength: number = 100): string => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
+
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
+export const calculateReadTime = (
+  content: string,
+  wordsPerMinute: number = 200
+): string => {
+  const wordCount = content.trim().split(/\s+/).length;
+  const readTime = Math.ceil(wordCount / wordsPerMinute);
+  return `${readTime} min read`;
+};
