@@ -1,6 +1,6 @@
 "use client";
 
-import FlatCard from "@/components/Card/FlatCard/FlatsCard";
+import FlatCard from "@/components/Card/FlatCard/FlatCard";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
 import { TFlat } from "@/types/Flats";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";

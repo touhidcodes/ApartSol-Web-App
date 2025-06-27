@@ -1,6 +1,6 @@
 "use client";
 
-import FlatCard from "@/components/Card/FlatCard/FlatsCard";
+import FlatCard from "@/components/Card/FlatCard/FlatCard";
 import Loading from "@/components/Custom/Loading/Loading";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
 import { RootState } from "@/redux/store";

@@ -136,55 +136,142 @@
 
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import AuthButton from "@/components/Custom/AuthButton.tsx/AuthButton";
+import useUserInfo from "@/hooks/useUserInfo";
+import { USER_ROLE } from "@/constants/role";
+import AuthLoading from "@/components/Custom/Loading/AuthLoading";
 
 const Navbar = () => {
+  const user = useUserInfo();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const currentPath = usePathname();
+  const isHomepage = currentPath === "/";
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [user]);
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  if (isLoading) {
+    return <AuthLoading />;
+  }
+
   return (
-    <header className="top-0 left-0 w-full z-50 bg-[#0D1B2A] text-white shadow overflow-hidden">
-      <div className="container mx-auto flex justify-between items-center py-4 px-4 md:px-8">
+    <header
+      className={`top-0 left-0 w-full z-50 text-white shadow-md transition-all duration-300 overflow-hidden bg-[#1C2D37] ${
+        isHomepage ? "absolute" : "fixed "
+      }`}
+    >
+      <div className="container mx-auto flex justify-between items-center py-3 px-4 md:px-8">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold">
-          <span className="flex items-center gap-2">
-            <span className="text-white">REALAR</span>
-            <span className="text-sm text-gray-400">LIVING SOLUTIONS</span>
+        <Link href="/" className="text-2xl font-bold">
+          <span className="flex flex-col leading-4 items-center">
+            <span className="text-white">APARTSOL</span>
+            <span className="text-xs text-gray-400 tracking-wide">
+              LIVING SOLUTIONS
+            </span>
           </span>
         </Link>
 
-        {/* Center Nav Links */}
+        {/* Desktop Nav Links */}
         <nav className="hidden md:flex gap-6 text-sm font-medium">
-          <Link href="#" className="hover:text-gray-300">
+          <Link href="/" className="hover:text-gray-300">
             Home
           </Link>
-          <Link href="#" className="hover:text-gray-300">
+          <Link href="/flats" className="hover:text-gray-300">
+            Flats
+          </Link>
+          <Link href="/about" className="hover:text-gray-300">
             About Us
           </Link>
-          <Link href="#" className="hover:text-gray-300">
-            Properties
-          </Link>
-          <Link href="#" className="hover:text-gray-300">
-            Agencies
-          </Link>
-          <Link href="#" className="hover:text-gray-300">
-            Blog
-          </Link>
-          <Link href="#" className="hover:text-gray-300">
-            Contact Us
-          </Link>
+          {user ? (
+            <Link
+              href="/dashboard/home"
+              className="hover:text-gray-300 capitalize"
+            >
+              {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
+            </Link>
+          ) : (
+            <Link href="/register" className="hover:text-gray-300">
+              Register
+            </Link>
+          )}
         </nav>
 
-        {/* Right side: Button & Menu Icon */}
+        {/* Action Buttons */}
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
             className="rounded-full border-white text-white hover:bg-white hover:text-black transition"
+            asChild
           >
-            Request a quote
+            <Link href="/post">Add Listing</Link>
           </Button>
-          <Menu className="md:hidden w-6 h-6" />
+          <AuthButton />
+          {/* Mobile menu icon */}
+          <button className="md:hidden" onClick={toggleMenu}>
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
       </div>
+
+      {/* Mobile Nav Dropdown */}
+      {menuOpen && (
+        <div className="md:hidden bg-[#1C2D37] text-sm font-medium px-4 py-4 space-y-3">
+          <Link
+            href="/"
+            className="block hover:text-gray-300"
+            onClick={toggleMenu}
+          >
+            Home
+          </Link>
+          <Link
+            href="/flats"
+            className="block hover:text-gray-300"
+            onClick={toggleMenu}
+          >
+            Flats
+          </Link>
+          <Link
+            href="/about"
+            className="block hover:text-gray-300"
+            onClick={toggleMenu}
+          >
+            About Us
+          </Link>
+          {user ? (
+            <Link
+              href="/dashboard/home"
+              className="block hover:text-gray-300 capitalize"
+              onClick={toggleMenu}
+            >
+              {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
+            </Link>
+          ) : (
+            <Link
+              href="/register"
+              className="block hover:text-gray-300"
+              onClick={toggleMenu}
+            >
+              Register
+            </Link>
+          )}
+          <Link
+            href="/post"
+            className="block hover:text-gray-300"
+            onClick={toggleMenu}
+          >
+            Add Listing
+          </Link>
+        </div>
+      )}
     </header>
   );
 };

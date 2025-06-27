@@ -20,7 +20,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 
 const placeholder =
   "https://images.unsplash.com/photo-1469022563428-aa04fef9f5a2";
