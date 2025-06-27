@@ -15,7 +15,7 @@ import { useGetAllBlogsQuery } from "@/redux/api/blogApi";
 import { TBlog } from "@/types/blog";
 import { calculateReadTime, formatDate, truncateText } from "@/lib/utils";
 
-const LatestNewsCarousel = () => {
+const LatestNews = () => {
   const [blogs, setBlogs] = useState<TBlog[]>([]);
   const { data, isLoading } = useGetAllBlogsQuery({ limit: 6 });
 
@@ -24,8 +24,6 @@ const LatestNewsCarousel = () => {
       setBlogs(data);
     }
   }, [data]);
-
-  console.log(data);
 
   const placeholder =
     "https://images.unsplash.com/photo-1469022563428-aa04fef9f5a2";
@@ -68,9 +66,9 @@ const LatestNewsCarousel = () => {
             loop: true,
           }}
         >
-          <CarouselContent className="gap-10">
+          <CarouselContent className="">
             {blogs.map((blog) => (
-              <CarouselItem key={blog.id} className="pl-2 md:pl-4 md:basis-1/2">
+              <CarouselItem key={blog.id} className="px-2 md:px-5 md:basis-1/2">
                 <Card className="bg-[#1C2D37] border-0 rounded-2xl overflow-hidden transition-transform duration-300 transform hover:scale-[1.02] h-full">
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden">
@@ -141,4 +139,4 @@ const LatestNewsCarousel = () => {
   );
 };
 
-export default LatestNewsCarousel;
+export default LatestNews;

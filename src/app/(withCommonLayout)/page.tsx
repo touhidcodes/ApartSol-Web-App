@@ -3,7 +3,7 @@ import HeroSection from "@/components/Custom/HomePage/HeroSection/HeroSection";
 import HowItWorks from "@/components/Custom/HomePage/HowItWorks/HowItWorks";
 import LatestNews from "@/components/Custom/HomePage/LatestNews/LatestNews";
 import ServiceSection from "@/components/Custom/HomePage/ServiceSection/ServiceSection";
-import Testimonial from "@/components/Custom/HomePage/Testimonial/Testimonial";
+import TestimonialSection from "@/components/Custom/HomePage/TestimonialSection/TestimonialSection";
 import WhoWeAreSection from "@/components/Custom/HomePage/WhoWeAreSection/WhoWeAreSection";
 
 const Homepage = () => {
@@ -15,7 +15,7 @@ const Homepage = () => {
       <ServiceSection />
       <HowItWorks />
       <LatestNews />
-      <Testimonial />
+      <TestimonialSection />
     </>
   );
 };
