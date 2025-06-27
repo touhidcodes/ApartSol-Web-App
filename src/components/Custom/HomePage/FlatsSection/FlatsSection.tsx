@@ -61,7 +61,7 @@ export default function FlatsSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mt-12 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mt-12">
           {flats.slice(0, 6).map((flat: TFlat) => (
             <FlatCard key={flat.id} flat={flat} />
           ))}

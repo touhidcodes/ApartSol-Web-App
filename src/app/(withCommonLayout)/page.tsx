@@ -1,7 +1,8 @@
 import FlatsSection from "@/components/Custom/HomePage/FlatsSection/FlatsSection";
+import GallerySection from "@/components/Custom/HomePage/GallerySection/GallerySection";
 import HeroSection from "@/components/Custom/HomePage/HeroSection/HeroSection";
-import HowItWorks from "@/components/Custom/HomePage/HowItWorks/HowItWorks";
 import LatestNews from "@/components/Custom/HomePage/LatestNews/LatestNews";
+import NewsletterSection from "@/components/Custom/HomePage/NewsletterSection/NewsletterSection";
 import ServiceSection from "@/components/Custom/HomePage/ServiceSection/ServiceSection";
 import TestimonialSection from "@/components/Custom/HomePage/TestimonialSection/TestimonialSection";
 import WhoWeAreSection from "@/components/Custom/HomePage/WhoWeAreSection/WhoWeAreSection";
@@ -13,9 +14,10 @@ const Homepage = () => {
       <WhoWeAreSection />
       <FlatsSection />
       <ServiceSection />
-      <HowItWorks />
-      <LatestNews />
       <TestimonialSection />
+      <GallerySection />
+      <LatestNews />
+      <NewsletterSection />
     </>
   );
 };

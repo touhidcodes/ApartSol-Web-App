@@ -49,7 +49,7 @@ const features = [
   },
 ];
 
-export default function WhyChooseUs() {
+export default function ServiceSection() {
   return (
     <section className="py-16 px-4 lg:px-16" id="why-choose-us">
       <div className="container mx-auto">

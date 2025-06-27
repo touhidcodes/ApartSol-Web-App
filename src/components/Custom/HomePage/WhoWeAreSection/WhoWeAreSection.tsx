@@ -145,7 +145,7 @@ const WhoWeAreSection = () => {
             <div className="inline-flex items-center gap-2 mb-3">
               <div className="w-8 h-[1px] bg-gray-400"></div>
               <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-                WHO WE ARE
+                Who We Are
               </span>
             </div>
 
