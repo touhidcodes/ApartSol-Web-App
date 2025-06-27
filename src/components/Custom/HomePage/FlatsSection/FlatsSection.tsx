@@ -1,14 +1,15 @@
 "use client";
 
-import FlatCard from "@/components/Card/FlatCard/FlatCard";
+import { useEffect, useState } from "react";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
 import { TFlat } from "@/types/Flats";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import FlatCard from "@/components/Card/FlatCard/FlatCard";
+import { Button } from "@/components/ui/button";
+import Loading from "@/components/Custom/Loading/Loading";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Loading from "../../Loading/Loading";
+import { ArrowRight } from "lucide-react";
 
-const FlatsSection = () => {
+export default function FlatsSection() {
   const [flats, setFlats] = useState<TFlat[]>([]);
   const { data, isLoading } = useGetAllFlatsQuery({ limit: 6 });
 
@@ -18,36 +19,60 @@ const FlatsSection = () => {
     }
   }, [data]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
 
   return (
-    <Box sx={{ py: 5, background: "#EBF0F4" }}>
-      <Container>
-        <Typography
-          variant="h4"
-          sx={{ mb: 3, textAlign: "center", color: "#00026E" }}
-        >
-          Featured Flats
-        </Typography>
-        <Grid container spacing={4} mt={2}>
-          {flats.slice(0, 6).map((flat: TFlat) => (
-            <Grid item xs={12} sm={6} md={6} key={flat.id}>
-              <FlatCard flat={flat} />
-            </Grid>
-          ))}
-        </Grid>
-        <Box
-          sx={{ display: "flex", justifyContent: "center", marginTop: "50px" }}
-        >
-          <Button component={Link} href="/flats">
-            View All
-          </Button>
-        </Box>
-      </Container>
-    </Box>
-  );
-};
+    <section className="py-12 bg-[#EBF0F4]" id="featured-flats">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12">
+          {/* Left Side - Title and Description */}
+          <div className="flex-1 max-w-2xl">
+            {/* Category Tag */}
+            <div className="inline-flex items-center gap-2 mb-3">
+              <div className="w-8 h-[1px] bg-gray-400"></div>
+              <span className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+                FEATURED LISTINGS
+              </span>
+            </div>
 
-export default FlatsSection;
+            {/* Main Title */}
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">
+              Our Services
+            </h2>
+
+            {/* Description */}
+            <p className="text-sm text-gray-600 leading-relaxed">
+              Quis nulla blandit vulputate morbi adipiscing sem vestibulum.
+              Nulla turpis integer dui sed posuere sem. Id molestie mi arcu
+              gravida lorem potenti.
+            </p>
+          </div>
+
+          {/* Right Side - CTA Button */}
+          <div className="flex-shrink-0">
+            <Button
+              className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-full font-medium transition-all duration-200 group"
+              size="lg"
+            >
+              view all properties
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {flats.slice(0, 6).map((flat: TFlat) => (
+          <FlatCard key={flat.id} flat={flat} />
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-10">
+        <Button asChild className="rounded-full px-6 py-2">
+          <Link href="/flats">View All</Link>
+        </Button>
+      </div>
+    </section>
+  );
+}
