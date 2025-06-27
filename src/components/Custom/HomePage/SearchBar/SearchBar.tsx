@@ -142,7 +142,7 @@ const SearchBar = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex items-center max-w-6xl mx-auto rounded-lg overflow-hidden shadow-md bg-white"
+      className="flex items-center mx-auto rounded-lg overflow-hidden shadow-md bg-white"
     >
       {/* Property Search label (dark section) */}
       <div className="bg-[#1C2D37] text-white px-5 py-5 font-semibold text-sm whitespace-nowrap">
@@ -188,7 +188,7 @@ const SearchBar = () => {
       </div>
 
       {/* Search Button */}
-      <div className="px-4 border-l border-gray-300">
+      <div className="px-4 border-l justify-end border-gray-300 item">
         <Button type="submit" className="rounded-full px-5 bg-[#1C2D37]">
           <Search className="w-4 h-4 mr-2" />
           Search Property

@@ -21,7 +21,7 @@ const HeroSection = () => {
 
       {/* Centered Content */}
       <div className="absolute inset-0 flex items-center justify-center z-20 px-4">
-        <div className="text-center max-w-5xl w-full space-y-6">
+        <div className="text-center max-w-5xl w-full space-y-6 mx-auto">
           <h1 className="text-white font-semibold text-3xl md:text-5xl leading-tight max-w-3xl mx-auto">
             Experience The Harmonious Blend Of Luxury
           </h1>
