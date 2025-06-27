@@ -174,7 +174,7 @@ const Navbar = () => {
         <Link href="/" className="text-2xl font-bold">
           <span className="flex flex-col leading-4 items-center">
             <span className="text-white">APARTSOL</span>
-            <span className="text-xs text-gray-400 tracking-wide">
+            <span className="text-xs text-gray-400 tracking-wide pt-1">
               LIVING SOLUTIONS
             </span>
           </span>

@@ -4,6 +4,7 @@ export type TFlat = {
   title: String;
   squareFeet: number;
   totalBedrooms: number;
+  totalBathrooms: number;
   totalRooms: number;
   amenities: string;
   location: string;

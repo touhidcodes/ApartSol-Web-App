@@ -22,8 +22,8 @@ export default function FlatsSection() {
   if (isLoading) return <Loading />;
 
   return (
-    <section className="py-12 bg-[#EBF0F4]" id="featured-flats">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-12 bg-[#EBF0F4]" id="featured">
+      <div className="container mx-auto">
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12">
           {/* Left Side - Title and Description */}
@@ -38,40 +38,34 @@ export default function FlatsSection() {
 
             {/* Main Title */}
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">
-              Our Services
+              Featured Properties
             </h2>
 
             {/* Description */}
             <p className="text-sm text-gray-600 leading-relaxed">
-              Quis nulla blandit vulputate morbi adipiscing sem vestibulum.
-              Nulla turpis integer dui sed posuere sem. Id molestie mi arcu
-              gravida lorem potenti.
+              Discover our handpicked selection of featured properties that
+              combine modern design, comfort, and the best locations to ensure
+              your perfect match.
             </p>
           </div>
 
           {/* Right Side - CTA Button */}
           <div className="flex-shrink-0">
             <Button
-              className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-full font-medium transition-all duration-200 group"
+              className=" text-white px-6 py-3 rounded-full font-medium transition-all duration-200 group bg-[#1C2D37] hover:bg-[#2a4453]"
               size="lg"
             >
-              view all properties
+              <Link href="/flats"> View All Properties</Link>
               <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
             </Button>
           </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {flats.slice(0, 6).map((flat: TFlat) => (
-          <FlatCard key={flat.id} flat={flat} />
-        ))}
-      </div>
-
-      <div className="flex justify-center mt-10">
-        <Button asChild className="rounded-full px-6 py-2">
-          <Link href="/flats">View All</Link>
-        </Button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {flats.slice(0, 6).map((flat: TFlat) => (
+            <FlatCard key={flat.id} flat={flat} />
+          ))}
+        </div>
       </div>
     </section>
   );

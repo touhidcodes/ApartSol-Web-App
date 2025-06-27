@@ -52,7 +52,7 @@ const features = [
 export default function WhyChooseUs() {
   return (
     <section className="py-12 px-4 lg:px-16" id="why-choose-us">
-      <div className="max-w-7xl mx-auto">
+      <div className="container mx-auto">
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12">
           {/* Left Side - Title and Description */}
@@ -72,36 +72,36 @@ export default function WhyChooseUs() {
 
             {/* Description */}
             <p className="text-sm text-gray-600 leading-relaxed">
-              Quis nulla blandit vulputate morbi adipiscing sem vestibulum.
-              Nulla turpis integer dui sed posuere sem. Id molestie mi arcu
-              gravida lorem potenti.
+              We offer a complete suite of services to make your property
+              journey seamless from verified listings and secure transactions to
+              expert support and community reviews.
             </p>
           </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {features.map((feature, index) => {
-          const Icon = feature.icon;
-          return (
-            <Card
-              key={index}
-              className="bg-white rounded-2xl shadow-sm p-6 text-center hover:shadow-md transition"
-            >
-              <div className="flex justify-center items-center w-12 h-12 mx-auto mb-4 bg-[#1C2D37] rounded-full">
-                <Icon className="text-white w-6 h-6" />
-              </div>
-              <CardHeader className="p-0 mb-2">
-                <CardTitle className="text-lg font-semibold">
-                  {feature.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0 text-sm text-gray-600">
-                {feature.description}
-              </CardContent>
-            </Card>
-          );
-        })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <Card
+                key={index}
+                className="bg-white rounded-2xl shadow-sm p-6 text-center hover:shadow-md transition"
+              >
+                <div className="flex justify-center items-center w-12 h-12 mx-auto mb-4 bg-[#1C2D37] rounded-full">
+                  <Icon className="text-white w-6 h-6" />
+                </div>
+                <CardHeader className="p-0 mb-2">
+                  <CardTitle className="text-lg font-semibold">
+                    {feature.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-sm text-gray-600">
+                  {feature.description}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
