@@ -180,7 +180,7 @@ export default function Footer() {
 
         <div className="text-center mt-10 text-xs text-gray-500 pt-6">
           <hr className="border-white/20 mb-4" />
-          &copy; {new Date().getFullYear()} MS CREATION
+          &copy; {new Date().getFullYear()} APARTSOL
           <br />
           This site developed by{" "}
           <Link
