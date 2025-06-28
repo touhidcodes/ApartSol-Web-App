@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
-import { TFlat, TFlatWithUserAndReviews } from "@/types/Flats";
+import { TFlatWithUserAndReviews } from "@/types/Flats";
 import {
   MapPin,
   Bed,
@@ -25,6 +25,8 @@ import {
   Banknote,
   CalendarCheck2,
   CalendarX2,
+  Hash,
+  ArrowUp,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +37,13 @@ import Loading from "@/components/Custom/Loading/Loading";
 import ThumbnailGallery from "@/components/Shared/ThumbnailGallery/ThumbnailGallery";
 import { FeaturesAmenities } from "@/components/Shared/FeatureAmenities/FeatureAmenities";
 import { RenderStars } from "@/components/Shared/RenderStars/RenderStars";
-import { Separator } from "@/components/ui/separator";
+import PropertyOverviewItem from "@/components/Shared/PropertyOverviewItem/PropertyOverviewItem";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 type PropTypes = {
   params: {
@@ -45,23 +53,6 @@ type PropTypes = {
 
 const placeholder =
   "https://images.unsplash.com/photo-1469022563428-aa04fef9f5a2";
-
-const PropertyOverviewItem = ({
-  icon,
-  label,
-  value,
-  bgColor = "bg-slate-700",
-}) => (
-  <div
-    className={`${bgColor} text-white p-4 rounded-lg flex items-center gap-3`}
-  >
-    <div className="text-blue-400">{icon}</div>
-    <div>
-      <div className="text-xs text-gray-300 uppercase">{label}</div>
-      <div className="text-sm font-semibold">{value}</div>
-    </div>
-  </div>
-);
 
 export default function FlatDetailPage({ params }: PropTypes) {
   const [contactForm, setContactForm] = useState({
@@ -111,26 +102,27 @@ export default function FlatDetailPage({ params }: PropTypes) {
         <div className="absolute inset-0 bg-[#0D1B2A]/50 z-10" />
         <div className="absolute inset-0 flex items-center justify-center z-20 px-4">
           <div className="text-center max-w-5xl w-full space-y-2 mx-auto">
-            <h1 className="text-white font-semibold text-3xl md:text-5xl leading-tight">
+            <h1 className="text-white text-3xl md:text-5xl leading-tight font-semibold">
               {flat.title}
             </h1>
-            <p className="text-white text-sm md:text-base">
-              Home → {flat.title}
-            </p>
+            <div>
+              <Breadcrumb className="flex items-center justify-center space-x-2 text-sm lg:text-md text-white">
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator>→</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="#" aria-current="page">
+                    {flat.title}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </Breadcrumb>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto">
-        {/* Back Button */}
-        <div className="mb-4">
-          <Link
-            href="/flats"
-            className="inline-flex items-center gap-2 text-primary hover:underline"
-          >
-            <ArrowLeft size={18} /> Back to Flats
-          </Link>
-        </div>
         {/* Image Carousel */}
         <div className="mb-10 w-full content grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
@@ -286,68 +278,75 @@ export default function FlatDetailPage({ params }: PropTypes) {
             </div>
 
             {/* Property Overview */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            <div className="rounded-xl shadow-sm">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6 pl-6">
                 Property Overview
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <PropertyOverviewItem
-                  icon={<Home size={20} />}
-                  label="ID NO."
-                  value={`#${flat.id.slice(-6).toUpperCase()}`}
-                />
-                <PropertyOverviewItem
-                  icon={<Building size={20} />}
-                  label="Type"
-                  value={flat.propertyType}
-                />
-                <PropertyOverviewItem
-                  icon={<Home size={20} />}
-                  label="Room"
-                  value={flat.totalRooms}
-                />
-                <PropertyOverviewItem
-                  icon={<Bed size={20} />}
-                  label="Bedroom"
-                  value={flat.totalBedrooms}
-                />
-                <PropertyOverviewItem
-                  icon={<Bath size={20} />}
-                  label="Bath"
-                  value={flat.totalBathrooms}
-                />
-                <PropertyOverviewItem
-                  icon={<DollarSign size={20} />}
-                  label="Purpose"
-                  value={`For ${flat.purpose}`}
-                />
-                <PropertyOverviewItem
-                  icon={<Ruler size={20} />}
-                  label="SqFt"
-                  value={flat.squareFeet}
-                />
-                <PropertyOverviewItem
-                  icon={<Car size={20} />}
-                  label="Parking"
-                  value={flat.parking ? "Yes" : "No"}
-                />
-                <PropertyOverviewItem
-                  icon={<Building size={20} />}
-                  label="Elevator"
-                  value={flat.elevator ? "Yes" : "No"}
-                />
-                <PropertyOverviewItem
-                  icon={<Wifi size={20} />}
-                  label="Wifi"
-                  value={flat.wifi ? "Yes" : "No"}
-                />
+              <div className="bg-slate-800 rounded-lg p-4">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                  <PropertyOverviewItem
+                    label="ID NO."
+                    value={`#${flat.id.slice(-4).toUpperCase()}`}
+                  >
+                    <Hash size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem label="Type" value={flat.propertyType}>
+                    <Building size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem label="Room" value={flat.totalRooms}>
+                    <Home size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem
+                    label="Bedroom"
+                    value={flat.totalBedrooms}
+                  >
+                    <Bed size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem
+                    label="Bath"
+                    value={flat.totalBathrooms}
+                  >
+                    <Bath size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem
+                    label="Purpose"
+                    value={`${flat.purpose}`}
+                  >
+                    <DollarSign size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem label="SqFt" value={flat.squareFeet}>
+                    <Ruler size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem
+                    label="Parking"
+                    value={flat.parking ? "Yes" : "No"}
+                  >
+                    <Car size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem
+                    label="Elevator"
+                    value={flat.elevator ? "Yes" : "No"}
+                  >
+                    <ArrowUp size={16} />
+                  </PropertyOverviewItem>
+                  <PropertyOverviewItem
+                    label="Wifi"
+                    value={flat.wifi ? "Yes" : "No"}
+                  >
+                    <Wifi size={16} />
+                  </PropertyOverviewItem>
+                </div>
               </div>
             </div>
+            {/* Features and amenities */}
             <FeaturesAmenities availableAmenities={flat.amenities} />
-            <div className="bg-gray-100 p-6 rounded-lg max-w-2xl">
+            {/* Review */}
+            <div className="bg-gray-100 p-6 rounded-lg">
               {/* Header */}
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">Review</h2>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  Reviews
+                </h2>
                 <button
                   // onClick={onLoginToReview}
                   className="bg-gray-800 text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-gray-700 transition-colors"

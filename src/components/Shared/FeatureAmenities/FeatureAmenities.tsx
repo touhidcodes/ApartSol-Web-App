@@ -45,7 +45,7 @@ type AmenityName = (typeof DEFAULT_AMENITIES)[number];
 
 export const FeaturesAmenities: React.FC<FeaturesAmenitiesProps> = ({
   availableAmenities,
-  title = "Features & amenities",
+  title = "Features & Amenities",
 }) => {
   const availableSet = new Set<string>(
     availableAmenities.map((amenity: string) => amenity.toLowerCase())
