@@ -28,7 +28,7 @@ const FlatCard = ({ flat }: { flat: TFlat }) => {
       {/* Image Section */}
       <div className="relative w-full md:w-10/12 h-[200px] md:h-full">
         <Image
-          src={flat?.image || placeholder}
+          src={flat?.images[0] || placeholder}
           alt="flat image"
           fill
           className="object-cover"
@@ -56,7 +56,9 @@ const FlatCard = ({ flat }: { flat: TFlat }) => {
           {/* Location */}
           <div className="flex items-center text-muted-foreground gap-1 mt-1">
             <MapPin className="w-4 h-4" />
-            <span className="text-sm">{flat?.location}</span>
+            <span className="text-sm">
+              `${flat?.city}, ${flat?.country}`
+            </span>
           </div>
 
           {/* Description */}

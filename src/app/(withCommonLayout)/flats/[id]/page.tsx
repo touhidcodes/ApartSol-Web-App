@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
-import { TFlat } from "@/types/Flats";
+import { TFlat, TFlatWithUserAndReviews } from "@/types/Flats";
 import {
   MapPin,
   Bed,
@@ -11,10 +11,6 @@ import {
   Bath,
   Wifi,
   Car,
-  Building2,
-  Layers3,
-  KeyRound,
-  ShowerHead,
   ArrowLeft,
   Home,
   Building,
@@ -22,25 +18,24 @@ import {
   Phone,
   Mail,
   Star,
+  CheckCircle,
+  Globe,
+  Link2,
+  Wallet,
+  Banknote,
+  CalendarCheck2,
+  CalendarX2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import Loading from "@/components/Custom/Loading/Loading";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import ThumbnailGallery from "@/components/Shared/ThumbnailGallery/ThumbnailGallery";
 import { FeaturesAmenities } from "@/components/Shared/FeatureAmenities/FeatureAmenities";
 import { RenderStars } from "@/components/Shared/RenderStars/RenderStars";
+import { Separator } from "@/components/ui/separator";
 
 type PropTypes = {
   params: {
@@ -75,7 +70,9 @@ export default function FlatDetailPage({ params }: PropTypes) {
     message: "",
   });
   const { data, isLoading } = useGetFlatByIdQuery(params.id);
-  const [flat, setFlat] = useState<TFlat | undefined>();
+  const [flat, setFlat] = useState<TFlatWithUserAndReviews | undefined>();
+
+  console.log(data);
 
   useEffect(() => {
     if (data) setFlat(data);
@@ -98,17 +95,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
     setContactForm({ name: "", email: "", message: "" });
   };
 
-  const reviews = [
-    {
-      id: "1",
-      author: "Realor",
-      rating: 4,
-      date: "7 May, 2024",
-      comment:
-        "Rapidiously myocardinate cross-platform intellectual capital model. Appropriately create interactive infrastructures",
-    },
-  ];
-
+  const avatarPlaceholder = "https://avatar.iran.liara.run/public";
   return (
     <div className="bg-[#EBF0F4] py-10">
       {/* Banner Section */}
@@ -145,10 +132,139 @@ export default function FlatDetailPage({ params }: PropTypes) {
           </Link>
         </div>
         {/* Image Carousel */}
-        <div className="mb-10 w-full max-w-5xl mx-auto">
-          {flat.images && <ThumbnailGallery images={flat.images} />}
+        <div className="mb-10 w-full content grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            {flat.images && <ThumbnailGallery images={flat.images} />}
+          </div>
+          {/* Right Side */}
+          <div className="flex flex-col  justify-between h-full">
+            {/* Author Info */}
+            <Card className="bg-[#1C2D37] text-white">
+              <CardHeader>
+                <h3 className="text-xl font-semibold">Author Info</h3>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Profile Picture and Name */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
+                      {flat?.user?.UserProfile?.image ? (
+                        <img
+                          src={
+                            flat?.user?.UserProfile?.image || avatarPlaceholder
+                          }
+                          alt={
+                            flat?.user?.UserProfile?.name || "Property Owner"
+                          }
+                          className="w-12 h-12 object-cover"
+                        />
+                      ) : (
+                        <User size={24} className="text-gray-400" />
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg">
+                        {flat?.user?.UserProfile?.name || "Property Owner"}
+                      </h4>
+                      <p className="text-sm text-slate-300">
+                        {flat?.user?.UserProfile?.profession ||
+                          "Profession not provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Company */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <Building size={16} />
+                    {flat?.user?.UserProfile?.company || "Company not provided"}
+                  </div>
+
+                  {/* Phone */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <Phone size={16} />
+                    {flat?.user?.UserProfile?.phone ||
+                      flat?.user?.UserProfile?.secondaryPhone ||
+                      "Phone not provided"}
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <MapPin size={16} />
+                    {flat?.user?.UserProfile?.city &&
+                    flat?.user?.UserProfile?.country
+                      ? `${flat?.user?.UserProfile.city}, ${flat?.user?.UserProfile.country}`
+                      : "Location not provided"}
+                  </div>
+
+                  {/* Verification */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <CheckCircle size={16} />
+                    {flat?.user?.UserProfile?.verified
+                      ? "Verified Agent"
+                      : "Not Verified"}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Properties */}
+            <Card className="bg-[#1C2D37] text-white">
+              <CardHeader>
+                <h3 className="text-lg font-semibold">Properties Pricing</h3>
+              </CardHeader>
+
+              <CardContent>
+                <div className="space-y-4 text-sm text-slate-300">
+                  {/* Rent */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Wallet size={18} />
+                      <span className="font-medium">Rent Price:</span>
+                    </div>
+                    <span>
+                      $ {flat?.rent?.toLocaleString() || "Not specified"}
+                    </span>
+                  </div>
+
+                  {/* Advance Amount */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Banknote size={18} />
+                      <span className="font-medium">Advance Amount:</span>
+                    </div>
+                    <span>
+                      ${" "}
+                      {flat?.advanceAmount?.toLocaleString() || "Not specified"}
+                    </span>
+                  </div>
+
+                  {/* Availability */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CalendarCheck2 size={18} />
+                      <span className="font-medium">Availability:</span>
+                    </div>
+                    <Badge
+                      className={
+                        flat?.availability ? "bg-green-600" : "bg-red-600"
+                      }
+                    >
+                      {flat?.availability ? "Available" : "Unavailable"}
+                    </Badge>
+                  </div>
+                  {/* Book Flat Button */}
+                  <Button
+                    size="lg"
+                    disabled={!flat?.availability}
+                    className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
+                  >
+                    {flat?.availability ? "Book This Flat" : "Not Available"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-        ----------------
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - About Property and Overview */}
           <div className="lg:col-span-2 space-y-8">
@@ -243,7 +359,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
 
               {/* Individual Reviews */}
               <div className="space-y-4">
-                {reviews.map((review) => (
+                {flat?.review?.map((review) => (
                   <div key={review.id} className="bg-white p-4 rounded-lg">
                     <div className="flex items-start gap-3">
                       {/* Avatar */}
@@ -276,7 +392,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
           {/* Right Column - Contact and Author Info */}
           <div className="space-y-6">
             {/* Contact Form */}
-            <Card className="bg-slate-800 text-white">
+            <Card className="bg-[#1C2D37] text-white">
               <CardHeader>
                 <h3 className="text-lg font-semibold">
                   Contact the listing owner
@@ -322,19 +438,24 @@ export default function FlatDetailPage({ params }: PropTypes) {
             </Card>
 
             {/* Author Info */}
-            <Card className="bg-slate-800 text-white">
+            <Card className="bg-[#1C2D37] text-white">
               <CardHeader>
-                <h3 className="text-lg font-semibold">Author Info</h3>
+                <h3 className="text-xl font-semibold">Author Info</h3>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
+                  {/* Profile Picture and Name */}
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center">
-                      {flat.user?.UserProfile?.image ? (
+                    <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
+                      {flat?.user?.UserProfile?.image ? (
                         <img
-                          src={flat.user.UserProfile.image}
-                          alt={flat.user.UserProfile.name}
-                          className="w-12 h-12 rounded-full object-cover"
+                          src={
+                            flat?.user?.UserProfile?.image || avatarPlaceholder
+                          }
+                          alt={
+                            flat?.user?.UserProfile?.name || "Property Owner"
+                          }
+                          className="w-12 h-12 object-cover"
                         />
                       ) : (
                         <User size={24} className="text-gray-400" />
@@ -342,40 +463,52 @@ export default function FlatDetailPage({ params }: PropTypes) {
                     </div>
                     <div>
                       <h4 className="font-semibold text-lg">
-                        {flat.user?.UserProfile?.name ||
-                          flat.user?.username ||
-                          "Property Owner"}
+                        {flat?.user?.UserProfile?.name || "Property Owner"}
                       </h4>
+                      <p className="text-sm text-slate-300">
+                        {flat?.user?.UserProfile?.profession ||
+                          "Profession not provided"}
+                      </p>
                     </div>
                   </div>
 
-                  <div className="space-y-3 text-sm">
-                    {flat.user?.UserProfile?.address && (
-                      <div className="flex items-center gap-2 text-gray-300">
-                        <MapPin size={16} />
-                        <span>{flat.user.UserProfile.address}</span>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-2 text-gray-300">
-                      <Phone size={16} />
-                      <span>01234567890</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-300">
-                      <Mail size={16} />
-                      <span>themeholy@gmail.com</span>
-                    </div>
+                  {/* Company */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <Building size={16} />
+                    {flat?.user?.UserProfile?.company || "Company not provided"}
                   </div>
 
-                  {flat.user?.UserProfile?.profession && (
-                    <div className="pt-2">
-                      <Badge
-                        variant="secondary"
-                        className="bg-slate-700 text-white"
-                      >
-                        {flat.user.UserProfile.profession}
-                      </Badge>
-                    </div>
-                  )}
+                  {/* Phone */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <Phone size={16} />
+                    {flat?.user?.UserProfile?.phone ||
+                      flat?.user?.UserProfile?.secondaryPhone ||
+                      "Phone not provided"}
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <MapPin size={16} />
+                    {flat?.user?.UserProfile?.city &&
+                    flat?.user?.UserProfile?.country
+                      ? `${flat?.user?.UserProfile.city}, ${flat?.user?.UserProfile.country}`
+                      : "Location not provided"}
+                  </div>
+
+                  {/* Verification */}
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <CheckCircle
+                      size={16}
+                      className={
+                        flat?.user?.UserProfile?.verified
+                          ? "text-green-400"
+                          : "text-gray-400"
+                      }
+                    />
+                    {flat?.user?.UserProfile?.verified
+                      ? "Verified Agent"
+                      : "Not Verified"}
+                  </div>
                 </div>
               </CardContent>
             </Card>
