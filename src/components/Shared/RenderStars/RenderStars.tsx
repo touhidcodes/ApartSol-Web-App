@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 
-export const renderStars = (ratingStr: string) => {
+export const RenderStars = (ratingStr: string) => {
   const rating = Math.min(Math.max(parseInt(ratingStr), 0), 5);
   const maxStars = 5;
 

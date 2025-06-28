@@ -21,6 +21,7 @@ import {
   User,
   Phone,
   Mail,
+  Star,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import ThumbnailGallery from "@/components/Shared/ThumbnailGallery/ThumbnailGallery";
+import { FeaturesAmenities } from "@/components/Shared/FeatureAmenities/FeatureAmenities";
+import { RenderStars } from "@/components/Shared/RenderStars/RenderStars";
 
 type PropTypes = {
   params: {
@@ -94,6 +97,17 @@ export default function FlatDetailPage({ params }: PropTypes) {
     alert("Message sent successfully!");
     setContactForm({ name: "", email: "", message: "" });
   };
+
+  const reviews = [
+    {
+      id: "1",
+      author: "Realor",
+      rating: 4,
+      date: "7 May, 2024",
+      comment:
+        "Rapidiously myocardinate cross-platform intellectual capital model. Appropriately create interactive infrastructures",
+    },
+  ];
 
   return (
     <div className="bg-[#EBF0F4] py-10">
@@ -213,6 +227,50 @@ export default function FlatDetailPage({ params }: PropTypes) {
                 />
               </div>
             </div>
+            <FeaturesAmenities availableAmenities={flat.amenities} />
+            <div className="bg-gray-100 p-6 rounded-lg max-w-2xl">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-gray-800">Review</h2>
+                <button
+                  // onClick={onLoginToReview}
+                  className="bg-gray-800 text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-gray-700 transition-colors"
+                >
+                  <Star size={14} />
+                  Login To Write Your Review
+                </button>
+              </div>
+
+              {/* Individual Reviews */}
+              <div className="space-y-4">
+                {reviews.map((review) => (
+                  <div key={review.id} className="bg-white p-4 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      {/* Avatar */}
+                      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white font-semibold">
+                        <User size={20} />
+                      </div>
+
+                      {/* Review Content */}
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="font-medium text-gray-800">
+                            {review.author}
+                          </span>
+                          {RenderStars(review.rating)}
+                          <span className="text-sm text-gray-500">
+                            {review.date}
+                          </span>
+                        </div>
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          {review.comment}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Right Column - Contact and Author Info */}
@@ -288,12 +346,6 @@ export default function FlatDetailPage({ params }: PropTypes) {
                           flat.user?.username ||
                           "Property Owner"}
                       </h4>
-                      {/* <p className="text-sm text-gray-300">
-                        Member Since{" "}
-                        {yearsAgo > 0
-                          ? `${yearsAgo} year${yearsAgo > 1 ? "s" : ""} ago`
-                          : "this year"}
-                      </p> */}
                     </div>
                   </div>
 
@@ -329,99 +381,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
             </Card>
           </div>
         </div>
-        -------------------
-        {/* Info Card */}
-        <Card className="bg-white shadow-md rounded-xl p-6">
-          <CardHeader className="text-2xl font-bold text-primary">
-            {flat.title}
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <MapPin size={18} /> {flat.location}
-            </div>
-            <Separator />
-            <div className="space-y-2">
-              <InfoRow
-                icon={<Bed size={18} />}
-                label="Bedrooms"
-                value={flat.totalBedrooms}
-              />
-              <InfoRow
-                icon={<Layers3 size={18} />}
-                label="Rooms"
-                value={flat.totalRooms}
-              />
-              <InfoRow
-                icon={<ShowerHead size={18} />}
-                label="Bathrooms"
-                value={flat.totalBathrooms}
-              />
-              <InfoRow
-                icon={<Ruler size={18} />}
-                label="Square Feet"
-                value={flat.squareFeet}
-              />
-              <InfoRow
-                icon={<DollarSign size={18} />}
-                label="Rent"
-                value={`${flat.rent} BDT/month`}
-              />
-              <InfoRow
-                icon={<KeyRound size={18} />}
-                label="Advance"
-                value={`${flat.advanceAmount} BDT`}
-              />
-            </div>
-            <Separator />
-            <div className="flex flex-col gap-2">
-              <Link href={`/booking/${flat.id}`}>
-                <Button className="w-full">Book This Flat</Button>
-              </Link>
-              <Link href={`/review/${flat.id}`}>
-                <Button variant="secondary" className="w-full">
-                  Make a Review
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Description */}
-      <div className="mt-10 bg-white rounded-xl p-6 shadow-sm">
-        <h2 className="text-xl font-semibold mb-2">Description</h2>
-        <p className="text-muted-foreground text-sm leading-relaxed">
-          {flat.description}
-        </p>
-        <div className="mt-4">
-          <h3 className="font-semibold text-sm text-gray-700">Amenities:</h3>
-          <div className="flex flex-wrap gap-2 mt-1">
-            {flat.amenities.map((item, i) => (
-              <Badge key={i} variant="secondary">
-                {item}
-              </Badge>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
 }
-
-const InfoRow = ({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-}) => (
-  <div className="flex items-center gap-2 text-muted-foreground">
-    {icon}
-    <span className="font-medium text-gray-800 w-32 inline-block">
-      {label}:
-    </span>
-    <span>{value}</span>
-  </div>
-);

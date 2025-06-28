@@ -12,7 +12,7 @@ import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import { useGetAllReviewsQuery } from "@/redux/api/reviewApi";
 import { TReview } from "@/types/Review";
-import { renderStars } from "@/components/Shared/RenderStars/RenderStars";
+import { RenderStars } from "@/components/Shared/RenderStars/RenderStars";
 
 const TestimonialSection = () => {
   const [reviews, setReviews] = useState<TReview[]>([]);
@@ -77,7 +77,7 @@ const TestimonialSection = () => {
 
                     {/* Star Ratings */}
                     <div className="flex items-center gap-1 mt-auto z-10">
-                      {renderStars(review.rating)}
+                      {RenderStars(review.rating)}
                     </div>
 
                     {/* User Info */}
