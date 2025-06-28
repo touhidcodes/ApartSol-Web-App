@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { useGetUserWithProfileQuery } from "@/redux/api/userApi";
 import { TUserWithProfile } from "@/types/User";
-import { TFlat } from "@/types/Flats";
+import { TFlat } from "@/types/Property";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import { useBookingRequestMutation } from "@/redux/api/bookingApi";
 import { useRouter } from "next/navigation";

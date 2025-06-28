@@ -23,7 +23,7 @@ import SingleBedIcon from "@mui/icons-material/SingleBed";
 import SquareFootIcon from "@mui/icons-material/SquareFoot";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useEffect, useState } from "react";
-import { TFlat } from "@/types/Flats";
+import { TFlat } from "@/types/Property";
 import { FieldValues } from "react-hook-form";
 import PHDropdown from "@/components/Forms/PHDropdown";
 import { ratingOptions } from "@/constants/formOptions";

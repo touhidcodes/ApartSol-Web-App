@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
-import { TFlat } from "@/types/Flats";
+import { TProperty } from "@/types/Property";
 import FlatCard from "@/components/Card/FlatCard/FlatCard";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/Custom/Loading/Loading";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export default function FlatsSection() {
-  const [flats, setFlats] = useState<TFlat[]>([]);
+  const [flats, setFlats] = useState<TProperty[]>([]);
   const { data, isLoading } = useGetAllFlatsQuery({ limit: 6 });
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function FlatsSection() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mt-12">
-          {flats.slice(0, 6).map((flat: TFlat) => (
+          {flats.slice(0, 6).map((flat: TProperty) => (
             <FlatCard key={flat.id} flat={flat} />
           ))}
         </div>

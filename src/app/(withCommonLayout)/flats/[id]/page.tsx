@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
-import { TFlatWithUserAndReviews } from "@/types/Flats";
 import {
   MapPin,
   Bed,
@@ -11,20 +10,15 @@ import {
   Bath,
   Wifi,
   Car,
-  ArrowLeft,
   Home,
   Building,
   User,
   Phone,
-  Mail,
   Star,
   CheckCircle,
-  Globe,
-  Link2,
   Wallet,
   Banknote,
   CalendarCheck2,
-  CalendarX2,
   Hash,
   ArrowUp,
 } from "lucide-react";
@@ -44,6 +38,16 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import FormContainer from "@/components/Forms/FormContainer";
+import FormInput from "@/components/Forms/FormInput";
+import FormTextarea from "@/components/Forms/FormTextarea";
+import FormSelect from "@/components/Forms/FormSelect";
+import { FieldValues } from "react-hook-form";
+import { useCreateReviewMutation } from "@/redux/api/reviewApi";
+import { toast } from "sonner";
+import { formatDate } from "@/lib/utils";
+import useUserInfo from "@/hooks/useUserInfo";
+import { TPropertyWithUserAndReviews } from "@/types/Property";
 
 type PropTypes = {
   params: {
@@ -54,36 +58,82 @@ type PropTypes = {
 const placeholder =
   "https://images.unsplash.com/photo-1469022563428-aa04fef9f5a2";
 
-export default function FlatDetailPage({ params }: PropTypes) {
-  const [contactForm, setContactForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+export default function propertyDetailPage({ params }: PropTypes) {
+  const userInfo = useUserInfo();
+  const [createReview] = useCreateReviewMutation();
   const { data, isLoading } = useGetFlatByIdQuery(params.id);
-  const [flat, setFlat] = useState<TFlatWithUserAndReviews | undefined>();
-
-  console.log(data);
+  const [property, setProperty] = useState<
+    TPropertyWithUserAndReviews | undefined
+  >();
 
   useEffect(() => {
-    if (data) setFlat(data);
+    if (data) setProperty(data);
   }, [data]);
 
-  if (isLoading || !flat) return <Loading />;
+  if (isLoading || !property)
+    return (
+      <div className="min-h-screen bg-gray-50 mb-10">
+        {/* Hero Section Skeleton */}
+        <div className="relative h-72 bg-gray-800 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            {/* Title Skeleton */}
+            <div className="h-12 w-96 bg-gray-700 rounded-lg animate-pulse mx-auto"></div>
+            {/* Breadcrumb Skeleton */}
+            <div className="flex items-center justify-center space-x-2">
+              <div className="h-4 w-12 bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-4 w-4 bg-gray-700 rounded animate-pulse"></div>
+              <div className="h-4 w-32 bg-gray-700 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+        <div className="container mx-auto mt-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-pulse">
+            {/* Left Section (2 Columns) */}
+            <div className="lg:col-span-2 flex flex-col gap-4">
+              <div className="bg-gray-300 rounded-xl h-72 w-full" />
+            </div>
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setContactForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+            {/* Right Section (1 Column) */}
+            <div className="flex flex-col justify-between gap-6">
+              <div className="bg-gray-300 rounded-xl h-32 w-full" />
+              <div className="bg-gray-300 rounded-xl h-32 w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+  const handleSubmitReview = async (data: FieldValues) => {
+    const propertyId = params.id;
+    try {
+      const res = await createReview({ propertyId, data });
+
+      console.log(res);
+
+      if (res?.data?.id) {
+        toast.success("Property reviewed successfully!");
+      }
+      toast.success("You already reviewed this property!");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleSubmit = () => {
-    console.log("Contact form submitted:", contactForm);
-    // Handle form submission here
-    alert("Message sent successfully!");
-    setContactForm({ name: "", email: "", message: "" });
+  const handleSubmitMessage = async (data: FieldValues) => {
+    console.log(data);
+    // const propertyId = params.id;
+    // try {
+    //   const res = await createReview({ propertyId, data });
+
+    //   console.log(res);
+
+    //   if (res?.data?.id) {
+    //     toast.success("Property reviewed successfully!");
+    //   }
+    //   toast.success("You already reviewed this property!");
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   const avatarPlaceholder = "https://avatar.iran.liara.run/public";
@@ -103,7 +153,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
         <div className="absolute inset-0 flex items-center justify-center z-20 px-4">
           <div className="text-center max-w-5xl w-full space-y-2 mx-auto">
             <h1 className="text-white text-3xl md:text-5xl leading-tight font-semibold">
-              {flat.title}
+              {property.title}
             </h1>
             <div>
               <Breadcrumb className="flex items-center justify-center space-x-2 text-sm lg:text-md text-white">
@@ -113,7 +163,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
                 <BreadcrumbSeparator>→</BreadcrumbSeparator>
                 <BreadcrumbItem>
                   <BreadcrumbLink href="#" aria-current="page">
-                    {flat.title}
+                    {property.title}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
@@ -122,31 +172,33 @@ export default function FlatDetailPage({ params }: PropTypes) {
         </div>
       </div>
 
-      <div className="container mx-auto">
+      <div className="container mx-auto py-16">
         {/* Image Carousel */}
         <div className="mb-10 w-full content grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            {flat.images && <ThumbnailGallery images={flat.images} />}
+            {property.images && <ThumbnailGallery images={property.images} />}
           </div>
           {/* Right Side */}
           <div className="flex flex-col  justify-between h-full">
             {/* Author Info */}
             <Card className="bg-[#1C2D37] text-white">
               <CardHeader>
-                <h3 className="text-xl font-semibold">Author Info</h3>
+                <h3 className="text-lg font-semibold">Listing Owner Info</h3>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {/* Profile Picture and Name */}
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
-                      {flat?.user?.UserProfile?.image ? (
+                      {property?.user?.UserProfile?.image ? (
                         <img
                           src={
-                            flat?.user?.UserProfile?.image || avatarPlaceholder
+                            property?.user?.UserProfile?.image ||
+                            avatarPlaceholder
                           }
                           alt={
-                            flat?.user?.UserProfile?.name || "Property Owner"
+                            property?.user?.UserProfile?.name ||
+                            "Property Owner"
                           }
                           className="w-12 h-12 object-cover"
                         />
@@ -156,10 +208,10 @@ export default function FlatDetailPage({ params }: PropTypes) {
                     </div>
                     <div>
                       <h4 className="font-semibold text-lg">
-                        {flat?.user?.UserProfile?.name || "Property Owner"}
+                        {property?.user?.UserProfile?.name || "Property Owner"}
                       </h4>
                       <p className="text-sm text-slate-300">
-                        {flat?.user?.UserProfile?.profession ||
+                        {property?.user?.UserProfile?.profession ||
                           "Profession not provided"}
                       </p>
                     </div>
@@ -168,30 +220,31 @@ export default function FlatDetailPage({ params }: PropTypes) {
                   {/* Company */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <Building size={16} />
-                    {flat?.user?.UserProfile?.company || "Company not provided"}
+                    {property?.user?.UserProfile?.company ||
+                      "Company not provided"}
                   </div>
 
                   {/* Phone */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <Phone size={16} />
-                    {flat?.user?.UserProfile?.phone ||
-                      flat?.user?.UserProfile?.secondaryPhone ||
+                    {property?.user?.UserProfile?.phone ||
+                      property?.user?.UserProfile?.secondaryPhone ||
                       "Phone not provided"}
                   </div>
 
                   {/* Location */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <MapPin size={16} />
-                    {flat?.user?.UserProfile?.city &&
-                    flat?.user?.UserProfile?.country
-                      ? `${flat?.user?.UserProfile.city}, ${flat?.user?.UserProfile.country}`
+                    {property?.user?.UserProfile?.city &&
+                    property?.user?.UserProfile?.country
+                      ? `${property?.user?.UserProfile.city}, ${property?.user?.UserProfile.country}`
                       : "Location not provided"}
                   </div>
 
                   {/* Verification */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <CheckCircle size={16} />
-                    {flat?.user?.UserProfile?.verified
+                    {property?.user?.UserProfile?.verified
                       ? "Verified Agent"
                       : "Not Verified"}
                   </div>
@@ -214,7 +267,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
                       <span className="font-medium">Rent Price:</span>
                     </div>
                     <span>
-                      $ {flat?.rent?.toLocaleString() || "Not specified"}
+                      $ {property?.rent?.toLocaleString() || "Not specified"}
                     </span>
                   </div>
 
@@ -226,7 +279,8 @@ export default function FlatDetailPage({ params }: PropTypes) {
                     </div>
                     <span>
                       ${" "}
-                      {flat?.advanceAmount?.toLocaleString() || "Not specified"}
+                      {property?.advanceAmount?.toLocaleString() ||
+                        "Not specified"}
                     </span>
                   </div>
 
@@ -238,19 +292,21 @@ export default function FlatDetailPage({ params }: PropTypes) {
                     </div>
                     <Badge
                       className={
-                        flat?.availability ? "bg-green-600" : "bg-red-600"
+                        property?.availability ? "bg-green-600" : "bg-red-600"
                       }
                     >
-                      {flat?.availability ? "Available" : "Unavailable"}
+                      {property?.availability ? "Available" : "Unavailable"}
                     </Badge>
                   </div>
-                  {/* Book Flat Button */}
+                  {/* Book property Button */}
                   <Button
                     size="lg"
-                    disabled={!flat?.availability}
+                    disabled={!property?.availability}
                     className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
                   >
-                    {flat?.availability ? "Book This Flat" : "Not Available"}
+                    {property?.availability
+                      ? "Book This property"
+                      : "Not Available"}
                   </Button>
                 </div>
               </CardContent>
@@ -266,7 +322,7 @@ export default function FlatDetailPage({ params }: PropTypes) {
                 About This Property
               </h2>
               <div className="text-gray-600 space-y-4">
-                <p className="leading-relaxed">{flat.description}</p>
+                <p className="leading-relaxed">{property.description}</p>
                 <p className="leading-relaxed">
                   This property offers excellent value for money with modern
                   amenities and prime location. The building features 24/7
@@ -286,52 +342,61 @@ export default function FlatDetailPage({ params }: PropTypes) {
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                   <PropertyOverviewItem
                     label="ID NO."
-                    value={`#${flat.id.slice(-4).toUpperCase()}`}
+                    value={`#${property.id.slice(-4).toUpperCase()}`}
                   >
                     <Hash size={16} />
                   </PropertyOverviewItem>
-                  <PropertyOverviewItem label="Type" value={flat.propertyType}>
+                  <PropertyOverviewItem
+                    label="Type"
+                    value={property.propertyType}
+                  >
                     <Building size={16} />
                   </PropertyOverviewItem>
-                  <PropertyOverviewItem label="Room" value={flat.totalRooms}>
+                  <PropertyOverviewItem
+                    label="Room"
+                    value={property.totalRooms}
+                  >
                     <Home size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
                     label="Bedroom"
-                    value={flat.totalBedrooms}
+                    value={property.totalBedrooms}
                   >
                     <Bed size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
                     label="Bath"
-                    value={flat.totalBathrooms}
+                    value={property.totalBathrooms}
                   >
                     <Bath size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
                     label="Purpose"
-                    value={`${flat.purpose}`}
+                    value={`${property.purpose}`}
                   >
                     <DollarSign size={16} />
                   </PropertyOverviewItem>
-                  <PropertyOverviewItem label="SqFt" value={flat.squareFeet}>
+                  <PropertyOverviewItem
+                    label="SqFt"
+                    value={property.squareFeet}
+                  >
                     <Ruler size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
                     label="Parking"
-                    value={flat.parking ? "Yes" : "No"}
+                    value={property.parking ? "Yes" : "No"}
                   >
                     <Car size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
                     label="Elevator"
-                    value={flat.elevator ? "Yes" : "No"}
+                    value={property.elevator ? "Yes" : "No"}
                   >
                     <ArrowUp size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
                     label="Wifi"
-                    value={flat.wifi ? "Yes" : "No"}
+                    value={property.wifi ? "Yes" : "No"}
                   >
                     <Wifi size={16} />
                   </PropertyOverviewItem>
@@ -339,7 +404,9 @@ export default function FlatDetailPage({ params }: PropTypes) {
               </div>
             </div>
             {/* Features and amenities */}
-            <FeaturesAmenities availableAmenities={flat.amenities} />
+            <div>
+              <FeaturesAmenities availableAmenities={property.amenities} />
+            </div>
             {/* Review */}
             <div className="bg-gray-100 p-6 rounded-lg">
               {/* Header */}
@@ -347,18 +414,23 @@ export default function FlatDetailPage({ params }: PropTypes) {
                 <h2 className="text-2xl font-semibold text-gray-800">
                   Reviews
                 </h2>
-                <button
-                  // onClick={onLoginToReview}
-                  className="bg-gray-800 text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-gray-700 transition-colors"
-                >
-                  <Star size={14} />
-                  Login To Write Your Review
-                </button>
+                <div>
+                  {userInfo ? (
+                    ""
+                  ) : (
+                    <Link href="/login">
+                      <Button className="bg-gray-800 text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-gray-700 transition-colors">
+                        <Star size={14} />
+                        Login To Write Your Review
+                      </Button>
+                    </Link>
+                  )}
+                </div>
               </div>
 
               {/* Individual Reviews */}
               <div className="space-y-4">
-                {flat?.review?.map((review) => (
+                {property?.review?.map((review) => (
                   <div key={review.id} className="bg-white p-4 rounded-lg">
                     <div className="flex items-start gap-3">
                       {/* Avatar */}
@@ -368,16 +440,22 @@ export default function FlatDetailPage({ params }: PropTypes) {
 
                       {/* Review Content */}
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="font-medium text-gray-800">
-                            {review.author}
+                        {/* Username + Ratings + Date */}
+                        <div className="mb-1">
+                          <span className="block font-semibold text-gray-800 text-sm">
+                            {review.name}
                           </span>
-                          {RenderStars(review.rating)}
-                          <span className="text-sm text-gray-500">
-                            {review.date}
-                          </span>
+
+                          <div className="flex items-center gap-2 mt-1">
+                            {RenderStars(review.rating)}
+                            <span className="text-xs text-gray-500">
+                              {formatDate(review.createdAt)}
+                            </span>
+                          </div>
                         </div>
-                        <p className="text-gray-700 text-sm leading-relaxed">
+
+                        {/* Comment */}
+                        <p className="text-gray-700 text-sm leading-relaxed mt-2">
                           {review.comment}
                         </p>
                       </div>
@@ -388,127 +466,109 @@ export default function FlatDetailPage({ params }: PropTypes) {
             </div>
           </div>
 
-          {/* Right Column - Contact and Author Info */}
+          {/* Right Column - Contact and Review */}
           <div className="space-y-6">
             {/* Contact Form */}
             <Card className="bg-[#1C2D37] text-white">
               <CardHeader>
-                <h3 className="text-lg font-semibold">
-                  Contact the listing owner
-                </h3>
+                <h3 className="text-lg font-semibold">Contact Listing Owner</h3>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <input
-                    type="text"
+              <CardContent className="space-y-4">
+                <FormContainer
+                  onSubmit={handleSubmitMessage}
+                  defaultValues={{
+                    name: "",
+                    email: "",
+                    message: "",
+                  }}
+                >
+                  <FormInput
+                    label="Your Name"
                     name="name"
                     placeholder="Name"
-                    value={contactForm.name}
-                    onChange={handleInputChange}
-                    className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  <input
+                  <FormInput
+                    label="Your Email"
                     type="email"
                     name="email"
-                    placeholder="Email"
-                    value={contactForm.email}
-                    onChange={handleInputChange}
-                    className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="someone@apartsol.com"
                     required
+                    className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  <textarea
+
+                  <FormTextarea
                     name="message"
-                    placeholder="Message..."
-                    value={contactForm.message}
-                    onChange={handleInputChange}
+                    label="Your Message"
+                    placeholder="Write a detailed message..."
+                    required
                     rows={4}
                     className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                    required
                   />
-                  <Button
-                    onClick={handleSubmit}
-                    className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
-                  >
+                  <Button className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold">
                     Submit Now
                   </Button>
-                </div>
+                </FormContainer>
               </CardContent>
             </Card>
 
-            {/* Author Info */}
+            {/* Review */}
             <Card className="bg-[#1C2D37] text-white">
               <CardHeader>
-                <h3 className="text-xl font-semibold">Author Info</h3>
+                <h3 className="text-lg font-semibold">Review This Property</h3>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {/* Profile Picture and Name */}
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
-                      {flat?.user?.UserProfile?.image ? (
-                        <img
-                          src={
-                            flat?.user?.UserProfile?.image || avatarPlaceholder
-                          }
-                          alt={
-                            flat?.user?.UserProfile?.name || "Property Owner"
-                          }
-                          className="w-12 h-12 object-cover"
-                        />
-                      ) : (
-                        <User size={24} className="text-gray-400" />
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg">
-                        {flat?.user?.UserProfile?.name || "Property Owner"}
-                      </h4>
-                      <p className="text-sm text-slate-300">
-                        {flat?.user?.UserProfile?.profession ||
-                          "Profession not provided"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Company */}
-                  <div className="flex items-center gap-2 text-sm text-slate-300">
-                    <Building size={16} />
-                    {flat?.user?.UserProfile?.company || "Company not provided"}
-                  </div>
-
-                  {/* Phone */}
-                  <div className="flex items-center gap-2 text-sm text-slate-300">
-                    <Phone size={16} />
-                    {flat?.user?.UserProfile?.phone ||
-                      flat?.user?.UserProfile?.secondaryPhone ||
-                      "Phone not provided"}
-                  </div>
-
-                  {/* Location */}
-                  <div className="flex items-center gap-2 text-sm text-slate-300">
-                    <MapPin size={16} />
-                    {flat?.user?.UserProfile?.city &&
-                    flat?.user?.UserProfile?.country
-                      ? `${flat?.user?.UserProfile.city}, ${flat?.user?.UserProfile.country}`
-                      : "Location not provided"}
-                  </div>
-
-                  {/* Verification */}
-                  <div className="flex items-center gap-2 text-sm text-slate-300">
-                    <CheckCircle
-                      size={16}
-                      className={
-                        flat?.user?.UserProfile?.verified
-                          ? "text-green-400"
-                          : "text-gray-400"
-                      }
-                    />
-                    {flat?.user?.UserProfile?.verified
-                      ? "Verified Agent"
-                      : "Not Verified"}
-                  </div>
-                </div>
+              <CardContent className="space-y-4">
+                <FormContainer
+                  onSubmit={handleSubmitReview}
+                  defaultValues={{
+                    name: "",
+                    email: "",
+                    rating: "",
+                    comment: "",
+                  }}
+                >
+                  <FormInput
+                    label="Your Name"
+                    name="name"
+                    placeholder="Name"
+                    required
+                    className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <FormInput
+                    label="Your Email"
+                    type="email"
+                    name="email"
+                    placeholder="someone@apartsol.com"
+                    required
+                    className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <FormSelect
+                    name="rating"
+                    label="Properties Rating"
+                    placeholder="Select"
+                    options={[
+                      { label: "1", value: "1" },
+                      { label: "2", value: "2" },
+                      { label: "3", value: "3" },
+                      { label: "4", value: "4" },
+                      { label: "5", value: "5" },
+                    ]}
+                    required
+                    className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <FormTextarea
+                    name="comment"
+                    label="Your Review"
+                    placeholder="Write a detailed review..."
+                    required
+                    rows={4}
+                    className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  />
+                  <Button className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold">
+                    Submit Now
+                  </Button>
+                </FormContainer>
               </CardContent>
             </Card>
           </div>

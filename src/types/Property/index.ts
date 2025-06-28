@@ -1,4 +1,4 @@
-export type TFlatString = {
+export type TPropertyString = {
   id: string;
   image: string;
   title: String;
@@ -16,7 +16,7 @@ export type TFlatString = {
 // Assuming you also have a Booking type defined
 type Booking = {
   id: string;
-  flatId: string;
+  PropertyId: string;
   userId: string;
   startDate: Date;
   endDate: Date;
@@ -25,8 +25,8 @@ type Booking = {
   updatedAt: Date;
 };
 
-// Basic Flat fields
-export interface TFlat {
+// Basic Property fields
+export interface TProperty {
   id: string;
   title: string;
   images: string[];
@@ -84,17 +84,19 @@ export interface TUserProfile {
 // Review fields
 export interface TReview {
   id: string;
-  rating: string; // or number if you prefer, depends on your schema
+  name: string;
+  email: string;
+  rating: string;
   comment: string;
   isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
   userId: string;
-  flatId?: string | null;
+  PropertyId?: string | null;
 }
 
-// The combined Flat with nested UserProfile and Reviews
-export interface TFlatWithUserAndReviews extends TFlat {
+// The combined Property with nested UserProfile and Reviews
+export interface TPropertyWithUserAndReviews extends TProperty {
   user: {
     UserProfile: TUserProfile | null;
   };

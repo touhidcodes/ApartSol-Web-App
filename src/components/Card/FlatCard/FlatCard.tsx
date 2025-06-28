@@ -1,11 +1,10 @@
-import { TFlat } from "@/types/Flats";
+import { TProperty } from "@/types/Property";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   MapPin,
   BedSingle,
-  Ruler,
   DollarSign,
   Star,
   Tag,
@@ -17,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { truncateText } from "@/lib/utils";
 
-const FlatCard = ({ flat }: { flat: TFlat }) => {
+const FlatCard = ({ flat }: { flat: TProperty }) => {
   const pathname = usePathname();
   const isFeatured = pathname === "/";
   const placeholder =

@@ -1,5 +1,7 @@
 export type TReview = {
   id: string;
+  name: string;
+  email: string;
   rating: string;
   comment: string;
   createdAt: string;
@@ -15,6 +17,5 @@ export type TReview = {
   };
   flat: {
     title: string;
-    location: string;
   };
 };

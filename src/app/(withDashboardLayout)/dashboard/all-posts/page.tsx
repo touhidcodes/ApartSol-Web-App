@@ -9,7 +9,7 @@ import {
 } from "@/redux/api/flatApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 
 const AllPostsPage = () => {
   const { data: flats, isLoading } = useGetAllFlatsQuery({});

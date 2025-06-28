@@ -159,9 +159,9 @@ const Navbar = () => {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  if (isLoading) {
-    return <AuthLoading />;
-  }
+  // if (isLoading) {
+  //   return <AuthLoading />;
+  // }
 
   return (
     <header
