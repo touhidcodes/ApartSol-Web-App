@@ -1,18 +1,18 @@
-import FlatsSection from "@/components/Custom/HomePage/FlatsSection/FlatsSection";
-import GallerySection from "@/components/Custom/HomePage/GallerySection/GallerySection";
-import HeroSection from "@/components/Custom/HomePage/HeroSection/HeroSection";
-import LatestNews from "@/components/Custom/HomePage/LatestNews/LatestNews";
-import NewsletterSection from "@/components/Custom/HomePage/NewsletterSection/NewsletterSection";
-import ServiceSection from "@/components/Custom/HomePage/ServiceSection/ServiceSection";
-import TestimonialSection from "@/components/Custom/HomePage/TestimonialSection/TestimonialSection";
-import WhoWeAreSection from "@/components/Custom/HomePage/WhoWeAreSection/WhoWeAreSection";
+import GallerySection from "@/components/Pages/HomePage/GallerySection/GallerySection";
+import HeroSection from "@/components/Pages/HomePage/HeroSection/HeroSection";
+import LatestNews from "@/components/Pages/HomePage/LatestNews/LatestNews";
+import NewsletterSection from "@/components/Pages/HomePage/NewsletterSection/NewsletterSection";
+import PropertiesSection from "@/components/Pages/HomePage/PropertiesSection/PropertiesSection";
+import ServiceSection from "@/components/Pages/HomePage/ServiceSection/ServiceSection";
+import TestimonialSection from "@/components/Pages/HomePage/TestimonialSection/TestimonialSection";
+import WhoWeAreSection from "@/components/Pages/HomePage/WhoWeAreSection/WhoWeAreSection";
 
 const Homepage = () => {
   return (
     <>
       <HeroSection />
       <WhoWeAreSection />
-      <FlatsSection />
+      <PropertiesSection />
       <ServiceSection />
       <TestimonialSection />
       <GallerySection />

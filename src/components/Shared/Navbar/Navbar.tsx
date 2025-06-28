@@ -138,7 +138,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import AuthButton from "@/components/Custom/AuthButton.tsx/AuthButton";
@@ -185,8 +185,11 @@ const Navbar = () => {
           <Link href="/" className="hover:text-gray-300">
             Home
           </Link>
-          <Link href="/flats" className="hover:text-gray-300">
-            Flats
+          <Link href="/properties" className="hover:text-gray-300">
+            Properties
+          </Link>
+          <Link href="/blogs" className="hover:text-gray-300">
+            Blogs
           </Link>
           <Link href="/about" className="hover:text-gray-300">
             About Us
@@ -209,10 +212,10 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
-            className="rounded-full border-white text-white hover:bg-white hover:text-black transition"
-            asChild
+            className="bg-transparent border-slate-600 text-white hover:bg-white hover:text-primary hover:border-white rounded-full px-6 py-2 font-medium transition-all duration-200 group"
           >
-            <Link href="/post">Add Listing</Link>
+            <Link href="/properties/add">Add Listing</Link>
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Button>
           <AuthButton />
           {/* Mobile menu icon */}
@@ -233,11 +236,11 @@ const Navbar = () => {
             Home
           </Link>
           <Link
-            href="/flats"
+            href="/properties"
             className="block hover:text-gray-300"
             onClick={toggleMenu}
           >
-            Flats
+            Properties
           </Link>
           <Link
             href="/about"

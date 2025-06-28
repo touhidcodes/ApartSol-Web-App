@@ -12,7 +12,7 @@ import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import { useGetAllReviewsQuery } from "@/redux/api/reviewApi";
 import { TReview } from "@/types/Review";
-import { RenderStars } from "@/components/Shared/RenderStars/RenderStars";
+import { RenderStars } from "@/components/Custom/RenderStars/RenderStars";
 
 const TestimonialSection = () => {
   const [reviews, setReviews] = useState<TReview[]>([]);

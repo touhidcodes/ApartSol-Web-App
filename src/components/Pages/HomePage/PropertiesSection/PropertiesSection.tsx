@@ -3,19 +3,19 @@
 import { useEffect, useState } from "react";
 import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
 import { TProperty } from "@/types/Property";
-import FlatCard from "@/components/Card/FlatCard/FlatCard";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/Custom/Loading/Loading";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import PropertyCard from "@/components/Card/PropertyCard/PropertyCard";
 
-export default function FlatsSection() {
-  const [flats, setFlats] = useState<TProperty[]>([]);
+export default function PropertiesSection() {
+  const [properties, setProperties] = useState<TProperty[]>([]);
   const { data, isLoading } = useGetAllFlatsQuery({ limit: 6 });
 
   useEffect(() => {
     if (data) {
-      setFlats(data);
+      setProperties(data);
     }
   }, [data]);
 
@@ -55,15 +55,15 @@ export default function FlatsSection() {
               className=" text-white px-6 py-3 rounded-full font-medium transition-all duration-200 group bg-[#1C2D37] hover:bg-slate-700"
               size="lg"
             >
-              <Link href="/flats"> View All Properties</Link>
+              <Link href="/propertys"> View All Properties</Link>
               <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 mt-12">
-          {flats.slice(0, 6).map((flat: TProperty) => (
-            <FlatCard key={flat.id} flat={flat} />
+          {properties.slice(0, 6).map((property: TProperty) => (
+            <PropertyCard key={property.id} property={property} />
           ))}
         </div>
       </div>

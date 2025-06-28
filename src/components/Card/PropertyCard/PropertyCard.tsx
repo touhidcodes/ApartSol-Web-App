@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { truncateText } from "@/lib/utils";
 
-const FlatCard = ({ flat }: { flat: TProperty }) => {
+const PropertyCard = ({ property }: { property: TProperty }) => {
   const pathname = usePathname();
   const isFeatured = pathname === "/";
   const placeholder =
@@ -27,7 +27,7 @@ const FlatCard = ({ flat }: { flat: TProperty }) => {
       {/* Image Section */}
       <div className="relative w-full md:w-10/12 h-[200px] md:h-full">
         <Image
-          src={flat?.images[0] || placeholder}
+          src={property?.images[0] || placeholder}
           alt="flat image"
           fill
           className="object-cover"
@@ -35,12 +35,19 @@ const FlatCard = ({ flat }: { flat: TProperty }) => {
         <div className="absolute top-3 left-3">
           <div className="flex justify-center items-center">
             {isFeatured ? (
-              <Badge variant="default" className="bg-[#1C2D37] text-white">
+              <Badge
+                variant="default"
+                className="bg-[#1C2D37] text-white px-2 py-1"
+              >
                 <Star className="w-3 h-3 mr-1" /> FEATURED
               </Badge>
             ) : (
-              <Badge variant="outline" className="bg-[#1C2D37] text-white">
-                <Tag className="w-3 h-3 mr-1" /> {flat?.rent ? "RENT" : "BUY"}
+              <Badge
+                variant="outline"
+                className="bg-[#1C2D37] text-white px-2 py-1"
+              >
+                <Tag className="w-3 h-3 mr-1" />
+                {property?.purpose === "RENT" ? "RENT" : "BUY"}
               </Badge>
             )}
           </div>
@@ -50,36 +57,36 @@ const FlatCard = ({ flat }: { flat: TProperty }) => {
       {/* Content Section */}
       <CardContent className="flex flex-col justify-between p-4 md:p-6 w-full">
         <div>
-          <h3 className="text-lg font-semibold">{flat?.title}</h3>
+          <h3 className="text-lg font-semibold">{property?.title}</h3>
 
           {/* Location */}
           <div className="flex items-center text-muted-foreground gap-1 mt-1">
             <MapPin className="w-4 h-4" />
             <span className="text-sm">
-              `${flat?.city}, ${flat?.country}`
+              `${property?.city}, ${property?.country}`
             </span>
           </div>
 
           {/* Description */}
           <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-            {truncateText(flat?.description, 95)}
+            {truncateText(property?.description, 95)}
           </p>
 
           {/* Info Row */}
           <div className="flex items-center justify-start mt-3 text-muted-foreground text-sm">
             <div className="flex items-center gap-1">
               <Home className="w-4 h-4" />
-              <span>{flat?.totalRooms} rooms</span>
+              <span>{property?.totalRooms} rooms</span>
             </div>
             <div className="border-l h-4 mx-3" />
             <div className="flex items-center gap-1">
               <BedSingle className="w-4 h-4" />
-              <span>{flat?.totalBedrooms} beds</span>
+              <span>{property?.totalBedrooms} beds</span>
             </div>
             <div className="border-l h-4 mx-3" />
             <div className="flex items-center gap-1">
               <Bath className="w-4 h-4" />
-              <span>{flat?.totalBathrooms} baths</span>
+              <span>{property?.totalBathrooms} baths</span>
             </div>
           </div>
         </div>
@@ -88,9 +95,9 @@ const FlatCard = ({ flat }: { flat: TProperty }) => {
         <div className="border-t mt-4 pt-4 flex justify-between items-center">
           <div className="flex items-center font-bold text-lg">
             <DollarSign className="w-4 h-4 mr-1" />
-            <span>{flat?.rent}</span>
+            <span>{property?.rent}</span>
           </div>
-          <Link href={`/flats/${flat?.id}`}>
+          <Link href={`/properties/${property?.id}`}>
             <Button size="lg" className="bg-[#1C2D37] hover:bg-slate-700">
               Details
             </Button>
@@ -101,4 +108,4 @@ const FlatCard = ({ flat }: { flat: TProperty }) => {
   );
 };
 
-export default FlatCard;
+export default PropertyCard;

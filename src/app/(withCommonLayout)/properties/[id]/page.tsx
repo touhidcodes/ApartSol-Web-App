@@ -27,11 +27,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import Loading from "@/components/Custom/Loading/Loading";
-import ThumbnailGallery from "@/components/Shared/ThumbnailGallery/ThumbnailGallery";
-import { FeaturesAmenities } from "@/components/Shared/FeatureAmenities/FeatureAmenities";
-import { RenderStars } from "@/components/Shared/RenderStars/RenderStars";
-import PropertyOverviewItem from "@/components/Shared/PropertyOverviewItem/PropertyOverviewItem";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -48,6 +43,11 @@ import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
 import useUserInfo from "@/hooks/useUserInfo";
 import { TPropertyWithUserAndReviews } from "@/types/Property";
+import PropertyDetailsSkeleton from "@/components/Skeleton/PropertyDetailsSkeleton/PropertyDetailsSkeleton";
+import ThumbnailGallery from "@/components/Custom/ThumbnailGallery/ThumbnailGallery";
+import PropertyOverviewItem from "@/components/Custom/PropertyOverviewItem/PropertyOverviewItem";
+import { RenderStars } from "@/components/Custom/RenderStars/RenderStars";
+import { FeaturesAmenities } from "@/components/Custom/FeatureAmenities/FeatureAmenities";
 
 type PropTypes = {
   params: {
@@ -70,38 +70,7 @@ export default function propertyDetailPage({ params }: PropTypes) {
     if (data) setProperty(data);
   }, [data]);
 
-  if (isLoading || !property)
-    return (
-      <div className="min-h-screen bg-gray-50 mb-10">
-        {/* Hero Section Skeleton */}
-        <div className="relative h-72 bg-gray-800 flex items-center justify-center">
-          <div className="text-center space-y-4">
-            {/* Title Skeleton */}
-            <div className="h-12 w-96 bg-gray-700 rounded-lg animate-pulse mx-auto"></div>
-            {/* Breadcrumb Skeleton */}
-            <div className="flex items-center justify-center space-x-2">
-              <div className="h-4 w-12 bg-gray-700 rounded animate-pulse"></div>
-              <div className="h-4 w-4 bg-gray-700 rounded animate-pulse"></div>
-              <div className="h-4 w-32 bg-gray-700 rounded animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-        <div className="container mx-auto mt-16">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-pulse">
-            {/* Left Section (2 Columns) */}
-            <div className="lg:col-span-2 flex flex-col gap-4">
-              <div className="bg-gray-300 rounded-xl h-72 w-full" />
-            </div>
-
-            {/* Right Section (1 Column) */}
-            <div className="flex flex-col justify-between gap-6">
-              <div className="bg-gray-300 rounded-xl h-32 w-full" />
-              <div className="bg-gray-300 rounded-xl h-32 w-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  if (isLoading || !property) return <PropertyDetailsSkeleton />;
 
   const handleSubmitReview = async (data: FieldValues) => {
     const propertyId = params.id;
@@ -317,7 +286,7 @@ export default function propertyDetailPage({ params }: PropTypes) {
           {/* Left Column - About Property and Overview */}
           <div className="lg:col-span-2 space-y-8">
             {/* About This Property */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="bg-slate-100 rounded-xl p-6 shadow-sm">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
                 About This Property
               </h2>
@@ -408,7 +377,7 @@ export default function propertyDetailPage({ params }: PropTypes) {
               <FeaturesAmenities availableAmenities={property.amenities} />
             </div>
             {/* Review */}
-            <div className="bg-gray-100 p-6 rounded-lg">
+            <div className="bg-slate-100 p-6 rounded-lg">
               {/* Header */}
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800">
@@ -506,7 +475,10 @@ export default function propertyDetailPage({ params }: PropTypes) {
                     rows={4}
                     className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
-                  <Button className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold">
+                  <Button
+                    disabled={!userInfo}
+                    className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
+                  >
                     Submit Now
                   </Button>
                 </FormContainer>
@@ -565,7 +537,10 @@ export default function propertyDetailPage({ params }: PropTypes) {
                     rows={4}
                     className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
-                  <Button className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold">
+                  <Button
+                    disabled={!userInfo}
+                    className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
+                  >
                     Submit Now
                   </Button>
                 </FormContainer>

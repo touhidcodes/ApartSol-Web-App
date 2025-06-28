@@ -27,7 +27,7 @@ const FormSelect = ({
   name,
   label,
   options,
-  placeholder = "Select an option",
+  placeholder,
   required,
   className,
 }: TFormSelectProps) => {
@@ -47,30 +47,20 @@ const FormSelect = ({
           )}
 
           <Select
-            value={String(field.value)}
+            value={field.value ? String(field.value) : undefined}
             onValueChange={(val) => {
               const parsedValue =
                 val === "true" ? true : val === "false" ? false : val;
               field.onChange(parsedValue);
             }}
-            defaultValue={String(field.value)}
           >
             <SelectTrigger
               className={cn(
-                "w-full bg-secondary shadow-none",
-                error && "border-destructive ring-destructive",
-                className
+                className || "w-full bg-secondary shadow-none",
+                error && "border-destructive focus-visible:ring-destructive"
               )}
             >
-              <SelectValue>
-                <span className={!field.value ? "text-muted-foreground" : ""}>
-                  {field.value
-                    ? options.find(
-                        (opt) => String(opt.value) === String(field.value)
-                      )?.label
-                    : placeholder}
-                </span>
-              </SelectValue>
+              <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
               {options.map((opt) => (
