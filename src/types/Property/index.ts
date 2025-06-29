@@ -36,9 +36,6 @@ export interface TProperty {
   totalBathrooms: number;
   propertyType: "RESIDENTIAL" | "COMMERCIAL";
   purpose: "RENT" | "SALE";
-  parking: boolean;
-  elevator: boolean;
-  wifi: boolean;
   street?: string | null;
   city?: string | null;
   state?: string | null;

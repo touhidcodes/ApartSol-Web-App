@@ -7,8 +7,6 @@ import {
   Ruler,
   DollarSign,
   Bath,
-  Wifi,
-  Car,
   Home,
   Building,
   User,
@@ -19,12 +17,11 @@ import {
   Banknote,
   CalendarCheck2,
   Hash,
-  ArrowUp,
+  KeyRound,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
@@ -71,11 +68,9 @@ export default function propertyDetailPage({ params }: PropTypes) {
 
   const handleSubmitReview = async (data: FieldValues) => {
     const propertyId = params.id;
-    console.log(propertyId);
+
     try {
       const res = await createReview({ propertyId, data });
-
-      console.log(res);
 
       if (res?.data?.id) {
         toast.success("Property reviewed successfully!");
@@ -350,22 +345,28 @@ export default function propertyDetailPage({ params }: PropTypes) {
                     <Ruler size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
-                    label="Parking"
-                    value={property.parking ? "Yes" : "No"}
+                    label="Rent"
+                    value={`S ${property.rent?.toLocaleString() || "N/A"}`}
                   >
-                    <Car size={16} />
+                    <DollarSign size={16} />
                   </PropertyOverviewItem>
+
                   <PropertyOverviewItem
-                    label="Elevator"
-                    value={property.elevator ? "Yes" : "No"}
+                    label="Advance"
+                    value={`$ ${
+                      property.advanceAmount?.toLocaleString() || "N/A"
+                    }`}
                   >
-                    <ArrowUp size={16} />
+                    <KeyRound size={16} />
                   </PropertyOverviewItem>
+
                   <PropertyOverviewItem
-                    label="Wifi"
-                    value={property.wifi ? "Yes" : "No"}
+                    label="Availability"
+                    value={
+                      property.availability ? "Available" : "Not Available"
+                    }
                   >
-                    <Wifi size={16} />
+                    <CheckCircle size={16} />
                   </PropertyOverviewItem>
                 </div>
               </div>
