@@ -18,16 +18,18 @@ import FormContainer from "@/components/Forms/FormContainer";
 import FormInput from "@/components/Forms/FormInput";
 import FormSelect from "@/components/Forms/FormSelect";
 
-const categoryOptions = [
-  { value: "apartment", label: "Apartment" },
-  { value: "studio", label: "Studio" },
-  { value: "house", label: "House" },
-];
-
 const locationOptions = [
   { value: "dhaka", label: "Dhaka" },
   { value: "chattogram", label: "Chattogram" },
   { value: "khulna", label: "Khulna" },
+  { value: "sylhet", label: "Sylhet" },
+  { value: "rajshahi", label: "Rajshahi" },
+  { value: "barisal", label: "Barisal" },
+];
+
+const purposeOptions = [
+  { value: "RENT", label: "Rent" },
+  { value: "SALE", label: "Buy" },
 ];
 
 const SearchBar = () => {
@@ -69,7 +71,8 @@ const SearchBar = () => {
           <div className="px-4 border-l border-gray-300">
             <FormSelect
               name="category"
-              options={categoryOptions}
+              placeholder="Purpose"
+              options={purposeOptions}
               className="w-[140px] border-none focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
@@ -77,6 +80,7 @@ const SearchBar = () => {
           <div className="px-4 border-l border-gray-300">
             <FormSelect
               name="location"
+              placeholder="Location"
               options={locationOptions}
               className="w-[140px] border-none focus:ring-0 focus:ring-offset-0"
             />

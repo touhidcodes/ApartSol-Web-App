@@ -1,7 +1,7 @@
 export enum tagTypes {
   admin = "admin",
   user = "user",
-  flat = "flat",
+  property = "property",
   booking = "booking",
   payment = "payment",
   review = "review",
@@ -11,7 +11,7 @@ export enum tagTypes {
 export const tagTypesList = [
   tagTypes.admin,
   tagTypes.user,
-  tagTypes.flat,
+  tagTypes.property,
   tagTypes.booking,
   tagTypes.payment,
   tagTypes.review,

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
 import {
   MapPin,
   Bed,
@@ -48,6 +47,7 @@ import ThumbnailGallery from "@/components/Custom/ThumbnailGallery/ThumbnailGall
 import PropertyOverviewItem from "@/components/Custom/PropertyOverviewItem/PropertyOverviewItem";
 import { RenderStars } from "@/components/Custom/RenderStars/RenderStars";
 import { FeaturesAmenities } from "@/components/Custom/FeatureAmenities/FeatureAmenities";
+import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
 
 type PropTypes = {
   params: {
@@ -55,25 +55,23 @@ type PropTypes = {
   };
 };
 
-const placeholder =
-  "https://images.unsplash.com/photo-1469022563428-aa04fef9f5a2";
-
 export default function propertyDetailPage({ params }: PropTypes) {
   const userInfo = useUserInfo();
   const [createReview] = useCreateReviewMutation();
-  const { data, isLoading } = useGetFlatByIdQuery(params.id);
+  const { data, isLoading } = useGetPropertyByIdQuery(params.id);
   const [property, setProperty] = useState<
     TPropertyWithUserAndReviews | undefined
   >();
 
   useEffect(() => {
-    if (data) setProperty(data);
+    if (data) setProperty(data?.data);
   }, [data]);
 
   if (isLoading || !property) return <PropertyDetailsSkeleton />;
 
   const handleSubmitReview = async (data: FieldValues) => {
     const propertyId = params.id;
+    console.log(propertyId);
     try {
       const res = await createReview({ propertyId, data });
 
@@ -377,29 +375,9 @@ export default function propertyDetailPage({ params }: PropTypes) {
               <FeaturesAmenities availableAmenities={property.amenities} />
             </div>
             {/* Review */}
-            <div className="bg-slate-100 p-6 rounded-lg">
-              {/* Header */}
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  Reviews
-                </h2>
-                <div>
-                  {userInfo ? (
-                    ""
-                  ) : (
-                    <Link href="/login">
-                      <Button className="bg-gray-800 text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 hover:bg-gray-700 transition-colors">
-                        <Star size={14} />
-                        Login To Write Your Review
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-              </div>
-
-              {/* Individual Reviews */}
-              <div className="space-y-4">
-                {property?.review?.map((review) => (
+            <div className="space-y-4">
+              {property?.review?.length ? (
+                property.review.map((review) => (
                   <div key={review.id} className="bg-white p-4 rounded-lg">
                     <div className="flex items-start gap-3">
                       {/* Avatar */}
@@ -409,7 +387,6 @@ export default function propertyDetailPage({ params }: PropTypes) {
 
                       {/* Review Content */}
                       <div className="flex-1">
-                        {/* Username + Ratings + Date */}
                         <div className="mb-1">
                           <span className="block font-semibold text-gray-800 text-sm">
                             {review.name}
@@ -423,15 +400,26 @@ export default function propertyDetailPage({ params }: PropTypes) {
                           </div>
                         </div>
 
-                        {/* Comment */}
                         <p className="text-gray-700 text-sm leading-relaxed mt-2">
                           {review.comment}
                         </p>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                ))
+              ) : (
+                <div className="text-center py-10 bg-white rounded-lg shadow-sm">
+                  <div className="flex justify-center mb-2">
+                    <Star className="w-10 h-10 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    No Reviews Yet
+                  </h3>
+                  <p className="text-gray-500 text-sm mt-1">
+                    Be the first to write a review for this property.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

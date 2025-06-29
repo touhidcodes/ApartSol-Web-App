@@ -20,7 +20,7 @@ const TestimonialSection = () => {
 
   useEffect(() => {
     if (data) {
-      setReviews(data);
+      setReviews(data?.data);
     }
   }, [data]);
 

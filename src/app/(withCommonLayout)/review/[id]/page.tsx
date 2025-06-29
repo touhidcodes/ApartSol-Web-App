@@ -3,7 +3,7 @@
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
 import Loading from "@/components/UI/Loading/Loading";
-import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
+import { useGetFlatByIdQuery } from "@/redux/api/propertiesApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,

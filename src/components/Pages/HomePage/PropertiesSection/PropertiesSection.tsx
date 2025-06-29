@@ -1,25 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useGetAllFlatsQuery } from "@/redux/api/flatApi";
+import { useGetAllPropertiesQuery } from "@/redux/api/propertiesApi";
 import { TProperty } from "@/types/Property";
 import { Button } from "@/components/ui/button";
-import Loading from "@/components/Custom/Loading/Loading";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import PropertyCard from "@/components/Card/PropertyCard/PropertyCard";
+import PropertyCardSkeleton from "@/components/Skeleton/PropertyCardSkeleton/PropertyCardSkeleton";
 
 export default function PropertiesSection() {
   const [properties, setProperties] = useState<TProperty[]>([]);
-  const { data, isLoading } = useGetAllFlatsQuery({ limit: 6 });
+  const queryParams = new URLSearchParams({ limit: "6" }).toString();
+  const { data, isLoading } = useGetAllPropertiesQuery(queryParams);
 
   useEffect(() => {
     if (data) {
-      setProperties(data);
+      setProperties(data?.data);
     }
   }, [data]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <PropertyCardSkeleton />;
 
   return (
     <section className="py-16 bg-[#EBF0F4]" id="featured">

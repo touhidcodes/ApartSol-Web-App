@@ -6,7 +6,7 @@ import {
   useDeleteFlatMutation,
   useGetAllFlatsQuery,
   useUpdateFlatMutation,
-} from "@/redux/api/flatApi";
+} from "@/redux/api/propertiesApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import Loading from "@/components/Custom/Loading/Loading";

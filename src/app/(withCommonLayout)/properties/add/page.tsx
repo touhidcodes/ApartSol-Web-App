@@ -7,15 +7,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
 import PHFileUploader from "@/components/Forms/PHFileUploader";
 import { toast } from "sonner";
-import { useCreateFlatMutation } from "@/redux/api/flatApi";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import { flatPostValidationSchema } from "@/constants/schema";
+import { useCreatePropertyMutation } from "@/redux/api/propertiesApi";
 
 const PostFlatPage = () => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
-  const [createFlat] = useCreateFlatMutation();
+  const [createFlat] = useCreatePropertyMutation();
   const router = useRouter();
 
   //  image upload

@@ -17,9 +17,9 @@ export const reviewApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.review],
     }),
-    getFlatReviews: build.query({
-      query: (flatId) => ({
-        url: `/reviews/${flatId}`,
+    getPropertyReviews: build.query({
+      query: (propertyId) => ({
+        url: `/reviews/${propertyId}`,
         method: "GET",
       }),
       providesTags: [tagTypes.review],
@@ -32,8 +32,8 @@ export const reviewApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.review],
     }),
     createReview: build.mutation({
-      query: ({ flatId, data }) => ({
-        url: `/reviews/${flatId}`,
+      query: ({ propertyId, data }) => ({
+        url: `/reviews/${propertyId}`,
         method: "POST",
         data,
       }),
@@ -60,7 +60,7 @@ export const reviewApi = baseApi.injectEndpoints({
 export const {
   useGetAllReviewsQuery,
   useGetUsersReviewsQuery,
-  useGetFlatReviewsQuery,
+  useGetPropertyReviewsQuery,
   useGetSingleReviewQuery,
   useCreateReviewMutation,
   useUpdateReviewMutation,

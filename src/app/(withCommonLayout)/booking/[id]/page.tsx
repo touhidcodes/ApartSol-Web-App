@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import { useGetUserWithProfileQuery } from "@/redux/api/userApi";
 import { TUserWithProfile } from "@/types/User";
 import { TFlat } from "@/types/Property";
-import { useGetFlatByIdQuery } from "@/redux/api/flatApi";
+import { useGetFlatByIdQuery } from "@/redux/api/propertiesApi";
 import { useBookingRequestMutation } from "@/redux/api/bookingApi";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/UI/Loading/Loading";

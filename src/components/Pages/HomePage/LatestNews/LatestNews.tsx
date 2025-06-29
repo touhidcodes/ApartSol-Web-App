@@ -22,7 +22,7 @@ const LatestNews = () => {
 
   useEffect(() => {
     if (data) {
-      setBlogs(data);
+      setBlogs(data?.data);
     }
   }, [data]);
 
