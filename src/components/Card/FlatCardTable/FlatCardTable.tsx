@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { TFlat } from "@/types/Property";
+import { TProperty } from "@/types/Property";
 import {
   Button,
   Dialog,
@@ -41,7 +41,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 type TFlatCardProps = {
-  flats: TFlat[];
+  flats: TProperty[];
   handleUpdate: (flat: FieldValues, flatId: string) => void;
   handleDelete: (flatId: string) => void;
 };
@@ -51,13 +51,13 @@ const FlatCardTable = ({
   handleUpdate,
   handleDelete,
 }: TFlatCardProps) => {
-  const [selectedFlat, setSelectedFlat] = useState<TFlat | null>(null);
+  const [selectedFlat, setSelectedFlat] = useState<TProperty | null>(null);
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [flatIdToDelete, setFlatIdToDelete] = useState<string | null>(null);
 
   // edit button & set selected flat data
-  const handleEditClick = (flat: TFlat) => {
+  const handleEditClick = (flat: TProperty) => {
     setSelectedFlat(flat);
     setUpdateModalOpen(true);
   };
@@ -95,6 +95,8 @@ const FlatCardTable = ({
       setFlatIdToDelete(null);
     }
   };
+
+  console.log(flats);
   return (
     <>
       <TableContainer component={Paper}>
@@ -111,19 +113,19 @@ const FlatCardTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {flats.map((flat: TFlat) => (
+            {flats.map((flat: TProperty) => (
               <StyledTableRow key={flat.id}>
                 <StyledTableCell component="th" scope="row">
                   <Stack direction="row" spacing={2}>
                     <Image
-                      src={flat?.image}
+                      src={flat?.images[0]}
                       alt="flat image"
                       width={100}
                       height={50}
                     />
                     <Stack spacing={1}>
                       <Typography>{flat?.title}</Typography>
-                      <Typography>{flat?.location}</Typography>
+                      <Typography>{flat?.state}</Typography>
                       <Typography sx={{ fontWeight: "600" }}>
                         $ {flat?.rent}
                       </Typography>

@@ -3,7 +3,7 @@
 import { Container, Typography } from "@mui/material";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 import {
   useDeleteReviewMutation,
   useGetUsersReviewsQuery,
@@ -54,7 +54,7 @@ const MyReviewsPage = () => {
         My Posts
       </Typography>
       <ReviewCardTable
-        reviews={reviews}
+        reviews={reviews?.data}
         handleUpdate={handleUpdate}
         handleDelete={handleDelete}
       />

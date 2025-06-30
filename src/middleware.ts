@@ -7,14 +7,14 @@ const commonPrivateRoutes = [
   "/dashboard/home",
   "/dashboard/profile",
   "/dashboard/change-password",
-  "/post",
+  "^/properties/add$",
   /^\/booking\/[^/].+$/,
   /^\/review\/[^/].+$/,
 ];
 const roleBasedPrivateRoutes = {
   USER: [
     /^\/dashboard\/my-bookings/,
-    /^\/dashboard\/my-posts/,
+    /^\/dashboard\/my-properties/,
     /^\/dashboard\/my-reviews/,
     /^\/checkout\/.+$/,
     /^\/checkout\/success/,
@@ -22,7 +22,7 @@ const roleBasedPrivateRoutes = {
   ],
   ADMIN: [
     /^\/dashboard\/all-user/,
-    /^\/dashboard\/all-posts/,
+    /^\/dashboard\/all-properties/,
     /^\/dashboard\/all-bookings/,
     /^\/dashboard\/all-reviews/,
   ],
@@ -82,7 +82,7 @@ export const config = {
   matcher: [
     "/login",
     "/register",
-    "/post",
+    "/properties/add",
     "/dashboard/:path*",
     "/booking/:path*",
     "/checkout/:path*",

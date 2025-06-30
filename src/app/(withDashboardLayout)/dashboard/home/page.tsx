@@ -1,5 +1,5 @@
 "use client";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 import useUserInfo from "@/hooks/useUserInfo";
 import {
   useGetBookingsByUserQuery,
@@ -85,7 +85,8 @@ const Dashboard = () => {
             {userRole === "ADMIN" ? (
               <>
                 <Typography variant="h6" gutterBottom>
-                  Registration Trends By This Month: ({monthlyUsers?.month})
+                  Registration Trends By This Month: (
+                  {monthlyUsers?.data?.month})
                 </Typography>
               </>
             ) : (
@@ -97,7 +98,11 @@ const Dashboard = () => {
             )}
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart
-                data={userRole === "ADMIN" ? registrationTrends : userBookings}
+                data={
+                  userRole === "ADMIN"
+                    ? registrationTrends?.data
+                    : userBookings?.data
+                }
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
@@ -137,12 +142,14 @@ const Dashboard = () => {
               {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Monthly Total Users</Typography>
-                  <Typography variant="h4">{monthlyUsers?.count}</Typography>
+                  <Typography variant="h4">
+                    {monthlyUsers?.data?.count}
+                  </Typography>
                 </>
               ) : (
                 <>
                   <Typography variant="h6">My Flat Post</Typography>
-                  <Typography variant="h4">{userTotalFlat}</Typography>
+                  <Typography variant="h4">{userTotalFlat?.data}</Typography>
                 </>
               )}
             </Paper>
@@ -165,12 +172,14 @@ const Dashboard = () => {
               {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Total Users</Typography>
-                  <Typography variant="h4">{totalUsers}</Typography>
+                  <Typography variant="h4">{totalUsers?.data}</Typography>
                 </>
               ) : (
                 <>
                   <Typography variant="h6">My Bookings</Typography>
-                  <Typography variant="h4">{userTotalBookings}</Typography>
+                  <Typography variant="h4">
+                    {userTotalBookings?.data}
+                  </Typography>
                 </>
               )}
             </Paper>
@@ -199,12 +208,12 @@ const Dashboard = () => {
               {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Total Post</Typography>
-                  <Typography variant="h4">{totalPost}</Typography>
+                  <Typography variant="h4">{totalPost?.data}</Typography>
                 </>
               ) : (
                 <>
                   <Typography variant="h6">My Flat Post</Typography>
-                  <Typography variant="h4">{userTotalFlat}</Typography>
+                  <Typography variant="h4">{userTotalFlat?.data}</Typography>
                 </>
               )}
             </Paper>
@@ -227,12 +236,14 @@ const Dashboard = () => {
               {userRole === "ADMIN" ? (
                 <>
                   <Typography variant="h6">Total Bookings</Typography>
-                  <Typography variant="h4">{totalBookings}</Typography>
+                  <Typography variant="h4">{totalBookings?.data}</Typography>
                 </>
               ) : (
                 <>
                   <Typography variant="h6">My Bookings</Typography>
-                  <Typography variant="h4">{userTotalBookings}</Typography>
+                  <Typography variant="h4">
+                    {userTotalBookings?.data}
+                  </Typography>
                 </>
               )}
             </Paper>
@@ -262,7 +273,9 @@ const Dashboard = () => {
             )}
 
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={userRole === "ADMIN" ? roles : userFlats}>
+              <BarChart
+                data={userRole === "ADMIN" ? roles?.data : userFlats?.data}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey={userRole === "ADMIN" ? "role" : "date"} />
                 <YAxis />

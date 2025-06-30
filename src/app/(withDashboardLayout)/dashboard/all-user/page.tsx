@@ -8,7 +8,7 @@ import {
   useGetAllUserQuery,
   useUpdateUserStatusMutation,
 } from "@/redux/api/userApi";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 
 const AllUserPage = () => {
   const { data: users, isLoading } = useGetAllUserQuery({});
@@ -48,7 +48,7 @@ const AllUserPage = () => {
         All Users
       </Typography>
       <Box>
-        <UserCardTable users={users} handleUpdate={handleUpdate} />
+        <UserCardTable users={users?.data} handleUpdate={handleUpdate} />
       </Box>
     </Container>
   );

@@ -188,8 +188,8 @@ const Navbar = () => {
           <Link href="/properties" className="hover:text-gray-300">
             Properties
           </Link>
-          <Link href="/blogs" className="hover:text-gray-300">
-            Blogs
+          <Link href="/articles" className="hover:text-gray-300">
+            Articles
           </Link>
           <Link href="/about" className="hover:text-gray-300">
             About Us
@@ -241,6 +241,13 @@ const Navbar = () => {
             onClick={toggleMenu}
           >
             Properties
+          </Link>
+          <Link
+            href="/articles"
+            className="block hover:text-gray-300"
+            onClick={toggleMenu}
+          >
+            Articles
           </Link>
           <Link
             href="/about"

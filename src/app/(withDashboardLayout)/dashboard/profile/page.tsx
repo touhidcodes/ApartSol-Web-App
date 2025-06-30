@@ -173,7 +173,7 @@
 // export default ProfilePage;
 
 import UpdateUserProfileModal from "@/components/Modal/UpdateUserProfileModal/UpdateUserProfileModal";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 import {
   useGetUserWithProfileQuery,
   useUpdateUserProfileMutation,

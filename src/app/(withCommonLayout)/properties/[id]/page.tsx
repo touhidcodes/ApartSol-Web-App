@@ -45,6 +45,7 @@ import PropertyOverviewItem from "@/components/Custom/PropertyOverviewItem/Prope
 import { RenderStars } from "@/components/Custom/RenderStars/RenderStars";
 import { FeaturesAmenities } from "@/components/Custom/FeatureAmenities/FeatureAmenities";
 import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
+import Link from "next/link";
 
 type PropTypes = {
   params: {
@@ -52,7 +53,7 @@ type PropTypes = {
   };
 };
 
-export default function propertyDetailPage({ params }: PropTypes) {
+export default function PropertyDetailPage({ params }: PropTypes) {
   const userInfo = useUserInfo();
   const [createReview] = useCreateReviewMutation();
   const { data, isLoading } = useGetPropertyByIdQuery(params.id);
@@ -153,7 +154,7 @@ export default function propertyDetailPage({ params }: PropTypes) {
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
                       {property?.user?.UserProfile?.image ? (
-                        <img
+                        <Image
                           src={
                             property?.user?.UserProfile?.image ||
                             avatarPlaceholder
@@ -261,15 +262,19 @@ export default function propertyDetailPage({ params }: PropTypes) {
                     </Badge>
                   </div>
                   {/* Book property Button */}
-                  <Button
-                    size="lg"
-                    disabled={!property?.availability}
-                    className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
-                  >
-                    {property?.availability
-                      ? "Book This property"
-                      : "Not Available"}
-                  </Button>
+                  <div>
+                    <Link href={`/booking/${property.id}`}>
+                      <Button
+                        size="lg"
+                        disabled={!property?.availability}
+                        className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
+                      >
+                        {property?.availability
+                          ? "Book This property"
+                          : "Not Available"}
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </CardContent>
             </Card>

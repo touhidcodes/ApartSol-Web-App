@@ -15,7 +15,7 @@ export type TReview = {
       name?: string;
     };
   };
-  flat: {
+  property: {
     title: string;
   };
 };

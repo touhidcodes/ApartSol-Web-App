@@ -14,16 +14,16 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { useGetUserWithProfileQuery } from "@/redux/api/userApi";
 import { TUserWithProfile } from "@/types/User";
-import { TFlat } from "@/types/Property";
-import { useGetFlatByIdQuery } from "@/redux/api/propertiesApi";
+import { TProperty } from "@/types/Property";
 import { useBookingRequestMutation } from "@/redux/api/bookingApi";
 import { useRouter } from "next/navigation";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SingleBedIcon from "@mui/icons-material/SingleBed";
 import SquareFootIcon from "@mui/icons-material/SquareFoot";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Image from "next/image";
+import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
 
 const StyledInformationBox = styled(Box)(({ theme }) => ({
   background: "#fff",
@@ -41,9 +41,9 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
   const [profileData, setProfileData] = useState<TUserWithProfile | undefined>(
     undefined
   );
-  const [flat, setFlat] = useState<TFlat | undefined>(undefined);
+  const [flat, setFlat] = useState<TProperty | undefined>(undefined);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
-  const { data: flatData, isLoading: flatLoading } = useGetFlatByIdQuery(
+  const { data: flatData, isLoading: flatLoading } = useGetPropertyByIdQuery(
     params?.id
   );
   const [bookingRequest] = useBookingRequestMutation();
@@ -51,8 +51,8 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     if (data) {
-      setProfileData(data);
-      setFlat(flatData);
+      setProfileData(data?.data);
+      setFlat(flatData?.data);
     }
   }, [data, flatData]);
 
@@ -125,7 +125,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
                   >
                     {flat && (
                       <Image
-                        src={flat?.image}
+                        src={flat?.images[0]}
                         alt="flat image"
                         width={500}
                         height={350}
@@ -158,7 +158,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
                       sx={{ color: "text.secondary", mt: 1 }}
                     >
                       <LocationOnIcon />
-                      <Typography>{flat?.location}</Typography>
+                      <Typography>{flat?.state}</Typography>
                     </Stack>
 
                     <Stack
@@ -265,7 +265,7 @@ const BookingPage = ({ params }: { params: { id: string } }) => {
                 <Typography variant="caption" color="secondary">
                   Location
                 </Typography>
-                <Typography>{flat?.location}</Typography>
+                <Typography>{flat?.state}</Typography>
               </StyledInformationBox>
               <StyledInformationBox>
                 <Typography variant="caption" color="secondary">

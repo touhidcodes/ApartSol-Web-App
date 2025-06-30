@@ -19,7 +19,7 @@ export const propertiesApi = baseApi.injectEndpoints({
     }),
     getMyProperties: build.query({
       query: () => ({
-        url: `properties/my-properties`,
+        url: `/properties/user`,
         method: "GET",
       }),
       providesTags: [tagTypes.property],

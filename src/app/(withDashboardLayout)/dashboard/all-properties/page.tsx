@@ -2,19 +2,19 @@
 
 import { Box, Container, Typography } from "@mui/material";
 import FlatCardTable from "@/components/Card/FlatCardTable/FlatCardTable";
-import {
-  useDeleteFlatMutation,
-  useGetAllFlatsQuery,
-  useUpdateFlatMutation,
-} from "@/redux/api/propertiesApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import Loading from "@/components/Custom/Loading/Loading";
+import {
+  useDeletePropertyMutation,
+  useGetAllPropertiesQuery,
+  useUpdatePropertyMutation,
+} from "@/redux/api/propertiesApi";
 
 const AllPostsPage = () => {
-  const { data: flats, isLoading } = useGetAllFlatsQuery({});
-  const [updateFlat] = useUpdateFlatMutation();
-  const [deleteFlat] = useDeleteFlatMutation();
+  const { data: flats, isLoading } = useGetAllPropertiesQuery({});
+  const [updateFlat] = useUpdatePropertyMutation();
+  const [deleteFlat] = useDeletePropertyMutation();
 
   const handleUpdate = async (updatedFlat: FieldValues, flatId: string) => {
     try {
@@ -58,7 +58,7 @@ const AllPostsPage = () => {
         All Posts
       </Typography>
       <FlatCardTable
-        flats={flats}
+        flats={flats?.data}
         handleUpdate={handleUpdate}
         handleDelete={handleDelete}
       />

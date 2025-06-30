@@ -11,7 +11,7 @@ import {
 import { toast } from "sonner";
 import { useState } from "react";
 import { useCreatePaymentMutation } from "@/redux/api/paymentApi";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 import { useParams } from "next/navigation";
 
 const StyledBox = styled(Box)(({ theme }) => ({

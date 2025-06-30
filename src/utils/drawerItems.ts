@@ -41,8 +41,8 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
           icon: SupervisedUserCircleIcon,
         },
         {
-          title: "All Posts",
-          path: `all-posts`,
+          title: "All Properties",
+          path: `all-properties`,
           icon: HomeWorkIcon,
         },
         {
@@ -66,8 +66,8 @@ export const drawerItems = (role: UserRole): DrawerItem[] => {
           icon: PersonIcon,
         },
         {
-          title: "My Posts",
-          path: `my-posts`,
+          title: "My Properties",
+          path: `my-properties`,
           icon: HomeWorkIcon,
         },
         {

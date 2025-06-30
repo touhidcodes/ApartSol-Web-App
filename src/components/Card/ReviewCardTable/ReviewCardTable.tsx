@@ -104,7 +104,6 @@ const ReviewCardTable = ({
           <TableHead>
             <TableRow>
               <StyledTableCell>Flat Name</StyledTableCell>
-              <StyledTableCell align="right">Location</StyledTableCell>
               <StyledTableCell align="right">Rating</StyledTableCell>
               <StyledTableCell align="right">Comment</StyledTableCell>
               <StyledTableCell align="right">Edit</StyledTableCell>
@@ -115,11 +114,9 @@ const ReviewCardTable = ({
             {reviews.map((review: TReview) => (
               <StyledTableRow key={review.id}>
                 <StyledTableCell component="th" scope="row">
-                  <Typography>{review?.flat?.title}</Typography>
+                  <Typography>{review?.property?.title}</Typography>
                 </StyledTableCell>
-                <StyledTableCell align="right">
-                  {review?.flat?.location}
-                </StyledTableCell>
+
                 <StyledTableCell align="right">{review.rating}</StyledTableCell>
                 <StyledTableCell align="right">
                   {review.comment}

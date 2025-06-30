@@ -2,8 +2,7 @@
 
 import PHForm from "@/components/Forms/PHForm";
 import PHInput from "@/components/Forms/PHInput";
-import Loading from "@/components/UI/Loading/Loading";
-import { useGetFlatByIdQuery } from "@/redux/api/propertiesApi";
+import Loading from "@/components/Custom/Loading/Loading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
@@ -23,18 +22,19 @@ import SingleBedIcon from "@mui/icons-material/SingleBed";
 import SquareFootIcon from "@mui/icons-material/SquareFoot";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useEffect, useState } from "react";
-import { TFlat } from "@/types/Property";
+import { TProperty } from "@/types/Property";
 import { FieldValues } from "react-hook-form";
 import PHDropdown from "@/components/Forms/PHDropdown";
 import { ratingOptions } from "@/constants/formOptions";
 import { useCreateReviewMutation } from "@/redux/api/reviewApi";
 import { toast } from "sonner";
+import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
 
 const ReviewPage = () => {
   const router = useRouter();
   const params = useParams();
-  const [flat, setFlat] = useState<TFlat | undefined>(undefined);
-  const { data: flatData, isLoading } = useGetFlatByIdQuery(params?.id);
+  const [flat, setFlat] = useState<TProperty | undefined>(undefined);
+  const { data: flatData, isLoading } = useGetPropertyByIdQuery(params?.id);
   const [createReview] = useCreateReviewMutation();
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const ReviewPage = () => {
                   >
                     {flat && (
                       <Image
-                        src={flat?.image}
+                        src={flat?.images[0]}
                         alt="flat image"
                         width={500}
                         height={350}
@@ -152,7 +152,7 @@ const ReviewPage = () => {
                       sx={{ color: "text.secondary", mt: 1 }}
                     >
                       <LocationOnIcon />
-                      <Typography>{flat?.location}</Typography>
+                      <Typography>{flat?.state}</Typography>
                     </Stack>
 
                     <Stack

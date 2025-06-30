@@ -1,5 +1,5 @@
 {
-  "name": "flat-mate-finder-appication",
+  "name": "apartsol-web-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,11 @@
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-toggle": "^1.1.9",
     "@reduxjs/toolkit": "^2.2.5",
+    "@tiptap/core": "^2.23.0",
+    "@tiptap/react": "^2.23.0",
+    "@tiptap/starter-kit": "^2.14.0",
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.1",
@@ -45,7 +49,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^18.3.23",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",

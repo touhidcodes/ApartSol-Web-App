@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useGetMyBookingsQuery } from "@/redux/api/bookingApi";
 import { TBookings } from "@/types/Bookings";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 import Link from "next/link";
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -57,7 +57,7 @@ const MyBookingsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {bookings.map((booking: TBookings) => (
+              {bookings?.data?.map((booking: TBookings) => (
                 <StyledTableRow key={booking.id}>
                   <StyledTableCell align="right">
                     {booking?.flat?.title}

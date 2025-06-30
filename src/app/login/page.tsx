@@ -13,6 +13,7 @@ import PHInput from "@/components/Forms/PHInput";
 import { toast } from "sonner";
 import logo from "../../assets/images/logo.png";
 import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 
 const LoginPage = () => {
   const [error, setError] = useState("");
@@ -126,6 +127,15 @@ const LoginPage = () => {
               Login to your account and explore all the amazing features we
               offer. Lets make your journey even better.
             </Typography>
+            <div className="flex justify-center mt-5">
+              <Button
+                onClick={() => router.push("/")}
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Home
+              </Button>
+            </div>
           </Grid>
 
           {/* Right Column (Form) */}

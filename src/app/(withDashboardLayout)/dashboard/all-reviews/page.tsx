@@ -9,7 +9,7 @@ import {
 } from "@/redux/api/reviewApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
 
 const AllReviewsPage = () => {
   const { data: reviews, isLoading } = useGetAllReviewsQuery({});
@@ -54,7 +54,7 @@ const AllReviewsPage = () => {
         All Reviews
       </Typography>
       <ReviewCardTable
-        reviews={reviews}
+        reviews={reviews?.data}
         handleUpdate={handleUpdate}
         handleDelete={handleDelete}
       />

@@ -15,7 +15,7 @@ import {
   useGetSingleUserQuery,
   useGetUserWithProfileQuery,
 } from "@/redux/api/userApi";
-import AuthButton from "@/components/UI/AuthButton.tsx/AuthButton";
+import AuthButton from "@/components/Custom/AuthButton.tsx/AuthButton";
 
 const drawerWidth = 300;
 
@@ -146,7 +146,15 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <Toolbar />
-        <Box style={{ backgroundColor: "#EBF0F4" }}>{children}</Box>
+        <Box
+          style={{
+            backgroundColor: "#EBF0F4",
+            minHeight: "100vh",
+            width: "100%",
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   );

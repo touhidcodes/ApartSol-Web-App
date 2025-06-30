@@ -2,19 +2,19 @@
 
 import { Box, Container, Typography } from "@mui/material";
 import FlatCardTable from "@/components/Card/FlatCardTable/FlatCardTable";
-import {
-  useDeleteFlatMutation,
-  useGetMyFlatsQuery,
-  useUpdateFlatMutation,
-} from "@/redux/api/propertiesApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import Loading from "@/components/UI/Loading/Loading";
+import Loading from "@/components/Custom/Loading/Loading";
+import {
+  useDeletePropertyMutation,
+  useGetMyPropertiesQuery,
+  useUpdatePropertyMutation,
+} from "@/redux/api/propertiesApi";
 
 const MyPostsPage = () => {
-  const { data: flats, isLoading } = useGetMyFlatsQuery({});
-  const [updateFlat] = useUpdateFlatMutation();
-  const [deleteFlat] = useDeleteFlatMutation();
+  const { data: flats, isLoading } = useGetMyPropertiesQuery({});
+  const [updateFlat] = useUpdatePropertyMutation();
+  const [deleteFlat] = useDeletePropertyMutation();
 
   const handleUpdate = async (updatedFlat: FieldValues, flatId: string) => {
     try {
@@ -51,14 +51,13 @@ const MyPostsPage = () => {
   if (isLoading) {
     return <Loading />;
   }
-
   return (
     <Container sx={{ paddingBottom: "50px" }}>
       <Typography variant="h4" component="h1" gutterBottom my={3}>
         My Posts
       </Typography>
       <FlatCardTable
-        flats={flats}
+        flats={flats?.data}
         handleUpdate={handleUpdate}
         handleDelete={handleDelete}
       />

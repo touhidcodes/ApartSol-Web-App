@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Box, Typography, Button, Stack } from "@mui/material";
-import { TFlat } from "@/types/Property";
+import { TProperty } from "@/types/Property";
 import PHInput from "@/components/Forms/PHInput";
 import PHFileUploader from "@/components/Forms/PHFileUploader";
 import PHForm from "@/components/Forms/PHForm";
@@ -12,7 +12,7 @@ import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
 
 interface TUpdateFlatModalProps {
   open: boolean;
-  flat: TFlat | null;
+  flat: TProperty | null;
   onClose: () => void;
   onSave: (updatedFlat: FieldValues, flatId: string) => void;
 }
@@ -25,7 +25,7 @@ const UpdateFlatModal = ({
 }: TUpdateFlatModalProps) => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const [imageUploadLoading, setImageUploadLoading] = useState<boolean>(false);
-  const [updatedFlat, setUpdatedFlat] = useState<TFlat | null>(flat);
+  const [updatedFlat, setUpdatedFlat] = useState<TProperty | null>(flat);
 
   //  set flat data which going to be update
   useEffect(() => {
@@ -87,7 +87,7 @@ const UpdateFlatModal = ({
               totalBedrooms: updatedFlat?.totalBedrooms || "",
               totalRooms: updatedFlat?.totalRooms || "",
               amenities: updatedFlat?.amenities || "",
-              location: updatedFlat?.location || "",
+              location: updatedFlat?.state || "",
               description: updatedFlat?.description || "",
               rent: updatedFlat?.rent || "",
               advanceAmount: updatedFlat?.advanceAmount || "",
