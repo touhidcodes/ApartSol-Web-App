@@ -13,21 +13,19 @@ import {
 import Image from "next/image";
 import useUserInfo from "@/hooks/useUserInfo";
 import { getSidebarLinks } from "./SideBarLinks";
+import useAuthUser from "../../../hooks/useAuthUserInfo";
 
 type SidebarProps = {
   isCollapsed: boolean;
   onClose: () => void;
 };
 
-type TUser = {
-  email: string;
-  username: string;
-};
 export default function Sidebar({ isCollapsed, onClose }: SidebarProps) {
   const pathname = usePathname();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const user = useUserInfo();
+  const { user } = useAuthUser();
+
   // const fetchUnreadCount = async () => {
   //   try {
   //     const res = await fetchWithAuth("/api/messages/unread", {

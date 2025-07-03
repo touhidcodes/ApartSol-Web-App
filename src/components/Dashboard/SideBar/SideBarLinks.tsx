@@ -155,7 +155,7 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
           items: [
             {
               label: "Profile",
-              href: "/dashboard/profile",
+              href: "/dashboard/user/profile",
               icon: PersonStanding,
             },
           ],
@@ -165,15 +165,19 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
           items: [
             {
               label: "My Properties",
-              href: "/dashboard/my-properties",
+              href: "/dashboard/user/my-properties",
               icon: HomeIcon,
             },
             {
               label: "My Bookings",
-              href: "/dashboard/my-bookings",
+              href: "/dashboard/user/my-bookings",
               icon: ShoppingCart,
             },
-            { label: "My Reviews", href: "/dashboard/my-reviews", icon: Star },
+            {
+              label: "My Reviews",
+              href: "/dashboard/user/my-reviews",
+              icon: Star,
+            },
           ],
         },
         ...defaultItems,
