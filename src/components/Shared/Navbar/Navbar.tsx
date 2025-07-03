@@ -145,6 +145,7 @@ import AuthButton from "@/components/Custom/AuthButton.tsx/AuthButton";
 import useUserInfo from "@/hooks/useUserInfo";
 import { USER_ROLE } from "@/constants/role";
 import AuthLoading from "@/components/Custom/Loading/AuthLoading";
+import Image from "next/image";
 
 const Navbar = () => {
   const user = useUserInfo();
@@ -171,8 +172,18 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex justify-between items-center py-3 px-4 md:px-8">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold">
-          <span className="flex flex-col leading-4 items-center">
+        <Link href="/" className="flex items-center gap-2 text-2xl font-bold">
+          <Image
+            src="/assets/images/logo/white.png"
+            alt="ApartSol Logo"
+            width={50}
+            height={50}
+            className="object-contain"
+            priority
+          />
+
+          {/* Text */}
+          <span className="flex flex-col leading-4">
             <span className="text-white">APARTSOL</span>
             <span className="text-xs text-gray-400 tracking-wide pt-1">
               LIVING SOLUTIONS
@@ -188,8 +199,8 @@ const Navbar = () => {
           <Link href="/properties" className="hover:text-gray-300">
             Properties
           </Link>
-          <Link href="/articles" className="hover:text-gray-300">
-            Articles
+          <Link href="/news" className="hover:text-gray-300">
+            News
           </Link>
           <Link href="/about" className="hover:text-gray-300">
             About Us
@@ -202,7 +213,7 @@ const Navbar = () => {
               {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
             </Link>
           ) : (
-            <Link href="/register" className="hover:text-gray-300">
+            <Link href="/auth?type=register" className="hover:text-gray-300">
               Register
             </Link>
           )}
@@ -215,7 +226,7 @@ const Navbar = () => {
             className="bg-transparent border-slate-600 text-white hover:bg-white hover:text-primary hover:border-white rounded-full px-6 py-2 font-medium transition-all duration-200 group"
           >
             <Link href="/properties/add">Add Listing</Link>
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Button>
           <AuthButton />
           {/* Mobile menu icon */}
@@ -243,11 +254,11 @@ const Navbar = () => {
             Properties
           </Link>
           <Link
-            href="/articles"
+            href="/news"
             className="block hover:text-gray-300"
             onClick={toggleMenu}
           >
-            Articles
+            News
           </Link>
           <Link
             href="/about"

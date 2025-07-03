@@ -1,35 +1,7 @@
 import React from "react";
 import { Check } from "lucide-react";
+import { DEFAULT_AMENITIES } from "@/data/constants";
 
-// Default amenities list (internal to component)
-const DEFAULT_AMENITIES = [
-  "24*7 Security",
-  "Airconditioning",
-  "Balcony",
-  "Barbeque",
-  "Basketball",
-  "Elevator",
-  "Fireplace",
-  "Garage",
-  "Generator",
-  "Gym",
-  "Indoor Game",
-  "Internet",
-  "Landscaping",
-  "Microwave",
-  "Modern Kitchen",
-  "Outdoor Kitchen",
-  "Parking",
-  "Pool",
-  "Refrigerator",
-  "Swimming Pool",
-  "Tennis Courts",
-  "Washer",
-  "WiFi",
-  "Window Coverings",
-] as const;
-
-// Type definitions
 interface AmenityItemProps {
   amenity: string;
   isAvailable: boolean;

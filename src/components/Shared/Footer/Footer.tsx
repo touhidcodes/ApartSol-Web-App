@@ -11,6 +11,7 @@ import {
   Phone,
   Github,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -49,14 +50,30 @@ export default function Footer() {
         <div className="grid md:grid-cols-[2fr_1fr_1fr] gap-10">
           {/* Logo and Info */}
           <div className="flex flex-col">
-            <Link href="/" className="text-2xl font-bold w-fit">
-              <span className="flex flex-col leading-4 items-start">
-                <span className="text-white">APARTSOL</span>
-                <span className="text-xs text-gray-400 tracking-wide pt-1">
-                  LIVING SOLUTIONS
+            <div>
+              {/* Logo */}
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-2xl font-bold"
+              >
+                <Image
+                  src="/assets/images/logo/white.png"
+                  alt="ApartSol Logo"
+                  width={50}
+                  height={50}
+                  className="object-contain"
+                  priority
+                />
+
+                {/* Text */}
+                <span className="flex flex-col leading-4">
+                  <span className="text-white">APARTSOL</span>
+                  <span className="text-xs text-gray-400 tracking-wide pt-1">
+                    LIVING SOLUTIONS
+                  </span>
                 </span>
-              </span>
-            </Link>
+              </Link>
+            </div>
             <p className="text-sm text-gray-400 mt-4 max-w-sm">
               ApartSol simplifies apartment renting and buying with verified
               listings, secure transactions, and expert support making your

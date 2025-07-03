@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSearchParams } from "@/redux/features/flatSlice";
 import { RootState } from "@/redux/store";
 import { useState } from "react";
-import PropertyCardSkeleton from "@/components/Skeleton/PropertyCardSkeleton/PropertyCardSkeleton";
+import PropertiesPageSkeleton from "@/components/Skeleton/PropertiesPageSkeleton/PropertiesPageSkeleton";
 
 const locationOptions = [
   { value: "dhaka", label: "Dhaka" },
@@ -115,7 +115,7 @@ const PropertiesPageContent = () => {
   };
 
   if (isLoading) {
-    return <PropertyCardSkeleton />;
+    return <PropertiesPageSkeleton />;
   }
 
   return (

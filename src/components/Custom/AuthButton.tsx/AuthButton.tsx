@@ -6,6 +6,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import AuthLoading from "../Loading/AuthLoading";
 import { Button } from "@/components/ui/button";
 import { LogIn, LogOut } from "lucide-react";
+import TextLoading from "../TextLoading/TextLoading";
 
 const AuthButton = () => {
   const router = useRouter();
@@ -15,11 +16,11 @@ const AuthButton = () => {
   const handleLogOut = async () => {
     setIsLoggingOut(true);
     await logoutUser();
-    router.push("/login");
+    router.push("/auth");
   };
 
   if (isLoggingOut) {
-    return <AuthLoading />;
+    return <TextLoading />;
   }
 
   return (
@@ -36,7 +37,7 @@ const AuthButton = () => {
           </Button>
         </Link>
       ) : (
-        <Link href="/login" passHref>
+        <Link href="/auth" passHref>
           <Button
             variant="outline"
             className="bg-transparent border-slate-600 text-white hover:bg-white hover:text-primary hover:border-white rounded-full px-6 py-2 font-medium transition-all duration-200 group"

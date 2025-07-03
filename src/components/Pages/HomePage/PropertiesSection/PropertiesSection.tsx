@@ -57,7 +57,7 @@ export default function PropertiesSection() {
               size="lg"
             >
               <Link href="/propertys"> View All Properties</Link>
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="ml- h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </div>
         </div>

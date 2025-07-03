@@ -1,0 +1,12 @@
+/images
+│
+├── /logo             → Logos, icons, favicon
+├── /backgrounds      → Backgrounds used across pages
+├── /auth             → Shared images for both login and registration
+├── /404              → Images for "Page Not Found" error
+├── /profile          → Default user profile pictures or avatars
+├── /dashboard        → Dashboard-related images or icons
+├── /ui-elements      → Icons, form field visuals, buttons, loaders
+├── /banners          → Hero sections or promotional graphics
+├── /placeholders     → Placeholder images for loading or missing items
+└── /others           → Miscellaneous

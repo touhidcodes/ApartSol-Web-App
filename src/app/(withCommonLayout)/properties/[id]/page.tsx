@@ -18,6 +18,7 @@ import {
   CalendarCheck2,
   Hash,
   KeyRound,
+  SlashIcon,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -119,16 +120,21 @@ export default function PropertyDetailPage({ params }: PropTypes) {
               {property.title}
             </h1>
             <div>
-              <Breadcrumb className="flex items-center justify-center space-x-2 text-sm lg:text-md text-white">
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator>→</BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#" aria-current="page">
-                    {property.title}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
+              <Breadcrumb className="flex items-center justify-center space-x-2 text-sm lg:text-md text-white list-none">
+                <BreadcrumbLink
+                  href="/"
+                  className="text-white hover:text-white focus:text-white active:text-white"
+                >
+                  Home
+                </BreadcrumbLink>
+                <BreadcrumbSeparator />
+                <BreadcrumbLink
+                  href="#"
+                  aria-current="page"
+                  className="text-white hover:text-white focus:text-white active:text-white"
+                >
+                  {property.title}
+                </BreadcrumbLink>
               </Breadcrumb>
             </div>
           </div>

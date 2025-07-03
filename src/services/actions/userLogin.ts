@@ -5,7 +5,9 @@ import setAccessToken from "./setAccessToken";
 import { toast } from "sonner";
 
 export const userLogin = async (data: FieldValues) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
+  // TODO: change URL before build
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

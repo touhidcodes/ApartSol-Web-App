@@ -264,11 +264,12 @@ instance.interceptors.response.use(
       });
     }
 
-    return Promise.reject({
-      statusCode: error?.response?.status || 500,
-      message: error?.response?.data?.message || "Something went wrong",
-      errorMessages: error?.response?.data?.message || [],
-    });
+    // return Promise.reject({
+    //   statusCode: error?.response?.status || 500,
+    //   message: error?.response?.data?.message || "Something went wrong",
+    //   errorMessages: error?.response?.data?.message || [],
+    // });
+    return Promise.reject(error);
   }
 );
 

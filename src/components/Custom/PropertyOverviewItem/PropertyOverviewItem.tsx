@@ -3,7 +3,7 @@ import React from "react";
 type PropertyOverviewItemProps = {
   label: string;
   value: string | number;
-  children: React.ReactNode; // receive icon as JSX
+  children: React.ReactNode;
 };
 
 const PropertyOverviewItem: React.FC<PropertyOverviewItemProps> = ({
