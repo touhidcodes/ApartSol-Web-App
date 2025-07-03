@@ -32,6 +32,8 @@ import { authKey } from "@/constants/authKey";
 
 interface DecodedData extends JwtPayload {
   role?: string;
+  email?: string;
+  username?: string;
 }
 
 const useUserInfo = () => {
