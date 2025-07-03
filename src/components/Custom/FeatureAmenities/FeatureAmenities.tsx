@@ -67,7 +67,7 @@ export const FeaturesAmenities: React.FC<FeaturesAmenitiesProps> = ({
   );
 
   return (
-    <div className="bg-slate-100 p-8 rounded-lg">
+    <div className="bg-slate-100 p-8 rounded-lg shadow-sm">
       <h2 className="text-2xl font-bold text-slate-700 mb-6">{title}</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

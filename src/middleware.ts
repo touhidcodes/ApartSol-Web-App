@@ -13,16 +13,16 @@ const commonPrivateRoutes = [
 ];
 const roleBasedPrivateRoutes = {
   USER: [
-    /^\/dashboard\/user\/my-bookings/,
-    /^\/dashboard\/user\/my-properties/,
-    /^\/dashboard\/user\/my-reviews/,
+    /^\/dashboard\/user\/bookings/,
+    /^\/dashboard\/user\/listings/,
+    /^\/dashboard\/user\/reviews/,
     /^\/checkout\/.+$/,
     /^\/checkout\/success/,
     /^\/checkout\/cancel/,
   ],
   ADMIN: [
     /^\/dashboard\/admin\/all-user/,
-    /^\/dashboard\/admin\/all-properties/,
+    /^\/dashboard\/admin\/all-listings/,
     /^\/dashboard\/admin\/all-bookings/,
     /^\/dashboard\/admin\/all-reviews/,
   ],

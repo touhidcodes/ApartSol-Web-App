@@ -19,6 +19,10 @@ import {
   Hash,
   KeyRound,
   SlashIcon,
+  Building2,
+  Landmark,
+  Mailbox,
+  Globe,
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -273,7 +277,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                       <Button
                         size="lg"
                         disabled={!property?.availability}
-                        className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
+                        className="w-full bg-white text-slate-800 hover:bg-slate-100 font-semibold"
                       >
                         {property?.availability
                           ? "Book This property"
@@ -289,6 +293,34 @@ export default function PropertyDetailPage({ params }: PropTypes) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - About Property and Overview */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Property Location */}
+            <div className="space-y-2 bg-slate-100 p-4 rounded-lg shadow-sm">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                Property Location
+              </h2>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <MapPin className="w-4 h-4 text-slate-600" />
+                  {property?.street || "N/A"}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <Building2 className="w-4 h-4 text-slate-600" />
+                  {property?.city || "N/A"}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <Landmark className="w-4 h-4 text-slate-600" />
+                  {property?.state || "N/A"}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <Globe className="w-4 h-4 text-slate-600" />
+                  {property?.country || "N/A"}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <Mailbox className="w-4 h-4 text-slate-600" />
+                  {property?.zipCode || "N/A"}
+                </div>
+              </div>
+            </div>
             {/* About This Property */}
             <div className="bg-slate-100 rounded-xl p-6 shadow-sm">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
@@ -390,7 +422,10 @@ export default function PropertyDetailPage({ params }: PropTypes) {
             <div className="space-y-4">
               {property?.review?.length ? (
                 property.review.map((review) => (
-                  <div key={review.id} className="bg-white p-4 rounded-lg">
+                  <div
+                    key={review.id}
+                    className="bg-slate-100 p-4 rounded-lg shadow-sm"
+                  >
                     <div className="flex items-start gap-3">
                       {/* Avatar */}
                       <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white font-semibold">
@@ -420,7 +455,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-10 bg-white rounded-lg shadow-sm">
+                <div className="text-center py-10 bg-slate-100 rounded-lg shadow-sm">
                   <div className="flex justify-center mb-2">
                     <Star className="w-10 h-10 text-gray-400" />
                   </div>
@@ -477,7 +512,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                   />
                   <Button
                     disabled={!userInfo}
-                    className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
+                    className="w-full bg-white text-slate-800 hover:bg-slate-100 font-semibold"
                   >
                     Submit Now
                   </Button>
@@ -539,7 +574,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                   />
                   <Button
                     disabled={!userInfo}
-                    className="w-full bg-white text-slate-800 hover:bg-gray-100 font-semibold"
+                    className="w-full bg-white text-slate-800 hover:bg-slate-100 font-semibold"
                   >
                     Submit Now
                   </Button>

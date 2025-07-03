@@ -10,6 +10,7 @@ import {
   useUpdateReviewMutation,
 } from "@/redux/api/reviewApi";
 import ReviewCardTable from "@/components/Card/ReviewCardTable/ReviewCardTable";
+import { Star } from "lucide-react";
 
 const MyReviewsPage = () => {
   const { data: reviews, isLoading } = useGetUsersReviewsQuery({});
@@ -50,6 +51,19 @@ const MyReviewsPage = () => {
 
   return (
     <Container sx={{ paddingBottom: "50px" }}>
+      <div>
+        <div className="text-center py-10 bg-slate-100 rounded-lg shadow-sm">
+          <div className="flex justify-center mb-2">
+            <Star className="w-10 h-10 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold text-muted-foreground">
+            No Bookings Yet
+          </h3>
+          <p className="text-sm text-muted-foreground mt-1">
+            You haven’t booked any property yet.
+          </p>
+        </div>
+      </div>
       <Typography variant="h4" component="h1" gutterBottom my={3}>
         My Posts
       </Typography>

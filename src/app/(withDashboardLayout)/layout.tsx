@@ -60,7 +60,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <DashboardAuthButton />
         </header>
 
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
     </div>
   );

@@ -37,10 +37,10 @@ export interface TProperty {
   propertyType: "RESIDENTIAL" | "COMMERCIAL";
   purpose: "RENT" | "SALE";
   street?: string | null;
-  city?: string | null;
-  state?: string | null;
-  zipCode?: string | null;
-  country?: string | null;
+  city: string | null;
+  state: string | null;
+  zipCode: string | null;
+  country: string | null;
   description: string;
   amenities: string[];
   availability: boolean;
