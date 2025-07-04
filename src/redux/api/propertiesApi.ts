@@ -17,9 +17,9 @@ export const propertiesApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.property],
     }),
-    getMyProperties: build.query({
-      query: () => ({
-        url: `/properties/user`,
+    getUserProperties: build.query({
+      query: (queryParams) => ({
+        url: `/properties/user?${queryParams}`,
         method: "GET",
       }),
       providesTags: [tagTypes.property],
@@ -53,7 +53,7 @@ export const propertiesApi = baseApi.injectEndpoints({
 export const {
   useGetAllPropertiesQuery,
   useGetPropertyByIdQuery,
-  useGetMyPropertiesQuery,
+  useGetUserPropertiesQuery,
   useCreatePropertyMutation,
   useUpdatePropertyMutation,
   useDeletePropertyMutation,

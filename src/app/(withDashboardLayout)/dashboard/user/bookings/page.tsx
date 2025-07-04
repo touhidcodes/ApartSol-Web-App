@@ -28,7 +28,7 @@ export default function MyBookingsPage() {
 
   return (
     <div className="space-y-2 mt-2">
-      <div className="flex justify-between items-center px-6">
+      <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">My Bookings</h2>
       </div>
 
