@@ -1,57 +1,52 @@
 "use client";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+
+import React, { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
-import { useCreatePropertyMutation } from "@/redux/api/propertiesApi";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import FormContainer from "@/components/Forms/FormContainer";
-import { createPropertySchema } from "@/schema/propertiesSchema";
 import FormInput from "@/components/Forms/FormInput";
 import FormTextarea from "@/components/Forms/FormTextarea";
 import FormSelect from "@/components/Forms/FormSelect";
-import { Loader2 } from "lucide-react";
-import FormImageUploader from "@/components/Forms/FormImageUploader";
-import { Button } from "@/components/ui/button";
 import FormTagsSelector from "@/components/Forms/FormTagsSelector";
-import {
-  Breadcrumb,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import Image from "next/image";
+import FormImageUploader from "@/components/Forms/FormImageUploader";
+import { TProperty } from "@/types/Property";
 import { DEFAULT_AMENITIES } from "@/data/constants";
 
-const defaultValues = {
-  title: "",
-  images: [],
-  squareFeet: "",
-  totalRooms: "",
-  totalBedrooms: "",
-  totalBathrooms: "",
-  propertyType: "",
-  purpose: "",
-  street: "",
-  city: "",
-  state: "",
-  zipCode: "",
-  country: "",
-  description: "",
-  amenities: [],
-  rent: "",
-  advanceAmount: "",
-};
+interface TUpdatePropertyModalProps {
+  open: boolean;
+  property: TProperty | null;
+  onClose: () => void;
+  onSave: (updatedProperty: FieldValues, propertyId: string) => void;
+}
 
-const AddPropertyPage = () => {
+const UpdatePropertyModal = ({
+  open,
+  property,
+  onClose,
+  onSave,
+}: TUpdatePropertyModalProps) => {
   const [loading, setLoading] = useState(false);
-  const [createProperty] = useCreatePropertyMutation();
-  const router = useRouter();
+  const [updatedProperty, setUpdatedProperty] = useState<TProperty | null>(
+    property
+  );
 
-  //  create post
-  const handlePost = async (values: FieldValues) => {
+  useEffect(() => {
+    setUpdatedProperty(property);
+  }, [property]);
+
+  const handleUpdatePost = async (values: FieldValues) => {
+    if (!property) return;
     try {
       setLoading(true);
-      const propertyData = {
+      const updatedData = {
         ...values,
         squareFeet: Number(values.squareFeet),
         totalBedrooms: Number(values.totalBedrooms),
@@ -60,82 +55,49 @@ const AddPropertyPage = () => {
         rent: Number(values.rent),
         advanceAmount: Number(values.advanceAmount),
       };
-      console.log(propertyData);
-
-      const res = await createProperty(propertyData);
-
-      if (res?.data?.id) {
-        toast.success("Property Listed successfully!");
-        setLoading(false);
-        router.push("/properties");
-      } else {
-        toast.error("Something went wrong!");
-      }
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-      toast.error("Something went wrong!");
+      onSave(updatedData, property.id);
+      toast.success("Property updated successfully!");
+      onClose();
+    } catch (error) {
+      toast.error("Failed to update property.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Banner Section */}
-      <div className="relative h-60 md:h-[300px] w-full">
-        {/* Background image */}
-        <Image
-          src="/assets/images/detailsPage.jpg"
-          alt="add-listing"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-[#0D1B2A]/50 z-10" />
-        <div className="absolute inset-0 flex items-center justify-center z-20 px-4">
-          <div className="text-center max-w-5xl w-full space-y-2 mx-auto">
-            <h1 className="text-white text-2xl md:text-5xl leading-tight font-semibold">
-              Add New Property Listing
-            </h1>
-            <div>
-              <Breadcrumb className="flex items-center justify-center space-x-2 text-sm lg:text-md text-white list-none">
-                <BreadcrumbLink
-                  href="/"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  Home
-                </BreadcrumbLink>
-                <BreadcrumbSeparator />
-                <BreadcrumbLink
-                  href="/properties"
-                  aria-current="page"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  Properties
-                </BreadcrumbLink>
-                <BreadcrumbSeparator />
-                <BreadcrumbLink
-                  href="/properties/add"
-                  aria-current="page"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  Add Listing
-                </BreadcrumbLink>
-              </Breadcrumb>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center justify-center py-10">
-        <div className="w-full container px-4">
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-hidden">
+        <DialogHeader>
+          <DialogTitle>Update Property</DialogTitle>
+        </DialogHeader>
+
+        {/* Scrollable form area */}
+        <div className="p-1 overflow-y-auto max-h-[75vh] pr-2">
           <FormContainer
-            onSubmit={handlePost}
-            resolver={zodResolver(createPropertySchema)}
-            defaultValues={defaultValues}
+            onSubmit={handleUpdatePost}
+            defaultValues={{
+              title: updatedProperty?.title || "",
+              images: updatedProperty?.images || [],
+              squareFeet: updatedProperty?.squareFeet || "",
+              totalRooms: updatedProperty?.totalRooms || "",
+              totalBedrooms: updatedProperty?.totalBedrooms || "",
+              totalBathrooms: updatedProperty?.totalBathrooms || "",
+              propertyType: updatedProperty?.propertyType || "",
+              purpose: updatedProperty?.purpose || "",
+              availability: updatedProperty?.availability || "",
+              street: updatedProperty?.street || "",
+              city: updatedProperty?.city || "",
+              state: updatedProperty?.state || "",
+              zipCode: updatedProperty?.zipCode || "",
+              country: updatedProperty?.country || "",
+              description: updatedProperty?.description || "",
+              amenities: updatedProperty?.amenities || [],
+              rent: updatedProperty?.rent || "",
+              advanceAmount: updatedProperty?.advanceAmount || "",
+            }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              {/* Column 1 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-4">
                 <FormInput
                   label="Property Title"
@@ -155,7 +117,6 @@ const AddPropertyPage = () => {
                   placeholder="1200"
                   required
                 />
-
                 <FormInput
                   label="Rent"
                   name="rent"
@@ -170,7 +131,6 @@ const AddPropertyPage = () => {
                 />
               </div>
 
-              {/* Column 2 */}
               <div className="space-y-4">
                 <FormInput
                   label="Total Rooms"
@@ -210,9 +170,18 @@ const AddPropertyPage = () => {
                   ]}
                   required
                 />
+                <FormSelect
+                  label="Availability"
+                  name="availability"
+                  placeholder="Select availability"
+                  options={[
+                    { label: "Yes", value: true },
+                    { label: "No", value: false },
+                  ]}
+                  required
+                />
               </div>
 
-              {/* Column 3 */}
               <div className="space-y-4">
                 <FormInput
                   label="Street"
@@ -246,8 +215,7 @@ const AddPropertyPage = () => {
               </div>
             </div>
 
-            {/* Bottom Inputs (Full Width) */}
-            <div className="grid grid-cols-1 gap-6 mt-8">
+            <div className="grid grid-cols-1 gap-6 mt-6">
               <FormTagsSelector
                 name="amenities"
                 tags={DEFAULT_AMENITIES}
@@ -258,28 +226,35 @@ const AddPropertyPage = () => {
               <FormImageUploader
                 name="images"
                 label="Upload Property Images"
-                required
+                required={false}
               />
             </div>
-            {/* Submit Button */}
-            <div className="flex justify-center pt-6">
+
+            <div className="flex justify-end gap-4 pt-6">
               <Button
-                disabled={loading}
+                variant="outline"
+                type="button"
+                onClick={onClose}
+                className="rounded-full"
+              >
+                Cancel
+              </Button>
+              <Button
                 type="submit"
-                className="hover:text-primary hover:border-white px-6 py-2 font-medium transition-all duration-200 group  bg-[#1C2D37] hover:bg-slate-700 hover:text-white"
+                className="rounded-full bg-[#1C2D37] text-white hover:bg-[#2a3f4a]"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  "Create Property"
+                  "Update Property"
                 )}
               </Button>
             </div>
           </FormContainer>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default AddPropertyPage;
+export default UpdatePropertyModal;

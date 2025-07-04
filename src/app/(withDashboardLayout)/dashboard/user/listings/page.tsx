@@ -17,6 +17,10 @@ import FormInput from "@/components/Forms/FormInput";
 import FormSelect from "@/components/Forms/FormSelect";
 import DashboardSearchBarSkeleton from "@/components/Skeleton/DashboardSearchBarSkeleton/DashboardSearchBarSkeleton";
 
+import { TProperty } from "@/types/Property";
+import UpdatePropertyModal from "@/components/Modal/UpdatePropertyModal/UpdatePropertyModal";
+import DeletePropertyModal from "@/components/Modal/DeletePropertyModal/DeletePropertyModal";
+
 interface FilterFormValues {
   searchTerm: string;
   availability: string;
@@ -50,6 +54,13 @@ const MyPropertyListings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filters, setFilters] = useState<FieldValues>(defaultValues);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<TProperty | null>(
+    null
+  );
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedDeleteProperty, setSelectedDeleteProperty] =
+    useState<TProperty | null>(null);
 
   const queryParams = useMemo(() => {
     const params = new URLSearchParams();
@@ -134,6 +145,26 @@ const MyPropertyListings = () => {
     return "You haven't posted any listings yet.";
   };
 
+  const handleUpdateClick = (property: TProperty) => {
+    setSelectedProperty(property);
+    setIsUpdateModalOpen(true);
+  };
+
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedProperty(null);
+  };
+
+  const handleDeleteClick = (property: TProperty) => {
+    setSelectedDeleteProperty(property);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedDeleteProperty(null);
+  };
+
   return (
     <div className="space-y-6 mt-2">
       {/* Header */}
@@ -149,60 +180,63 @@ const MyPropertyListings = () => {
         <DashboardSearchBarSkeleton />
       ) : (
         <div className="bg-white rounded-lg shadow-md border">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <div className="bg-[#1C2D37] text-white px-4 py-5 text-sm font-semibold flex items-center rounded-l-lg">
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Filter
             </div>
-
-            <FormContainer
-              onSubmit={handleSubmitSearch}
-              defaultValues={filters}
-            >
-              <div className="flex items-center justify-between flex-1">
-                <div className="flex items-center px-4 border-l border-gray-300">
-                  <Search className="w-4 h-4 text-muted-foreground mr-2" />
-                  <FormInput
-                    name="searchTerm"
-                    placeholder="Search properties..."
-                    className="w-[200px] px-0 border-none focus:ring-0"
-                  />
+            <div className="w-full mr-10">
+              <FormContainer
+                onSubmit={handleSubmitSearch}
+                defaultValues={filters}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center px-4 border-l border-gray-300">
+                    <Search className="w-4 h-4 text-muted-foreground mr-2" />
+                    <FormInput
+                      name="searchTerm"
+                      placeholder="Search properties..."
+                      className="w-[200px] px-0 border-none focus:ring-0"
+                    />
+                  </div>
+                  <div className="px-4 border-l border-gray-300">
+                    <FormSelect
+                      name="availability"
+                      options={availabilityOptions}
+                      placeholder="Status"
+                      className="w-[140px] border-none"
+                    />
+                  </div>
+                  <div className="px-4 border-l border-gray-300">
+                    <FormSelect
+                      name="sortBy"
+                      options={sortOptions}
+                      placeholder="Sort by"
+                      className="w-[140px] border-none"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div className="px-4 border-l border-gray-300">
+                      <Button
+                        type="submit"
+                        className="rounded-full px-6 bg-[#1C2D37] hover:bg-[#2a3f4a]"
+                      >
+                        <Search className="w-4 h-4 mr-2" />
+                        Search
+                      </Button>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleClearSearch}
+                      className="ml-2 rounded-full px-6 border-gray-300 text-gray-700 hover:bg-gray-100"
+                    >
+                      Clear Filter
+                    </Button>
+                  </div>
                 </div>
-                <div className="px-4 border-l border-gray-300">
-                  <FormSelect
-                    name="availability"
-                    options={availabilityOptions}
-                    placeholder="Status"
-                    className="w-[140px] border-none"
-                  />
-                </div>
-                <div className="px-4 border-l border-gray-300">
-                  <FormSelect
-                    name="sortBy"
-                    options={sortOptions}
-                    placeholder="Sort by"
-                    className="w-[140px] border-none"
-                  />
-                </div>
-                <div className="px-4 border-l border-gray-300">
-                  <Button
-                    type="submit"
-                    className="rounded-full px-6 bg-[#1C2D37] hover:bg-[#2a3f4a]"
-                  >
-                    <Search className="w-4 h-4 mr-2" />
-                    Search
-                  </Button>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleClearSearch}
-                  className="ml-2 rounded-full px-6 border-gray-300 text-gray-700 hover:bg-gray-100"
-                >
-                  Clear Filter
-                </Button>
-              </div>
-            </FormContainer>
+              </FormContainer>
+            </div>
           </div>
         </div>
       )}
@@ -214,11 +248,24 @@ const MyPropertyListings = () => {
         perPageOptions={perPageOptions}
         onPageChange={handlePageChange}
         onItemsPerPageChange={handleItemsPerPageChange}
-        onUpdate={handleUpdate}
-        onDelete={handleDelete}
+        onUpdateClick={handleUpdateClick}
+        onDeleteClick={handleDeleteClick}
         emptyStateTitle="No Listings Found"
         emptyStateDescription={getEmptyStateDescription()}
         showActions={true}
+      />
+      {/* Modals */}
+      <UpdatePropertyModal
+        open={isUpdateModalOpen}
+        property={selectedProperty}
+        onClose={handleCloseUpdateModal}
+        onSave={handleUpdate}
+      />
+      <DeletePropertyModal
+        open={isDeleteModalOpen}
+        property={selectedDeleteProperty}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleDelete}
       />
     </div>
   );

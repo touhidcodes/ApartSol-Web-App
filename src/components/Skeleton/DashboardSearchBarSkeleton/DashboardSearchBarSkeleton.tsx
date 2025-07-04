@@ -5,7 +5,7 @@ const DashboardSearchBarSkeleton = () => {
     <div className="bg-white rounded-lg shadow-md border animate-pulse">
       <div className="flex items-center">
         {/* Left Label */}
-        <div className="bg-[#1C2D37] text-white px-4 py-5 text-sm font-semibold flex items-center rounded-l-lg">
+        <div className="bg-[#1C2D37] text-white px-4 py-6 text-sm font-semibold flex items-center rounded-l-lg">
           <SlidersHorizontal className="w-4 h-4 mr-2" />
           Filter
         </div>

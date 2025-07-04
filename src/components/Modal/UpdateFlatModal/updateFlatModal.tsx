@@ -17,7 +17,7 @@ interface TUpdateFlatModalProps {
   onSave: (updatedFlat: FieldValues, flatId: string) => void;
 }
 
-const UpdateFlatModal = ({
+const UpdatePropertiesModal = ({
   open,
   flat,
   onClose,
@@ -191,4 +191,4 @@ const UpdateFlatModal = ({
   );
 };
 
-export default UpdateFlatModal;
+export default UpdatePropertiesModal;

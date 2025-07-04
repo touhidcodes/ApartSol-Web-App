@@ -32,17 +32,8 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Pencil, Trash, Home } from "lucide-react";
-
-interface Property {
-  id: string;
-  title: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  rent: number;
-  availability: boolean;
-  [key: string]: any;
-}
+import { TProperty } from "@/types/Property";
+import DashboardTableSkeleton from "@/components/Skeleton/DashboardTableSkeleton/DashboardTableSkeleton";
 
 interface PaginationData {
   currentPage: number;
@@ -54,14 +45,14 @@ interface PaginationData {
 }
 
 interface PropertiesTableProps {
-  properties: Property[];
+  properties: TProperty[];
   isLoading: boolean;
   paginationData: PaginationData;
   perPageOptions?: number[];
   onPageChange: (page: number) => void;
   onItemsPerPageChange: (itemsPerPage: number) => void;
-  onUpdate: (property: Property, propertyId: string) => void;
-  onDelete: (propertyId: string) => void;
+  onUpdateClick: (property: TProperty) => void;
+  onDeleteClick: (property: TProperty) => void;
   emptyStateTitle?: string;
   emptyStateDescription?: string;
   showActions?: boolean;
@@ -74,8 +65,8 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
   perPageOptions = [5, 10, 20, 50],
   onPageChange,
   onItemsPerPageChange,
-  onUpdate,
-  onDelete,
+  onUpdateClick,
+  onDeleteClick,
   emptyStateTitle = "No Listings Found",
   emptyStateDescription = "You haven't posted any listings yet.",
   showActions = true,
@@ -84,20 +75,7 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
     paginationData;
 
   if (isLoading) {
-    return (
-      <div className="space-y-4">
-        {/* Loading skeleton */}
-        <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="border rounded-lg">
-            <div className="h-12 bg-gray-100 border-b"></div>
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-50 border-b"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <DashboardTableSkeleton />;
   }
 
   return (
@@ -145,7 +123,7 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
             </TableHeader>
 
             <TableBody>
-              {properties?.map((property: Property) => (
+              {properties?.map((property: TProperty) => (
                 <TableRow
                   key={property.id}
                   className="odd:bg-muted/50 [&>*]:whitespace-nowrap"
@@ -202,14 +180,14 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
                         >
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem
-                            onClick={() => onUpdate(property, property.id)}
+                            onClick={() => onUpdateClick(property)}
                             className="hover:bg-indigo-600 hover:text-white transition-colors px-3 py-2 cursor-pointer text-sm flex items-center gap-2"
                           >
                             <Pencil className="w-4 h-4" />
                             Update
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => onDelete(property.id)}
+                            onClick={() => onDeleteClick(property)}
                             className="hover:bg-red-600 hover:text-white transition-colors px-3 py-2 cursor-pointer text-sm flex items-center gap-2"
                           >
                             <Trash className="w-4 h-4" />
