@@ -105,7 +105,7 @@ export default function PropertyBookingPage() {
 
       if (res?.data?.data?.id) {
         toast.success(res?.data?.message);
-        router.push(`/checkout/${res.data.id}`);
+        router.push(`/checkout/${res?.data?.data?.id}`);
       } else {
         toast.info(res?.data?.data?.message);
       }

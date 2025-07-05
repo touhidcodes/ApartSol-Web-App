@@ -45,13 +45,16 @@ const BookingPageSkeleton = () => {
   return (
     <div className="min-h-screen bg-[#EBF0F4]">
       {/* Banner Section */}
-      <div className="relative h-60 md:h-[300px] w-full">
-        <div className="w-full h-full bg-gray-200 animate-pulse" />
-        <div className="absolute inset-0 bg-[#0D1B2A]/50 z-10" />
-        <div className="absolute inset-0 flex items-center justify-center z-20 px-4">
-          <div className="text-center max-w-5xl w-full space-y-2 mx-auto">
-            <div className="h-8 bg-gray-300 rounded w-64 mx-auto animate-pulse" />
-            <div className="h-4 bg-gray-300 rounded w-32 mx-auto animate-pulse" />
+      {/* Hero Section Skeleton */}
+      <div className="relative h-72 bg-gray-800 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          {/* Title Skeleton */}
+          <div className="h-12 w-96 bg-gray-700 rounded-lg animate-pulse mx-auto"></div>
+          {/* Breadcrumb Skeleton */}
+          <div className="flex items-center justify-center space-x-2">
+            <div className="h-4 w-12 bg-gray-700 rounded animate-pulse"></div>
+            <div className="h-4 w-4 bg-gray-700 rounded animate-pulse"></div>
+            <div className="h-4 w-32 bg-gray-700 rounded animate-pulse"></div>
           </div>
         </div>
       </div>

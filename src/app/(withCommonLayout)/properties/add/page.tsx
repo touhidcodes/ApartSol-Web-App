@@ -14,13 +14,9 @@ import { Loader2 } from "lucide-react";
 import FormImageUploader from "@/components/Forms/FormImageUploader";
 import { Button } from "@/components/ui/button";
 import FormTagsSelector from "@/components/Forms/FormTagsSelector";
-import {
-  Breadcrumb,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import Image from "next/image";
 import { DEFAULT_AMENITIES } from "@/data/constants";
+import DynamicBreadcrumb from "@/components/Shared/Breadcrumb/DynamicBreadcrumb";
 
 const defaultValues = {
   title: "",
@@ -38,7 +34,7 @@ const defaultValues = {
   country: "",
   description: "",
   amenities: [],
-  rent: "",
+  price: "",
   advanceAmount: "",
 };
 
@@ -57,7 +53,7 @@ const AddPropertyPage = () => {
         totalBedrooms: Number(values.totalBedrooms),
         totalBathrooms: Number(values.totalBathrooms),
         totalRooms: Number(values.totalRooms),
-        rent: Number(values.rent),
+        price: Number(values.price),
         advanceAmount: Number(values.advanceAmount),
       };
       console.log(propertyData);
@@ -98,32 +94,7 @@ const AddPropertyPage = () => {
             <h1 className="text-white text-2xl md:text-5xl leading-tight font-semibold">
               Add New Property Listing
             </h1>
-            <div>
-              <Breadcrumb className="flex items-center justify-center space-x-2 text-sm lg:text-md text-white list-none">
-                <BreadcrumbLink
-                  href="/"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  Home
-                </BreadcrumbLink>
-                <BreadcrumbSeparator />
-                <BreadcrumbLink
-                  href="/properties"
-                  aria-current="page"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  Properties
-                </BreadcrumbLink>
-                <BreadcrumbSeparator />
-                <BreadcrumbLink
-                  href="/properties/add"
-                  aria-current="page"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  Add Listing
-                </BreadcrumbLink>
-              </Breadcrumb>
-            </div>
+            <DynamicBreadcrumb />s
           </div>
         </div>
       </div>
@@ -157,8 +128,8 @@ const AddPropertyPage = () => {
                 />
 
                 <FormInput
-                  label="Rent"
-                  name="rent"
+                  label="Price"
+                  name="price"
                   placeholder="20000"
                   required
                 />

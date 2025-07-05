@@ -4,10 +4,10 @@ import { baseApi } from "./baseApi";
 export const paymentApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     createPayment: build.mutation({
-      query: (bookingId) => ({
+      query: (paymentData) => ({
         url: `/create-payment`,
         method: "POST",
-        data: { bookingId },
+        data: { paymentData },
       }),
       invalidatesTags: [tagTypes.payment],
     }),

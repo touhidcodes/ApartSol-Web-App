@@ -163,14 +163,14 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                   {/* Profile Picture and Name */}
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center overflow-hidden">
-                      {property?.user?.UserProfile?.image ? (
+                      {property?.user?.userProfile?.image ? (
                         <Image
                           src={
-                            property?.user?.UserProfile?.image ||
+                            property?.user?.userProfile?.image ||
                             avatarPlaceholder
                           }
                           alt={
-                            property?.user?.UserProfile?.name ||
+                            property?.user?.userProfile?.name ||
                             "Property Owner"
                           }
                           className="w-12 h-12 object-cover"
@@ -181,10 +181,10 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                     </div>
                     <div>
                       <h4 className="font-semibold text-lg">
-                        {property?.user?.UserProfile?.name || "Property Owner"}
+                        {property?.user?.userProfile?.name || "Property Owner"}
                       </h4>
                       <p className="text-sm text-slate-300">
-                        {property?.user?.UserProfile?.profession ||
+                        {property?.user?.userProfile?.profession ||
                           "Profession not provided"}
                       </p>
                     </div>
@@ -193,31 +193,31 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                   {/* Company */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <Building size={16} />
-                    {property?.user?.UserProfile?.company ||
+                    {property?.user?.userProfile?.company ||
                       "Company not provided"}
                   </div>
 
                   {/* Phone */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <Phone size={16} />
-                    {property?.user?.UserProfile?.phone ||
-                      property?.user?.UserProfile?.secondaryPhone ||
+                    {property?.user?.userProfile?.phone ||
+                      property?.user?.userProfile?.secondaryPhone ||
                       "Phone not provided"}
                   </div>
 
                   {/* Location */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <MapPin size={16} />
-                    {property?.user?.UserProfile?.city &&
-                    property?.user?.UserProfile?.country
-                      ? `${property?.user?.UserProfile.city}, ${property?.user?.UserProfile.country}`
+                    {property?.user?.userProfile?.city &&
+                    property?.user?.userProfile?.country
+                      ? `${property?.user?.userProfile.city}, ${property?.user?.userProfile.country}`
                       : "Location not provided"}
                   </div>
 
                   {/* Verification */}
                   <div className="flex items-center gap-2 text-sm text-slate-300">
                     <CheckCircle size={16} />
-                    {property?.user?.UserProfile?.verified
+                    {property?.user?.userProfile?.verified
                       ? "Verified Agent"
                       : "Not Verified"}
                   </div>
@@ -237,10 +237,14 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Wallet size={18} />
-                      <span className="font-medium">Rent Price:</span>
+                      {property?.purpose === "RENT" ? (
+                        <span className="font-medium">Rent Price:</span>
+                      ) : (
+                        <span className="font-medium">Sale Price:</span>
+                      )}
                     </div>
                     <span>
-                      $ {property?.rent?.toLocaleString() || "Not specified"}
+                      $ {property?.price?.toLocaleString() || "Not specified"}
                     </span>
                   </div>
 
@@ -388,8 +392,8 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                     <Ruler size={16} />
                   </PropertyOverviewItem>
                   <PropertyOverviewItem
-                    label="Rent"
-                    value={`S ${property.rent?.toLocaleString() || "N/A"}`}
+                    label="Price"
+                    value={`S ${property.price?.toLocaleString() || "N/A"}`}
                   >
                     <DollarSign size={16} />
                   </PropertyOverviewItem>
@@ -405,9 +409,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
 
                   <PropertyOverviewItem
                     label="Availability"
-                    value={
-                      property.availability ? "Available" : "Not Available"
-                    }
+                    value={property.availability ? "Available" : "Unavailable"}
                   >
                     <CheckCircle size={16} />
                   </PropertyOverviewItem>

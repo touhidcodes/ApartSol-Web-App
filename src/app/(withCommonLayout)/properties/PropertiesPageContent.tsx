@@ -41,7 +41,7 @@ const bedroomOptions = [
 
 const purposeOptions = [
   { value: "RENT", label: "Rent" },
-  { value: "SALE", label: "Buy" },
+  { value: "SALE", label: "Sale" },
 ];
 
 const PropertiesPageContent = () => {

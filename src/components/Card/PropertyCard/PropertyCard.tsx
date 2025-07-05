@@ -47,7 +47,7 @@ const PropertyCard = ({ property }: { property: TProperty }) => {
                 className="bg-[#1C2D37] text-white px-2 py-1"
               >
                 <Tag className="w-3 h-3 mr-1" />
-                {property?.purpose === "RENT" ? "RENT" : "BUY"}
+                {property?.purpose === "RENT" ? "RENT" : "SALE"}
               </Badge>
             )}
           </div>
@@ -63,7 +63,7 @@ const PropertyCard = ({ property }: { property: TProperty }) => {
           <div className="flex items-center text-muted-foreground gap-1 mt-1">
             <MapPin className="w-4 h-4" />
             <span className="text-sm">
-              `{property?.city}, {property?.country}`
+              `{property?.city}, ${property?.country}`
             </span>
           </div>
 
@@ -95,7 +95,7 @@ const PropertyCard = ({ property }: { property: TProperty }) => {
         <div className="border-t mt-4 pt-4 flex justify-between items-center">
           <div className="flex items-center font-bold text-lg">
             <DollarSign className="w-4 h-4 mr-1" />
-            <span>{property?.rent}</span>
+            <span>{property?.price}</span>
           </div>
           <Link href={`/properties/${property?.id}`}>
             <Button size="lg" className="bg-[#1C2D37] hover:bg-slate-700">
