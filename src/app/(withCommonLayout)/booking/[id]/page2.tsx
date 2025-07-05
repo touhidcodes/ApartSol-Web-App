@@ -8,9 +8,11 @@ import {
   Bath,
   Home,
   Ruler,
+  DollarSign,
   User,
   Mail,
   Phone,
+  Calendar,
   CheckCircle,
   Star,
   Building2,
@@ -18,6 +20,12 @@ import {
   Globe,
   Mailbox,
   CreditCard,
+  Shield,
+  Clock,
+  ArrowLeft,
+  Heart,
+  Share2,
+  AlertCircle,
   Loader2,
   UserRound,
 } from "lucide-react";
@@ -26,6 +34,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
 import { useGetUserWithProfileQuery } from "@/redux/api/userApi";
@@ -37,7 +52,8 @@ import { calculateAverageRating } from "@/lib/utils";
 import { TPropertyWithUserAndReviews } from "@/types/Property";
 import { TUserWithProfile } from "@/types/User";
 import { avatarPlaceholder } from "@/data/common";
-import BookingPageSkeleton from "@/components/Skeleton/BookingPageSkeleton/BookingPageSkeleton";
+
+// Types
 
 export default function PropertyBookingPage() {
   const params = useParams();
@@ -45,18 +61,43 @@ export default function PropertyBookingPage() {
   const propertyId = params?.id as string;
 
   // Redux hooks
-  const { data: propertyData, isLoading: propertyLoading } =
-    useGetPropertyByIdQuery(propertyId);
-  const { data: userData, isLoading: userLoading } =
-    useGetUserWithProfileQuery("");
-  const [bookingRequest] = useBookingRequestMutation();
+  const {
+    data: propertyData,
+    isLoading: propertyLoading,
+    error: propertyError,
+  } = useGetPropertyByIdQuery(propertyId);
+  const {
+    data: userData,
+    isLoading: userLoading,
+    error: userError,
+  } = useGetUserWithProfileQuery("");
+  const [bookingRequest, { isLoading: bookingLoading }] =
+    useBookingRequestMutation();
 
   // Local state
   const [property, setProperty] = useState<TPropertyWithUserAndReviews | null>(
     null
   );
   const [user, setUser] = useState<TUserWithProfile | null>(null);
-  const [bookingLoading, setBookingLoading] = useState<boolean>(false);
+  const [bookingError, setBookingError] = useState<string>("");
+
+  if (!property) {
+    // Show a loading state or return null to avoid error
+    return null;
+  }
+
+  const vatPercent = 0.15; // 15% VAT
+  const processingFee = 50; // fixed service charge
+
+  let extraCharge = 0;
+
+  if (property.purpose === "SALE") {
+    extraCharge = (property.price ?? 0) * vatPercent;
+  } else {
+    extraCharge = processingFee;
+  }
+  const totalDueToday = (property.price ?? 0) + extraCharge;
+  const averageRating = calculateAverageRating(property.review);
 
   // Update local state when data loads
   useEffect(() => {
@@ -71,15 +112,6 @@ export default function PropertyBookingPage() {
     }
   }, [userData]);
 
-  // Pricing calculations
-  const processingFee = 50;
-  const vatRate = 0.15; // 15% VAT
-  const price = property?.price ?? 0;
-  const advance = property?.advanceAmount ?? 0;
-  const vatAmount = property?.purpose === "SALE" ? price * vatRate : 0;
-  const serviceCharge = property?.purpose === "RENT" ? processingFee : 0;
-  const totalDueToday = Math.floor(price + vatAmount + serviceCharge + advance);
-
   // Handle booking submission
   const handleBooking = async () => {
     if (!property || !user) {
@@ -92,52 +124,89 @@ export default function PropertyBookingPage() {
       return;
     }
 
+    setBookingError("");
+
     try {
-      setBookingLoading(true);
-      const bookingData = {
+      const propertyId = property.id;
+
+      const propertyData = {
         totalAmount: totalDueToday,
       };
 
-      const res = await bookingRequest({
-        propertyId,
-        propertyData: bookingData,
-      });
+      const res = await bookingRequest({ propertyId, propertyData });
 
-      if (res?.data?.data?.id) {
-        toast.success(res?.data?.message);
+      if (res?.data?.id) {
+        toast.success("Booking request submitted successfully!");
         router.push(`/checkout/${res.data.id}`);
       } else {
-        toast.info(res?.data?.data?.message);
+        toast.success("You have already booked this property!");
       }
     } catch (error: any) {
       console.error("Booking error:", error);
       const errorMessage =
-        error?.data?.message || "Something went wrong with your booking";
+        error?.data?.message ||
+        error?.message ||
+        "Something went wrong with your booking";
+      setBookingError(errorMessage);
       toast.error(errorMessage);
-    } finally {
-      setBookingLoading(false);
     }
   };
 
   // Loading state
   if (propertyLoading || userLoading) {
-    return <BookingPageSkeleton />;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="container mx-auto px-4 py-16">
+          <div className="flex items-center justify-center">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+              <p className="text-gray-600">Loading booking information...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  // If no property or user data available, continue loading
-  if (!property || !user) {
-    return <BookingPageSkeleton />;
+  // Error state
+  if (propertyError || userError || !property || !user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-md mx-auto">
+            <Alert className="border-red-200 bg-red-50">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-800">
+                {propertyError
+                  ? "Failed to load property information"
+                  : userError
+                  ? "Failed to load user information"
+                  : "Property or user information not found"}
+              </AlertDescription>
+            </Alert>
+            <div className="mt-4 text-center">
+              <Button
+                onClick={() => router.push("/properties")}
+                variant="outline"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Properties
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
-
-  const averageRating = calculateAverageRating(property.review);
 
   return (
     <div className="min-h-screen bg-[#EBF0F4]">
       {/* Banner Section */}
       <div className="relative h-60 md:h-[300px] w-full">
+        {/* Background image */}
         <Image
           src="/assets/images/detailsPage.jpg"
-          alt="Property Details"
+          alt="home"
           fill
           className="object-cover"
           priority
@@ -156,6 +225,16 @@ export default function PropertyBookingPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Booking Error Alert */}
+        {bookingError && (
+          <Alert className="mb-6 border-red-200 bg-red-50">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-800">
+              {bookingError}
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Property Details */}
           <div className="lg:col-span-2 space-y-6">
@@ -186,29 +265,40 @@ export default function PropertyBookingPage() {
               </div>
 
               <CardContent className="p-6 bg-slate-100">
-                <div className="mb-4">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                    {property.title}
-                  </h2>
-                  <div className="flex items-center gap-2 text-gray-600 mb-3">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm text-gray-500">
-                      {[
-                        property.street,
-                        property.city,
-                        property.state,
-                        property.country,
-                      ]
-                        .filter(Boolean)
-                        .join(", ") || "Address not available"}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-medium">{averageRating}</span>
-                    <span className="text-sm text-gray-500">
-                      ({property.review.length} reviews)
-                    </span>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                      {property.title}
+                    </h2>
+                    <div className="flex items-center gap-2 text-gray-600 mb-3">
+                      <MapPin className="w-4 h-4" />
+                      {(property.street ||
+                        property.city ||
+                        property.state ||
+                        property.country) && (
+                        <span className="font-small text-sm text-gray-500">
+                          {[
+                            property.street,
+                            property.city,
+                            property.state,
+                            property.country,
+                          ]
+                            .filter(Boolean)
+                            .join(", ") || "N/A"}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium">
+                          {averageRating}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          ({property.review.length} reviews)
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -266,13 +356,15 @@ export default function PropertyBookingPage() {
               <CardContent>
                 <div className="flex items-center gap-4">
                   <Avatar className="w-16 h-16">
-                    <AvatarImage
-                      src={
-                        property.user.userProfile?.image || avatarPlaceholder
-                      }
-                      alt={property.user.userProfile?.name || "Property Owner"}
-                    />
-                    <AvatarFallback className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200">
+                    {property ? (
+                      <AvatarImage
+                        src={property.user.userProfile?.image || undefined}
+                        alt={property.user.userProfile?.name || "user"}
+                      />
+                    ) : (
+                      <AvatarImage src={avatarPlaceholder} alt="user" />
+                    )}
+                    <AvatarFallback className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-full">
                       {property.user.userProfile?.name?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
@@ -303,6 +395,11 @@ export default function PropertyBookingPage() {
                           <span>{property.user.userProfile.phone}</span>
                         </div>
                       )}
+                      {property.user.userProfile?.profession && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          {property.user.userProfile.profession}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -318,7 +415,7 @@ export default function PropertyBookingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
                     <UserRound className="w-5 h-5 text-gray-600" />
                     <div>
@@ -326,14 +423,16 @@ export default function PropertyBookingPage() {
                       <p className="font-semibold">{user.username}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
                     <Mail className="w-5 h-5 text-gray-600" />
                     <div>
-                      <p className="text-xs text-gray-500">Email</p>
+                      <p className="text-xs text-gray-500">Email Address</p>
                       <p className="font-semibold">{user.email}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
                     <UserRound className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="text-xs text-gray-500">Full Name</p>
@@ -342,10 +441,25 @@ export default function PropertyBookingPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
+                    <MapPin className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Address</p>
+                      <p className="font-semibold">
+                        {user.userProfile
+                          ? `${user.userProfile.state || "State"}, ${
+                              user.userProfile.country || "Country"
+                            }`
+                          : "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
                     <Phone className="w-5 h-5 text-gray-600" />
                     <div>
-                      <p className="text-xs text-gray-500">Phone</p>
+                      <p className="text-xs text-gray-500">Phone Number</p>
                       <p className="font-semibold">
                         {user.userProfile?.phone || "Not provided"}
                       </p>
@@ -364,7 +478,8 @@ export default function PropertyBookingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {/* Location Fields */}
                   <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
                     <Building2 className="w-4 h-4 text-gray-600" />
                     <div>
@@ -398,12 +513,33 @@ export default function PropertyBookingPage() {
                     </div>
                   </div>
                 </div>
+                {/* Optional Full Address Below */}
+                {(property.street ||
+                  property.city ||
+                  property.state ||
+                  property.country) && (
+                  <p className="text-xs text-gray-500">
+                    Full Address:&nbsp;
+                    <span className="font-small text-gray-700">
+                      {[
+                        property.street,
+                        property.city,
+                        property.state,
+                        property.country,
+                        property.zipCode,
+                      ]
+                        .filter(Boolean)
+                        .join(", ") || "N/A"}
+                    </span>
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>
 
           {/* Right Column - Booking Summary */}
           <div className="space-y-6">
+            {/* Booking Summary */}
             <Card className="shadow-lg border-0 bg-white sticky top-4">
               <CardHeader className="bg-[#1C2D37] text-white rounded-t-lg">
                 <CardTitle className="flex items-center gap-2">
@@ -412,44 +548,53 @@ export default function PropertyBookingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 bg-slate-100 rounded-b-lg">
-                <div className="space-y-3 text-sm text-gray-700">
+                <div className="space-y-4 text-sm text-gray-700">
                   {property.purpose === "RENT" ? (
                     <>
                       <div className="flex justify-between items-center">
                         <span>Monthly Rent</span>
-                        <span className="font-semibold">
-                          ${price.toLocaleString()}
+                        <span className="font-semibold text-base">
+                          ${property.price.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span>Advance Amount</span>
-                        <span className="font-semibold">
-                          ${advance.toLocaleString()}
+                        <span className="font-semibold text-base">
+                          ${property.advanceAmount.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span>Processing Fee</span>
                         <span className="font-semibold">${processingFee}</span>
                       </div>
+                      <div className="flex justify-between items-center">
+                        <span>VAT</span>
+                        <span className="font-semibold">$0</span>
+                      </div>
                     </>
                   ) : (
                     <>
                       <div className="flex justify-between items-center">
-                        <span>Property Price</span>
-                        <span className="font-semibold">
-                          ${price.toLocaleString()}
+                        <span>Total Price</span>
+                        <span className="font-semibold text-base">
+                          ${property.price.toLocaleString()}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span>Advance Amount</span>
-                        <span className="font-semibold">
-                          ${advance.toLocaleString()}
-                        </span>
+                        <span>Processing Fee</span>
+                        <span className="font-semibold">${processingFee}</span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span>VAT (15%)</span>
                         <span className="font-semibold">
-                          ${vatAmount.toLocaleString()}
+                          $
+                          {(property.price * 0.15 || 0).toLocaleString(
+                            undefined,
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            }
+                          )}
                         </span>
                       </div>
                     </>
@@ -459,42 +604,41 @@ export default function PropertyBookingPage() {
 
                   <div className="flex justify-between items-center text-lg font-bold">
                     <span>Total Due Today</span>
-                    <span className="text-blue-600">
-                      ${totalDueToday.toLocaleString()}
-                    </span>
+                    <span className="text-blue-600">${totalDueToday}</span>
                   </div>
                 </div>
 
-                <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 mt-4">
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
                   <p className="text-sm text-blue-800">
                     <strong>Note:</strong> The advance amount will be refunded
                     when you move out, subject to property conditions.
                   </p>
                 </div>
+                <div className="flex justify-center">
+                  <Button
+                    className="hover:text-primary hover:border-white px-6 py-2 font-medium transition-all duration-200 group  bg-[#1C2D37] hover:bg-slate-700 hover:text-white"
+                    onClick={handleBooking}
+                    disabled={bookingLoading || !property.availability}
+                  >
+                    {bookingLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : !property.availability ? (
+                      "Not Available"
+                    ) : (
+                      <>
+                        <CreditCard className="w-5 h-5 mr-2" />
+                        Book Property Now
+                      </>
+                    )}
+                  </Button>
+                </div>
 
-                <Button
-                  className="w-full mt-6 bg-[#1C2D37] hover:bg-slate-700 text-white"
-                  onClick={handleBooking}
-                  disabled={bookingLoading || !property.availability}
-                >
-                  {bookingLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Processing...
-                    </>
-                  ) : !property.availability ? (
-                    "Property Not Available"
-                  ) : (
-                    <>
-                      <CreditCard className="w-5 h-5 mr-2" />
-                      Book Property Now
-                    </>
-                  )}
-                </Button>
-
-                <p className="text-center text-sm text-gray-500 mt-3">
-                  🔒 Your payment is secure and encrypted
-                </p>
+                <div className="text-center text-sm text-gray-500">
+                  <p>🔒 Your payment is secure and encrypted</p>
+                </div>
               </CardContent>
             </Card>
 
@@ -505,19 +649,43 @@ export default function PropertyBookingPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {[
-                    "Instant booking confirmation",
-                    "24/7 customer support",
-                    "Verified property owners",
-                    "Secure payment processing",
-                    "Money-back guarantee",
-                  ].map((benefit, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">{benefit}</span>
-                    </div>
-                  ))}
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">
+                      Instant booking confirmation
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">24/7 customer support</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">Verified property owners</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">Secure payment processing</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">Money-back guarantee</span>
+                  </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Contact Support */}
+            <Card className="shadow-lg border-0 bg-slate-100">
+              <CardContent className="p-6 text-center">
+                <h3 className="font-semibold mb-2">Need Help?</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Our booking specialists are here to assist you
+                </p>
+                <Button variant="outline" className="w-full">
+                  <Phone className="w-4 h-4 mr-2" />
+                  Contact Support
+                </Button>
               </CardContent>
             </Card>
           </div>

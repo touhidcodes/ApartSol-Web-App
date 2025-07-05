@@ -22,7 +22,7 @@ export interface TProperty {
   availability: boolean;
   isFeatured: boolean;
   isDeleted: boolean;
-  rent: number;
+  price: number;
   advanceAmount: number;
   userId: string;
   createdAt: string;

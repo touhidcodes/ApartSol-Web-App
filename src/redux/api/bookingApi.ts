@@ -5,23 +5,23 @@ export const bookingApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllBookings: build.query({
       query: () => ({
-        url: "/booking-requests",
+        url: "/bookings",
         method: "GET",
       }),
       providesTags: [tagTypes.booking],
     }),
-    getMyBookings: build.query({
+    getUserBookings: build.query({
       query: () => ({
-        url: "/my-bookings",
+        url: "/bookings/",
         method: "GET",
       }),
       providesTags: [tagTypes.booking],
     }),
     bookingRequest: build.mutation({
-      query: (flatId) => ({
-        url: "/booking-applications",
+      query: ({ propertyId, propertyData }) => ({
+        url: `/bookings/${propertyId}`,
         method: "POST",
-        data: flatId,
+        data: propertyData,
       }),
       invalidatesTags: [tagTypes.booking],
     }),
@@ -30,6 +30,6 @@ export const bookingApi = baseApi.injectEndpoints({
 
 export const {
   useGetAllBookingsQuery,
-  useGetMyBookingsQuery,
+  useGetUserBookingsQuery,
   useBookingRequestMutation,
 } = bookingApi;

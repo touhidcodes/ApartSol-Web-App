@@ -1,30 +1,22 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  Typography,
-  styled,
-} from "@mui/material";
-import { toast } from "sonner";
 import { useState } from "react";
-import { useCreatePaymentMutation } from "@/redux/api/paymentApi";
-import Loading from "@/components/Custom/Loading/Loading";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  background: "#fff",
-  borderRadius: theme.spacing(1),
-  padding: "20px 30px",
-  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-  maxWidth: "600px",
-  textAlign: "center",
-}));
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2, CreditCard, BadgeCheck, Banknote } from "lucide-react";
+import { useCreatePaymentMutation } from "@/redux/api/paymentApi";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const CheckoutPage = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState("stripe");
   const [createPayment, { isLoading }] = useCreatePaymentMutation();
   const { bookingId } = useParams();
 
@@ -32,7 +24,7 @@ const CheckoutPage = () => {
     setIsButtonDisabled(true);
     try {
       const res = await createPayment(bookingId);
-
+      console.log(res);
       if (res?.data?.url) {
         toast.success("Redirecting to payment...");
         window.location.href = res.data.url;
@@ -47,78 +39,114 @@ const CheckoutPage = () => {
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
-    <Box sx={{ background: "#EBF0F4" }} mt={10}>
-      <Container sx={{ paddingBottom: "50px" }}>
-        <Stack
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <Typography
-            variant="h4"
-            component="h1"
-            style={{ color: "#0B1134CC", marginTop: "20px" }}
-          >
-            Congratulations!
-          </Typography>
-          <Typography
-            component="p"
-            fontWeight={400}
-            style={{ color: "#0B1134CC", marginTop: "5px" }}
-          >
-            Your booking has been successful. Ready to proceed with payment?
-          </Typography>
+    <div className="min-h-screen bg-muted py-10 px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        {/* Left - User Info */}
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <BadgeCheck className="w-5 h-5" /> Shipping Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label>Full Name</Label>
+              <Input placeholder="Enter your full name" required />
+            </div>
+            <div>
+              <Label>Email Address</Label>
+              <Input
+                placeholder="Enter your email address"
+                required
+                type="email"
+              />
+            </div>
+            <div>
+              <Label>Phone Number</Label>
+              <Input placeholder="Enter phone number" required type="tel" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Label>City</Label>
+                <Input placeholder="Enter city" required />
+              </div>
+              <div>
+                <Label>State</Label>
+                <Input placeholder="Enter state" required />
+              </div>
+              <div>
+                <Label>ZIP Code</Label>
+                <Input placeholder="ZIP" required />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Information Box */}
-          <StyledBox mt={5}>
-            <Typography variant="h6">Booking Summary</Typography>
-            <Typography variant="body1" sx={{ mt: 2 }}>
-              Thank you for booking! Please click the button below to complete
-              your payment.
-            </Typography>
-            <Stack spacing={1} alignItems="center">
-              <Typography
-                variant="h6"
-                sx={{ color: "#1976d2", fontWeight: "bold" }}
+        {/* Right - Cart Summary */}
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <CreditCard className="w-5 h-5" /> Review Your Cart
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 mb-6">
+              <h2 className="text-md font-semibold text-gray-800 dark:text-gray-100">
+                Booking Status: <Badge variant="outline">Pending</Badge>
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Your booking was successful. Choose a payment method to proceed.
+              </p>
+            </div>
+
+            <Separator className="my-4" />
+
+            <div className="space-y-4">
+              <RadioGroup
+                defaultValue="stripe"
+                onValueChange={(value) => setSelectedMethod(value)}
               >
-                For Demo Use
-              </Typography>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="stripe" id="stripe" />
+                  <Label htmlFor="stripe">Stripe</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="sslcommerz" id="sslcommerz" />
+                  <Label htmlFor="sslcommerz">SSLCommerz</Label>
+                </div>
+              </RadioGroup>
 
-              <Typography variant="body1" sx={{ color: "#424242" }}>
-                Card No:{" "}
-                <span style={{ fontWeight: "bold" }}>4242 4242 4242 4242</span>
-              </Typography>
+              <div className="text-sm text-muted-foreground">
+                Use the following test card details for Stripe:
+                <ul className="mt-1 ml-4 list-disc">
+                  <li>
+                    Card: <strong>4242 4242 4242 4242</strong>
+                  </li>
+                  <li>CVC: Any 3 digits</li>
+                  <li>Expiry: Any future date</li>
+                </ul>
+              </div>
 
-              <Typography variant="body1" sx={{ color: "#424242" }}>
-                CVC: <span style={{ fontWeight: "bold" }}>Any 3 digits</span>
-              </Typography>
-
-              <Typography variant="body1" sx={{ color: "#424242" }}>
-                Expiry Date:{" "}
-                <span style={{ fontWeight: "bold" }}>Any future date</span>
-              </Typography>
-            </Stack>
-
-            <Box mt={3}>
               <Button
-                variant="contained"
                 onClick={handlePayment}
-                disabled={isButtonDisabled}
+                disabled={isButtonDisabled || isLoading}
+                className="w-full mt-4"
               >
-                Proceed to Payment
+                {isLoading ? (
+                  <>
+                    <Loader2 className="animate-spin w-4 h-4 mr-2" />{" "}
+                    Redirecting...
+                  </>
+                ) : (
+                  "Pay Now"
+                )}
               </Button>
-            </Box>
-          </StyledBox>
-        </Stack>
-      </Container>
-    </Box>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 
