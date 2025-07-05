@@ -29,3 +29,13 @@ export const calculateReadTime = (
   const readTime = Math.ceil(wordCount / wordsPerMinute);
   return `${readTime} min read`;
 };
+
+// Calculate average rating
+export function calculateAverageRating<T extends { rating: string | number }>(
+  items: T[]
+): number {
+  if (!items || items.length === 0) return 0;
+
+  const total = items.reduce((sum, item) => sum + Number(item.rating), 0);
+  return Number((total / items.length).toFixed(1));
+}

@@ -6,7 +6,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import AuthLoading from "../Loading/AuthLoading";
 import { Button } from "@/components/ui/button";
 import { LogIn, LogOut } from "lucide-react";
-import TextLoading from "../TextLoading/TextLoading";
+import TextLoading from "../Loading/TextLoading";
 
 const AuthButton = () => {
   const router = useRouter();

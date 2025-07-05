@@ -4,7 +4,7 @@ import { logoutUser } from "@/services/actions/logoutUser";
 import { LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import TextLoading from "../TextLoading/TextLoading";
+import TextLoading from "../Loading/TextLoading";
 
 const DashboardAuthButton = () => {
   const router = useRouter();

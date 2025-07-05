@@ -1,4 +1,19 @@
-export type TReview = {
+import { UserRole } from "../enums";
+
+export interface TReview {
+  id: string;
+  name: string;
+  email: string;
+  rating: string; // consider number if you convert it
+  comment: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  propertyId?: string | null;
+}
+
+export type TReviewWithUser = {
   id: string;
   name: string;
   email: string;
@@ -9,7 +24,7 @@ export type TReview = {
   user: {
     username: string;
     email: string;
-    role: "SUPERADMIN" | "ADMIN" | "AGENT" | "USER";
+    role: UserRole;
     UserProfile?: {
       image?: string | null;
       name?: string;

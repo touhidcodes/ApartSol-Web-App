@@ -20,7 +20,7 @@ import { PanelLeft, PanelRightOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Sidebar from "@/components/Dashboard/SideBar/SideBar";
-import DynamicBreadcrumb from "@/components/Shared/Breadcrumb/DynamicBreadcrumb";
+import DynamicBreadcrumb from "@/components/Shared/Breadcrumb/DynamicDashboardBreadcrumb";
 import useUserInfo from "@/hooks/useUserInfo";
 import DashboardAuthButton from "@/components/Custom/DashboardAuthButton/DashboardAuthButton";
 

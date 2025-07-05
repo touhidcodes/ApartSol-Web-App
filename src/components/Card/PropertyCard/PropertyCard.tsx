@@ -63,7 +63,7 @@ const PropertyCard = ({ property }: { property: TProperty }) => {
           <div className="flex items-center text-muted-foreground gap-1 mt-1">
             <MapPin className="w-4 h-4" />
             <span className="text-sm">
-              `${property?.city}, ${property?.country}`
+              `{property?.city}, {property?.country}`
             </span>
           </div>
 

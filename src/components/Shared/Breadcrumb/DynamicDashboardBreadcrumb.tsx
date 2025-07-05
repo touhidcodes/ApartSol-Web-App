@@ -14,7 +14,7 @@ const labelMap: Record<string, string> = {
   // Add other mappings as needed
 };
 
-export default function DynamicBreadcrumb() {
+export default function DynamicDashboardBreadcrumb() {
   const pathname = usePathname();
 
   // Split, filter empty segments and remove "user" / "admin"
@@ -30,20 +30,20 @@ export default function DynamicBreadcrumb() {
   });
 
   return (
-    <Breadcrumb className="flex items-center space-x-1 text-white text-sm lg:text-md list-none">
+    <Breadcrumb className="flex items-center space-x-1 text-black text-sm lg:text-md list-none">
       {/* Home is the only clickable link */}
       <BreadcrumbLink
         href="/"
-        className="text-white no-underline hover:text-white"
+        className="text-black no-underline hover:text-black"
       >
         Home
       </BreadcrumbLink>
 
       {breadcrumbs.map((crumb, idx) => (
         <span key={idx} className="flex items-center gap-1">
-          <BreadcrumbSeparator className="text-white" />
+          <BreadcrumbSeparator className="text-black" />
           <span
-            className="text-white font-normal select-none no-underline"
+            className="text-black font-normal select-none no-underline"
             aria-current={idx === breadcrumbs.length - 1 ? "page" : undefined}
           >
             {crumb.label}

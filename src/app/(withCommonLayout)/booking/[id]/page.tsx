@@ -1,310 +1,655 @@
 "use client";
+
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  Typography,
-  Grid,
-  styled,
-  CardContent,
-  Card,
-} from "@mui/material";
-import { toast } from "sonner";
-import { useState, useEffect } from "react";
-import { useGetUserWithProfileQuery } from "@/redux/api/userApi";
-import { TUserWithProfile } from "@/types/User";
-import { TProperty } from "@/types/Property";
-import { useBookingRequestMutation } from "@/redux/api/bookingApi";
-import { useRouter } from "next/navigation";
-import Loading from "@/components/Custom/Loading/Loading";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import SingleBedIcon from "@mui/icons-material/SingleBed";
-import SquareFootIcon from "@mui/icons-material/SquareFoot";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import Image from "next/image";
+  MapPin,
+  Bed,
+  Bath,
+  Home,
+  Ruler,
+  DollarSign,
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  CheckCircle,
+  Star,
+  Building2,
+  Landmark,
+  Globe,
+  Mailbox,
+  CreditCard,
+  Shield,
+  Clock,
+  ArrowLeft,
+  Heart,
+  Share2,
+  AlertCircle,
+  Loader2,
+  UserRound,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
+import { useGetUserWithProfileQuery } from "@/redux/api/userApi";
+import { useBookingRequestMutation } from "@/redux/api/bookingApi";
+import { toast } from "sonner";
+import DynamicBreadcrumb from "@/components/Shared/Breadcrumb/DynamicBreadcrumb";
+import Image from "next/image";
+import { calculateAverageRating } from "@/lib/utils";
+import { TPropertyWithUserAndReviews } from "@/types/Property";
+import { TUserWithProfile } from "@/types/User";
+import { avatarPlaceholder } from "@/data/common";
 
-const StyledInformationBox = styled(Box)(({ theme }) => ({
-  background: "#fff",
-  borderRadius: theme.spacing(1),
-  width: "45%",
-  padding: "8px 16px",
-  "& p": {
-    fontWeight: 500,
-  },
-}));
+// Types
 
-const BookingPage = ({ params }: { params: { id: string } }) => {
-  const { data, isLoading } = useGetUserWithProfileQuery("");
-  const [error, setError] = useState("");
-  const [profileData, setProfileData] = useState<TUserWithProfile | undefined>(
-    undefined
-  );
-  const [flat, setFlat] = useState<TProperty | undefined>(undefined);
-  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
-  const { data: flatData, isLoading: flatLoading } = useGetPropertyByIdQuery(
-    params?.id
-  );
-  const [bookingRequest] = useBookingRequestMutation();
+export default function PropertyBookingPage() {
+  const params = useParams();
   const router = useRouter();
+  const propertyId = params?.id as string;
+
+  // Redux hooks
+  const {
+    data: propertyData,
+    isLoading: propertyLoading,
+    error: propertyError,
+  } = useGetPropertyByIdQuery(propertyId);
+  const {
+    data: userData,
+    isLoading: userLoading,
+    error: userError,
+  } = useGetUserWithProfileQuery("");
+  const [bookingRequest, { isLoading: bookingLoading }] =
+    useBookingRequestMutation();
+
+  // Local state
+  const [property, setProperty] = useState<TPropertyWithUserAndReviews | null>(
+    null
+  );
+  const [user, setUser] = useState<TUserWithProfile | null>(null);
+  const [bookingError, setBookingError] = useState<string>("");
+
+  // Processing fee (could be dynamic based on property value)
+  const processingFee = 50;
+
+  // Update local state when data loads
+  useEffect(() => {
+    if (propertyData?.data) {
+      setProperty(propertyData.data);
+    }
+  }, [propertyData]);
 
   useEffect(() => {
-    if (data) {
-      setProfileData(data?.data);
-      setFlat(flatData?.data);
+    if (userData?.data) {
+      setUser(userData.data);
     }
-  }, [data, flatData]);
+  }, [userData]);
 
+  // Handle booking submission
   const handleBooking = async () => {
-    const data = { flatId: flatData?.id };
-    setIsButtonDisabled(true);
+    if (!property || !user) {
+      toast.error("Missing property or user information");
+      return;
+    }
+
+    if (!property.availability) {
+      toast.error("This property is no longer available");
+      return;
+    }
+
+    setBookingError("");
+
     try {
-      const res = await bookingRequest(data);
-      if (res?.data?.id) {
-        toast.success("Flat booked successfully!");
-        router.push(`/checkout/${res?.data?.id}`);
+      const bookingData = {
+        flatId: property.id,
+        userId: user.id,
+        totalAmount: property.advanceAmount + processingFee,
+        processingFee: processingFee,
+        advanceAmount: property.advanceAmount,
+        monthlyRent: property.rent,
+      };
+
+      const response = await bookingRequest(bookingData).unwrap();
+
+      if (response?.data?.id) {
+        toast.success("Booking request submitted successfully!");
+        router.push(`/checkout/${response.data.id}`);
       } else {
-        toast.success("You have already booked this flat!");
+        toast.success("You have already booked this property!");
       }
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message);
-      toast.error("Something went wrong!");
+    } catch (error: any) {
+      console.error("Booking error:", error);
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Something went wrong with your booking";
+      setBookingError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
+  // Loading state
+  if (propertyLoading || userLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="container mx-auto px-4 py-16">
+          <div className="flex items-center justify-center">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+              <p className="text-gray-600">Loading booking information...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
+  // Error state
+  if (propertyError || userError || !property || !user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-md mx-auto">
+            <Alert className="border-red-200 bg-red-50">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-800">
+                {propertyError
+                  ? "Failed to load property information"
+                  : userError
+                  ? "Failed to load user information"
+                  : "Property or user information not found"}
+              </AlertDescription>
+            </Alert>
+            <div className="mt-4 text-center">
+              <Button
+                onClick={() => router.push("/properties")}
+                variant="outline"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Properties
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const averageRating = calculateAverageRating(property.review);
+  const totalDueToday = property.advanceAmount + processingFee;
+
   return (
-    <Box sx={{ background: "#EBF0F4" }} mt={10}>
-      <Container sx={{ paddingBottom: "50px" }}>
-        <Stack
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <Typography
-            variant="h4"
-            component="h1"
-            style={{ color: "#0B1134CC", marginTop: "20px" }}
-          >
-            Book Your Desired Flat
-          </Typography>
-          <Typography
-            component="p"
-            fontWeight={400}
-            style={{ color: "#0B1134CC", marginTop: "5px" }}
-          >
-            Always we are with you!
-          </Typography>
-          <Box mt={5}>
-            <Card
-              sx={{
-                borderRadius: "15px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                height: { xs: "auto", md: 250 },
-              }}
-            >
-              <Grid container spacing={0}>
-                {/* Image Grid */}
-                <Grid item xs={12} md={6}>
-                  <Box
-                    sx={{
-                      position: "relative",
-                      height: { xs: 200, md: "100%" },
-                      width: "100%",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {flat && (
-                      <Image
-                        src={flat?.images[0]}
-                        alt="flat image"
-                        width={500}
-                        height={350}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    )}
-                  </Box>
-                </Grid>
-                {/* Content Grid */}
-                <Grid item xs={12} md={6}>
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      padding: { xs: 2, md: 3 },
-                    }}
-                  >
-                    <Typography variant="h6" fontWeight={600}>
-                      {flat?.title}
-                    </Typography>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary", mt: 1 }}
-                    >
-                      <LocationOnIcon />
-                      <Typography>{flat?.state}</Typography>
-                    </Stack>
+    <div className="min-h-screen bg-[#EBF0F4]">
+      {/* Banner Section */}
+      <div className="relative h-60 md:h-[300px] w-full">
+        {/* Background image */}
+        <Image
+          src="/assets/images/detailsPage.jpg"
+          alt="home"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-[#0D1B2A]/50 z-10" />
+        <div className="absolute inset-0 flex items-center justify-center z-20 px-4">
+          <div className="text-center max-w-5xl w-full space-y-2 mx-auto">
+            <h1 className="text-white text-3xl md:text-5xl leading-tight font-semibold">
+              Complete Your Booking
+            </h1>
+            <div className="flex items-center justify-center">
+              <DynamicBreadcrumb />
+            </div>
+          </div>
+        </div>
+      </div>
 
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      spacing={1}
-                      sx={{ color: "text.secondary", mt: 1 }}
-                    >
-                      <SingleBedIcon />
-                      <Typography>{flat?.totalBedrooms} Bedrooms</Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      sx={{ color: "text.secondary", mt: 1 }}
-                    >
-                      <SquareFootIcon />
-                      <Typography>{flat?.squareFeet} sqft</Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      sx={{ color: "text.secondary", mt: 1 }}
-                    >
-                      <AttachMoneyIcon sx={{ mr: 0.5 }} />
-                      <Typography>{flat?.rent} USD</Typography>
-                    </Stack>
-                  </CardContent>
-                </Grid>
-              </Grid>
+      <div className="container mx-auto px-4 py-8">
+        {/* Booking Error Alert */}
+        {bookingError && (
+          <Alert className="mb-6 border-red-200 bg-red-50">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-800">
+              {bookingError}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Property Details */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Property Card */}
+            <Card className="overflow-hidden shadow-lg border-0 bg-white">
+              <div className="relative">
+                <img
+                  src={property.images[0] || "/api/placeholder/600/400"}
+                  alt={property.title}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute top-4 left-4">
+                  <Badge className="bg-black/80 text-white">
+                    {property.propertyType}
+                  </Badge>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <Badge
+                    className={
+                      property.availability
+                        ? "bg-green-600 hover:bg-green-600"
+                        : "bg-red-600 hover:bg-red-600"
+                    }
+                  >
+                    {property.availability ? "Available" : "Not Available"}
+                  </Badge>
+                </div>
+              </div>
+
+              <CardContent className="p-6 bg-slate-100">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                      {property.title}
+                    </h2>
+                    <div className="flex items-center gap-2 text-gray-600 mb-3">
+                      <MapPin className="w-4 h-4" />
+                      {(property.street ||
+                        property.city ||
+                        property.state ||
+                        property.country) && (
+                        <span className="font-small text-sm text-gray-500">
+                          {[
+                            property.street,
+                            property.city,
+                            property.state,
+                            property.country,
+                          ]
+                            .filter(Boolean)
+                            .join(", ") || "N/A"}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium">
+                          {averageRating}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          ({property.review.length} reviews)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Property Features */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Bed className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Bedrooms</p>
+                      <p className="font-semibold">{property.totalBedrooms}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Bath className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Bathrooms</p>
+                      <p className="font-semibold">{property.totalBathrooms}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Home className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Total Rooms</p>
+                      <p className="font-semibold">{property.totalRooms}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Ruler className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Square Feet</p>
+                      <p className="font-semibold">{property.squareFeet}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                  <h3 className="font-semibold text-gray-900 mb-2">
+                    Property Description
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {property.description}
+                  </p>
+                </div>
+              </CardContent>
             </Card>
-          </Box>
-          <Grid item xs={12} md={8} my={4}>
-            <Typography
-              variant="h5"
-              color={"secondary.main"}
-              mb={2}
-              marginLeft={5}
-            >
-              Your Information:
-            </Typography>
 
-            <Stack
-              direction={{ xs: "column", md: "row" }}
-              gap={2}
-              flexWrap={"wrap"}
-              alignItems="center"
-              justifyContent="center"
-            >
-              <StyledInformationBox>
-                <Typography color="secondary" variant="caption">
-                  Username
-                </Typography>
-                <Typography>{profileData?.username}</Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography color="secondary" variant="caption">
-                  Email
-                </Typography>
-                <Typography> {profileData?.email}</Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography color="secondary" variant="caption">
-                  Name
-                </Typography>
-                <Typography>
-                  {profileData?.name ? profileData?.name : "Data not provided"}
-                </Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Address
-                </Typography>
-                <Typography>
-                  {profileData?.address
-                    ? profileData?.address
-                    : "Data not provided"}
-                </Typography>
-              </StyledInformationBox>
-            </Stack>
+            {/* Property Owner */}
+            <Card className="shadow-lg border-0 bg-slate-100">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="w-5 h-5" />
+                  Property Owner
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-4">
+                  <Avatar className="w-16 h-16">
+                    {property ? (
+                      <AvatarImage
+                        src={property.user.userProfile?.image || undefined}
+                        alt={property.user.userProfile?.name || "user"}
+                      />
+                    ) : (
+                      <AvatarImage src={avatarPlaceholder} alt="user" />
+                    )}
+                    <AvatarFallback className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-full">
+                      {property.user.userProfile?.name?.charAt(0) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
 
-            <Typography
-              variant="h5"
-              my={3}
-              color={"secondary.main"}
-              marginLeft={5}
-            >
-              Flat Information
-            </Typography>
-            <Stack
-              direction={{ xs: "column", md: "row" }}
-              flexWrap={"wrap"}
-              gap={2}
-              alignItems="center"
-              justifyContent="center"
-            >
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Flat Title
-                </Typography>
-                <Typography>{flat?.title}</Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Location
-                </Typography>
-                <Typography>{flat?.state}</Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Number of Bedrooms
-                </Typography>
-                <Typography>{flat?.totalBedrooms}</Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Total Rooms
-                </Typography>
-                <Typography>{flat?.totalRooms}</Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Advance Amount{" "}
-                </Typography>
-                <Typography>{flat?.advanceAmount}</Typography>
-              </StyledInformationBox>
-              <StyledInformationBox>
-                <Typography variant="caption" color="secondary">
-                  Rent
-                </Typography>
-                <Typography>{flat?.rent}</Typography>
-              </StyledInformationBox>
-            </Stack>
-          </Grid>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-lg">
+                        {property.user.userProfile?.name || "Property Owner"}
+                      </h3>
+                      {property.user.userProfile?.verified && (
+                        <Badge
+                          variant="secondary"
+                          className="bg-green-100 text-green-800"
+                        >
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          Verified
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <div className="flex items-center gap-2">
+                        <Mail className="w-4 h-4" />
+                        <span>{property.user.email}</span>
+                      </div>
+                      {property.user.userProfile?.phone && (
+                        <div className="flex items-center gap-2">
+                          <Phone className="w-4 h-4" />
+                          <span>{property.user.userProfile.phone}</span>
+                        </div>
+                      )}
+                      {property.user.userProfile?.profession && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          {property.user.userProfile.profession}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-          <Button
-            variant="contained"
-            onClick={handleBooking}
-            disabled={isButtonDisabled}
-          >
-            Book Flat
-          </Button>
-        </Stack>
-      </Container>
-    </Box>
+            {/* Your Information */}
+            <Card className="shadow-lg border-0 bg-slate-100">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserRound className="w-5 h-5" />
+                  Your Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-3 p-3 bg-slate-200 rounded-lg">
+                    <UserRound className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Username</p>
+                      <p className="font-semibold">{user.username}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
+                    <Mail className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Email Address</p>
+                      <p className="font-semibold">{user.email}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
+                    <UserRound className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Full Name</p>
+                      <p className="font-semibold">
+                        {user.userProfile?.name || "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
+                    <MapPin className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Address</p>
+                      <p className="font-semibold">
+                        {user.userProfile
+                          ? `${user.userProfile.state || "State"}, ${
+                              user.userProfile.country || "Country"
+                            }`
+                          : "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-slate-200  rounded-lg">
+                    <Phone className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Phone Number</p>
+                      <p className="font-semibold">
+                        {user.userProfile?.phone || "Not provided"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Property Location */}
+            <Card className="shadow-lg border-0 bg-slate-100">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  Property Location
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {/* Location Fields */}
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Building2 className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Street</p>
+                      <p className="font-semibold">
+                        {property.street || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Landmark className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">City</p>
+                      <p className="font-semibold">{property.city || "N/A"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Globe className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">State</p>
+                      <p className="font-semibold">{property.state || "N/A"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-slate-200 rounded-lg">
+                    <Mailbox className="w-4 h-4 text-gray-600" />
+                    <div>
+                      <p className="text-xs text-gray-500">Zip Code</p>
+                      <p className="font-semibold">
+                        {property.zipCode || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                {/* Optional Full Address Below */}
+                {(property.street ||
+                  property.city ||
+                  property.state ||
+                  property.country) && (
+                  <p className="text-xs text-gray-500">
+                    Full Address:&nbsp;
+                    <span className="font-small text-gray-700">
+                      {[
+                        property.street,
+                        property.city,
+                        property.state,
+                        property.country,
+                        property.zipCode,
+                      ]
+                        .filter(Boolean)
+                        .join(", ") || "N/A"}
+                    </span>
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column - Booking Summary */}
+          <div className="space-y-6">
+            {/* Booking Summary */}
+            <Card className="shadow-lg border-0 bg-white sticky top-4">
+              <CardHeader className="bg-[#1C2D37] text-white rounded-t-lg">
+                <CardTitle className="flex items-center gap-2">
+                  <CreditCard className="w-5 h-5" />
+                  Booking Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 bg-slate-100 rounded-b-lg">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Monthly Rent</span>
+                    <span className="font-semibold text-lg">
+                      ${property.rent.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Advance Amount</span>
+                    <span className="font-semibold text-lg">
+                      ${property.advanceAmount.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Processing Fee</span>
+                    <span className="font-semibold">${processingFee}</span>
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex justify-between items-center text-lg font-bold">
+                    <span>Total Due Today</span>
+                    <span className="text-blue-600">
+                      ${totalDueToday.toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> The advance amount will be refunded
+                      when you move out, subject to property conditions.
+                    </p>
+                  </div>
+                  <div className="flex justify-center">
+                    <Button
+                      className="hover:text-primary hover:border-white px-6 py-2 font-medium transition-all duration-200 group  bg-[#1C2D37] hover:bg-slate-700 hover:text-white"
+                      onClick={handleBooking}
+                      disabled={bookingLoading || !property.availability}
+                    >
+                      {bookingLoading ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : !property.availability ? (
+                        "Not Available"
+                      ) : (
+                        <>
+                          <CreditCard className="w-5 h-5 mr-2" />
+                          Book Property Now
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  <div className="text-center text-sm text-gray-500">
+                    <p>🔒 Your payment is secure and encrypted</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Booking Benefits */}
+            <Card className="shadow-lg border-0 bg-slate-100">
+              <CardHeader>
+                <CardTitle className="text-lg">Why Book With Us?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">
+                      Instant booking confirmation
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">24/7 customer support</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">Verified property owners</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">Secure payment processing</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <span className="text-sm">Money-back guarantee</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Contact Support */}
+            <Card className="shadow-lg border-0 bg-slate-100">
+              <CardContent className="p-6 text-center">
+                <h3 className="font-semibold mb-2">Need Help?</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Our booking specialists are here to assist you
+                </p>
+                <Button variant="outline" className="w-full">
+                  <Phone className="w-4 h-4 mr-2" />
+                  Contact Support
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default BookingPage;
+}
