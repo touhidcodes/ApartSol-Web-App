@@ -116,10 +116,14 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
         {
           section: "Main",
           items: [
-            { label: "Home", href: "/dashboard/home", icon: LayoutDashboard },
+            {
+              label: "Home",
+              href: "/dashboard/admin/overview",
+              icon: LayoutDashboard,
+            },
             {
               label: "Profile",
-              href: "/dashboard/profile",
+              href: "/dashboard/admin/profile",
               icon: PersonStanding,
             },
           ],
@@ -127,20 +131,20 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
         {
           section: "Manage",
           items: [
-            { label: "All Users", href: "/dashboard/all-user", icon: Users },
+            { label: "Users", href: "/dashboard/all-user", icon: Users },
             {
-              label: "All Properties",
-              href: "/dashboard/all-listings",
+              label: "Properties",
+              href: "/dashboard/admin/listings",
               icon: HomeIcon,
             },
             {
-              label: "All Bookings",
-              href: "/dashboard/all-bookings",
+              label: "Bookings",
+              href: "/dashboard/admin.bookings",
               icon: ShoppingCart,
             },
             {
-              label: "All Reviews",
-              href: "/dashboard/all-reviews",
+              label: "Reviews",
+              href: "/dashboard/admin/reviews",
               icon: Star,
             },
           ],
@@ -153,6 +157,11 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
         {
           section: "Main",
           items: [
+            {
+              label: "Home",
+              href: "/dashboard/user/overview",
+              icon: LayoutDashboard,
+            },
             {
               label: "Profile",
               href: "/dashboard/user/profile",

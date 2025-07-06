@@ -12,7 +12,7 @@ import {
   useGetTotalUserCountQuery,
   useGetUserByRoleQuery,
   useGetUserRegistrationTrendsQuery,
-} from "@/redux/api/dashboard";
+} from "@/redux/api/dashboardApi";
 import { Container, Typography, Paper, Grid } from "@mui/material";
 import {
   XAxis,

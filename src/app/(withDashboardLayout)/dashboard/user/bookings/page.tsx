@@ -12,11 +12,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, Loader2 } from "lucide-react";
-import { useGetMyBookingsQuery } from "@/redux/api/bookingApi";
-import { TBookings } from "@/types/Bookings";
+import { useGetUserBookingsQuery } from "@/redux/api/bookingApi";
+import { TBooking } from "@/types/Bookings";
 
 export default function MyBookingsPage() {
-  const { data: bookings, isLoading } = useGetMyBookingsQuery({});
+  const { data: bookings, isLoading } = useGetUserBookingsQuery({});
 
   if (isLoading) {
     return (
@@ -39,23 +39,26 @@ export default function MyBookingsPage() {
               <TableRow className="[&>*]:whitespace-nowrap sticky top-0 bg-background after:content-[''] after:inset-x-0 after:h-px after:bg-border after:absolute after:bottom-0 z-10">
                 <TableHead className="pl-6">Title</TableHead>
                 <TableHead>Location</TableHead>
-                <TableHead>Rent</TableHead>
+                <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              {bookings?.data?.map((booking: TBookings) => (
+              {bookings?.data?.map((booking: TBooking) => (
                 <TableRow
                   key={booking.id}
                   className="odd:bg-muted/50 [&>*]:whitespace-nowrap"
                 >
                   <TableCell className="font-medium pl-6">
-                    {booking?.flat?.title}
+                    {booking?.property?.title}
                   </TableCell>
-                  <TableCell>{booking?.flat?.location}</TableCell>
-                  <TableCell>{booking?.flat?.rent}</TableCell>
+                  <TableCell>
+                    {booking?.property?.city}, {booking?.property?.state},
+                    {booking?.property?.country}
+                  </TableCell>
+                  <TableCell>{booking?.totalAmount}</TableCell>
                   <TableCell>
                     <Badge
                       variant={
