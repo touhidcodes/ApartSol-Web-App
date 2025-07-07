@@ -33,9 +33,11 @@ import {
   Heart,
   TrendingUp,
   TrendingDown,
+  Loader2,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  useGetUserDashboardStatsQuery,
   useGetUserMonthlyRevenueBreakdownQuery,
   useGetUserMonthlySalesDataQuery,
   useGetUserPropertyBookingTrendsQuery,
@@ -44,6 +46,7 @@ import {
   useGetUserRecentPropertiesQuery,
 } from "@/redux/api/dashboardApi";
 import { COLORS } from "@/data/dashboard";
+import { TDashboardUserStats } from "@/types/Dashboard";
 
 interface RevenueData {
   type: string;
@@ -131,6 +134,9 @@ const getStatusColor = (status: string): string => {
 };
 
 const UserDashboard = () => {
+  const { data: userStatsResponse } = useGetUserDashboardStatsQuery({});
+  const userStats: TDashboardUserStats = userStatsResponse?.data ?? [];
+
   const { data: propTypesResponse } = useGetUserPropertyTypesDistributionQuery(
     {}
   );
@@ -160,40 +166,50 @@ const UserDashboard = () => {
     : Object.values(revBreakdownRaw || {});
   const totalRev = revenueArray.reduce((sum, r) => sum + r.revenue, 0);
 
-  const userCards: StatCardProps[] = [
+  const userCards = [
     {
       title: "My Properties",
-      value: 12,
+      value: userStats.myProperties ?? 0,
       change: "+3",
-      changeType: "increase",
+      changeType: "increase" as const,
       icon: Home,
       color: "text-blue-500",
     },
     {
-      title: "Total Bookings",
-      value: 34,
+      title: "My Bookings",
+      value: userStats.myBookings ?? 0,
       change: "+5",
-      changeType: "increase",
+      changeType: "increase" as const,
       icon: Calendar,
       color: "text-green-500",
     },
     {
       title: "Property Value",
-      value: "$1.2M",
+      value: userStats.totalPropertyValue ?? 0,
       change: "+10%",
-      changeType: "increase",
+      changeType: "increase" as const,
       icon: Eye,
       color: "text-purple-500",
     },
     {
       title: "Completed",
-      value: 20,
+      value: userStats.completedBookings ?? 0,
       change: "+2",
-      changeType: "increase",
+      changeType: "increase" as const,
       icon: Heart,
       color: "text-red-500",
     },
   ];
+
+  const isLoading = !userStats;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <Loader2 className="w-10 h-10 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 space-y-6">

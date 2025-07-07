@@ -48,16 +48,13 @@ const sortOptions = [
   { label: "Title Z-A", value: "title-za" },
 ];
 
-const perPageOptions = [5, 10, 20, 50];
-
 const MyPropertyListings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filters, setFilters] = useState<FieldValues>(defaultValues);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState<TProperty | null>(
-    null
-  );
+  const [selectedUpdateProperty, setSelectedUpdateProperty] =
+    useState<TProperty | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedDeleteProperty, setSelectedDeleteProperty] =
     useState<TProperty | null>(null);
@@ -76,8 +73,8 @@ const MyPropertyListings = () => {
   }, [currentPage, itemsPerPage, filters]);
 
   const { data, isLoading } = useGetUserPropertiesQuery(queryParams);
-  const [updateFlat] = useUpdatePropertyMutation();
-  const [deleteFlat] = useDeletePropertyMutation();
+  const [updateProperty] = useUpdatePropertyMutation();
+  const [deleteProperty] = useDeletePropertyMutation();
 
   const properties = data?.data || [];
   const totalItems = data?.meta?.total ?? 0;
@@ -122,8 +119,8 @@ const MyPropertyListings = () => {
         advanceAmount: Number(updatedProperty.advanceAmount),
       };
 
-      const res = await updateFlat({ propertyId, propertyData });
-      if (res?.data?.id) toast.success("Flat updated successfully!");
+      const res = await updateProperty({ propertyId, propertyData });
+      if (res?.data?.id) toast.success("Property updated successfully!");
     } catch (err) {
       console.error(err);
     }
@@ -131,28 +128,21 @@ const MyPropertyListings = () => {
 
   const handleDelete = async (propertyId: string) => {
     try {
-      const res = await deleteFlat(propertyId);
-      if (res?.data?.id) toast.success("Flat deleted successfully!");
+      const res = await deleteProperty(propertyId);
+      if (res?.data?.id) toast.success("Property deleted successfully!");
     } catch (err) {
       console.error("Failed to delete property", err);
     }
   };
 
-  const getEmptyStateDescription = () => {
-    if (filters.searchTerm || filters.availability !== "all") {
-      return "No properties match your search criteria. Try adjusting your filters.";
-    }
-    return "You haven't posted any listings yet.";
-  };
-
   const handleUpdateClick = (property: TProperty) => {
-    setSelectedProperty(property);
+    setSelectedUpdateProperty(property);
     setIsUpdateModalOpen(true);
   };
 
   const handleCloseUpdateModal = () => {
     setIsUpdateModalOpen(false);
-    setSelectedProperty(null);
+    setSelectedUpdateProperty(null);
   };
 
   const handleDeleteClick = (property: TProperty) => {
@@ -245,19 +235,15 @@ const MyPropertyListings = () => {
         properties={properties}
         isLoading={isLoading}
         paginationData={paginationData}
-        perPageOptions={perPageOptions}
         onPageChange={handlePageChange}
         onItemsPerPageChange={handleItemsPerPageChange}
         onUpdateClick={handleUpdateClick}
         onDeleteClick={handleDeleteClick}
-        emptyStateTitle="No Listings Found"
-        emptyStateDescription={getEmptyStateDescription()}
-        showActions={true}
       />
       {/* Modals */}
       <UpdatePropertyModal
         open={isUpdateModalOpen}
-        property={selectedProperty}
+        property={selectedUpdateProperty}
         onClose={handleCloseUpdateModal}
         onSave={handleUpdate}
       />

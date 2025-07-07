@@ -42,6 +42,7 @@ import {
   Search,
   Bell,
   Settings,
+  Loader2,
 } from "lucide-react";
 import {
   useGetUserRegistrationTrendsQuery,
@@ -123,8 +124,8 @@ const AdminDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
+      <div className="flex justify-center items-center h-[300px]">
+        <Loader2 className="w-10 h-10 animate-spin" />
       </div>
     );
   }
@@ -154,6 +155,15 @@ const AdminDashboard = () => {
     }
   };
 
+  interface StatCardProps {
+    title: string;
+    value: string | number;
+    change: string;
+    changeType: "increase" | "decrease";
+    icon: React.ElementType;
+    color: string;
+  }
+
   const StatCard = ({
     title,
     value,
@@ -161,7 +171,7 @@ const AdminDashboard = () => {
     changeType,
     icon: Icon,
     color,
-  }: any) => (
+  }: StatCardProps) => (
     <Card className="relative overflow-hidden">
       <CardHeader className="flex items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-gray-600">
@@ -194,33 +204,33 @@ const AdminDashboard = () => {
   const adminCards = [
     {
       title: "Total Properties",
-      value: adminStats?.totalProperties,
-      change: `${adminStats?.propertyGrowth}%`,
-      changeType: "increase",
+      value: adminStats?.totalProperties ?? 0,
+      change: `${adminStats?.propertyGrowth ?? 0}%`,
+      changeType: "increase" as const,
       icon: Home,
       color: "text-blue-500",
     },
     {
       title: "Total Revenue",
-      value: `$${(adminStats?.totalRevenue ?? 0).toLocaleString()}`,
-      change: `${adminStats?.revenueGrowth}%`,
-      changeType: "increase",
+      value: `$${(adminStats?.totalRevenue ?? 0).toLocaleString() ?? 0}`,
+      change: `${adminStats?.revenueGrowth ?? 0}%`,
+      changeType: "increase" as const,
       icon: DollarSign,
       color: "text-green-500",
     },
     {
       title: "Active Users",
-      value: adminStats?.totalUsers,
-      change: `${adminStats?.userGrowth}%`,
-      changeType: "increase",
+      value: adminStats?.totalUsers ?? 0,
+      change: `${adminStats?.userGrowth ?? 0}%`,
+      changeType: "increase" as const,
       icon: Users,
       color: "text-purple-500",
     },
     {
       title: "Monthly Growth",
-      value: `${adminStats?.propertyGrowth}%`,
-      change: `${adminStats?.propertyGrowth}%`,
-      changeType: "increase",
+      value: `${adminStats?.propertyGrowth ?? 0}%`,
+      change: `${adminStats?.propertyGrowth ?? 0}%`,
+      changeType: "increase" as const,
       icon: TrendingUp,
       color: "text-orange-500",
     },

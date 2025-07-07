@@ -1,12 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Box, Typography, Button, Stack } from "@mui/material";
-import PHInput from "@/components/Forms/PHInput";
-import PHForm from "@/components/Forms/PHForm";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import FormContainer from "@/components/Forms/FormContainer";
+import FormInput from "@/components/Forms/FormInput";
+import FormTextarea from "@/components/Forms/FormTextarea";
 import { TReview } from "@/types/Review";
-import PHDropdown from "@/components/Forms/PHDropdown";
-import { ratingOptions } from "@/constants/formOptions";
+import FormSelect from "@/components/Forms/FormSelect";
 
 interface TUpdateReviewModalProps {
   open: boolean;
@@ -21,75 +30,102 @@ const UpdateReviewModal = ({
   onClose,
   onSave,
 }: TUpdateReviewModalProps) => {
+  const [loading, setLoading] = useState(false);
   const [updatedReview, setUpdatedReview] = useState<TReview | null>(review);
 
-  // Set review data when the modal opens
   useEffect(() => {
     setUpdatedReview(review);
   }, [review]);
 
-  // Handle form submission to pass the updated review to the parent component
   const handleUpdateReview = async (values: FieldValues) => {
-    console.log(values);
-    if (review) {
+    if (!review) return;
+    try {
+      setLoading(true);
       onSave(values, review.id);
       toast.success("Review updated successfully!");
+      onClose();
+    } catch (error) {
+      toast.error("Failed to update review.");
+    } finally {
+      setLoading(false);
     }
-    onClose();
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <Stack
-        sx={{ alignItems: "center", justifyContent: "center", height: "100vh" }}
-      >
-        <Box
-          m={5}
-          sx={{
-            maxWidth: 600,
-            width: "100%",
-            boxShadow: 1,
-            borderRadius: 1,
-            p: 5,
-            textAlign: "center",
-            background: "#EBF0F4",
-            overflowY: "auto",
-          }}
-        >
-          <Typography variant="h6" mb={3}>
-            Update Review
-          </Typography>
-          <PHForm
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-xl w-full max-h-[90vh] overflow-hidden">
+        <DialogHeader>
+          <DialogTitle>Update Review</DialogTitle>
+        </DialogHeader>
+
+        <div className="p-1 overflow-y-auto max-h-[75vh] pr-2">
+          <FormContainer
             onSubmit={handleUpdateReview}
             defaultValues={{
-              rating: updatedReview?.rating || "",
+              name: updatedReview?.name || "",
+              email: updatedReview?.email || "",
               comment: updatedReview?.comment || "",
+              rating: updatedReview?.rating?.toString() || "",
             }}
           >
-            <Stack spacing={4} my={1} marginBottom={5}>
-              <PHDropdown
-                name="rating"
-                fullWidth={true}
-                options={ratingOptions}
+            <div className="grid grid-cols-1 gap-6">
+              <FormInput
+                label="Reviewer Name"
+                name="name"
+                placeholder="John Doe"
+                required
               />
-              <PHInput name="comment" type="text" fullWidth={true} />
-            </Stack>
-            <Stack
-              direction="row"
-              sx={{ alignItems: "center", justifyContent: "space-between" }}
-              spacing={5}
-            >
-              <Button fullWidth={true} type="submit">
-                Submit
-              </Button>
-              <Button fullWidth={true} onClick={onClose}>
+              <FormInput
+                label="Reviewer Email"
+                name="email"
+                placeholder="someone@example.com"
+                required
+              />
+              <FormSelect
+                label="Property Type"
+                name="propertyType"
+                placeholder="Select type"
+                options={[
+                  { label: "1", value: "1" },
+                  { label: "2", value: "2" },
+                  { label: "3", value: "3" },
+                  { label: "4", value: "4" },
+                  { label: "5", value: "5" },
+                ]}
+                required
+              />
+              <FormTextarea
+                label="Comment"
+                name="comment"
+                placeholder="Share your experience..."
+                required
+              />
+            </div>
+
+            <div className="flex justify-end gap-4 pt-6">
+              <Button
+                variant="outline"
+                type="button"
+                onClick={onClose}
+                className="rounded-full"
+              >
                 Cancel
               </Button>
-            </Stack>
-          </PHForm>
-        </Box>
-      </Stack>
-    </Modal>
+              <Button
+                type="submit"
+                className="rounded-full bg-[#1C2D37] text-white hover:bg-[#2a3f4a]"
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  "Update Review"
+                )}
+              </Button>
+            </div>
+          </FormContainer>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

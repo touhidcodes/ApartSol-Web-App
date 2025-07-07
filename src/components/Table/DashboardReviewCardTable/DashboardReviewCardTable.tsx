@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -8,14 +9,15 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Pencil, Trash, Star, MoreHorizontal, Home } from "lucide-react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Pagination,
   PaginationContent,
@@ -30,44 +32,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Pencil, Trash, Home } from "lucide-react";
-import { TProperty } from "@/types/Property";
-import DashboardTableSkeleton from "@/components/Skeleton/DashboardTableSkeleton/DashboardTableSkeleton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { TReview, TReviewWithUser } from "@/types/Review";
 import { TPaginationData } from "@/types";
+import DashboardTableSkeleton from "@/components/Skeleton/DashboardTableSkeleton/DashboardTableSkeleton";
+import { truncateText } from "@/lib/utils";
 
-interface PropertiesTableProps {
-  properties: TProperty[];
+interface ReviewCardTableProps {
+  reviews: TReviewWithUser[];
   isLoading: boolean;
+  onUpdateClick: (review: TReview) => void;
+  onDeleteClick: (review: TReviewWithUser) => void;
   paginationData: TPaginationData;
   onPageChange: (page: number) => void;
   onItemsPerPageChange: (itemsPerPage: number) => void;
-  onUpdateClick: (property: TProperty) => void;
-  onDeleteClick: (property: TProperty) => void;
 }
 
-const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
-  properties,
+const DashboardReviewCardTable = ({
+  reviews,
   isLoading,
   paginationData,
   onPageChange,
   onItemsPerPageChange,
   onUpdateClick,
   onDeleteClick,
-}) => {
+}: ReviewCardTableProps) => {
   const { currentPage, totalPages, totalItems, itemsPerPage, start, end } =
     paginationData;
 
   if (isLoading) {
     return <DashboardTableSkeleton />;
   }
-
   return (
     <div className="space-y-4">
-      {/* Results Info */}
+      {/* Header */}
       <div className="flex justify-between items-center">
         <p className="text-gray-600">
-          Showing {start} to {end} of {totalItems} properties
+          Showing {start} to {end} of {totalItems} reviews
         </p>
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Show:</span>
@@ -92,57 +99,29 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
 
       {/* Table */}
       <div className="grid w-full [&>div]:h-full [&>div]:border [&>div]:rounded">
-        {properties?.length ? (
+        {reviews.length ? (
           <Table>
             <TableHeader>
               <TableRow className="[&>*]:whitespace-nowrap sticky top-0 bg-background after:content-[''] after:inset-x-0 after:h-px after:bg-border after:absolute after:bottom-0 z-10">
-                <TableHead className="pl-6">Title</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead className="text-center">Rent</TableHead>
-                <TableHead className="text-center">Availability</TableHead>
-                <TableHead className="text-center">Action</TableHead>
+                <TableHead className="pl-6">Property Name</TableHead>
+                <TableHead className="text-center">Rating</TableHead>
+                <TableHead className="text-center">Comment</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
-
             <TableBody>
-              {properties?.map((property: TProperty) => (
+              {reviews.map((review) => (
                 <TableRow
-                  key={property.id}
+                  key={review.id}
                   className="odd:bg-muted/50 [&>*]:whitespace-nowrap"
                 >
                   <TableCell className="pl-6">
-                    <div className="font-medium">{property.title}</div>
+                    {review?.property?.title || "N/A"}
                   </TableCell>
-
-                  <TableCell>
-                    <div>
-                      <span>{property?.city || "N/A"},</span>
-                      <span> {property?.state || "N/A"},</span>
-                      <span> {property?.country || "N/A"}</span>
-                    </div>
+                  <TableCell className="text-center">{review.rating}</TableCell>
+                  <TableCell className="text-center max-w-[250px] truncate">
+                    {truncateText(review.comment, 50)}
                   </TableCell>
-
-                  <TableCell>
-                    <div className="text-center">$ {property.price}</div>
-                  </TableCell>
-
-                  <TableCell>
-                    <div className="text-center">
-                      <Badge
-                        variant={
-                          property.availability ? "default" : "destructive"
-                        }
-                        className={
-                          property.availability
-                            ? "bg-green-500 hover:bg-green-600 text-white"
-                            : ""
-                        }
-                      >
-                        {property.availability ? "Yes" : "No"}
-                      </Badge>
-                    </div>
-                  </TableCell>
-
                   <TableCell className="text-center">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -154,21 +133,20 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
                           <MoreHorizontal className="w-5 h-5" />
                         </Button>
                       </DropdownMenuTrigger>
-
                       <DropdownMenuContent
                         align="end"
                         className="w-44 bg-background border border-border rounded-md shadow-xl animate-in fade-in-0 zoom-in-95"
                       >
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => onUpdateClick(property)}
+                          onClick={() => onUpdateClick(review)}
                           className="hover:bg-indigo-600 hover:text-white transition-colors px-3 py-2 cursor-pointer text-sm flex items-center gap-2"
                         >
                           <Pencil className="w-4 h-4" />
                           Update
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onDeleteClick(property)}
+                          onClick={() => onDeleteClick(review)}
                           className="hover:bg-red-600 hover:text-white transition-colors px-3 py-2 cursor-pointer text-sm flex items-center gap-2"
                         >
                           <Trash className="w-4 h-4" />
@@ -187,26 +165,54 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
               <Home className="w-10 h-10 text-muted-foreground" />
             </div>
             <h3 className="text-lg font-semibold text-muted-foreground">
-              No Listings Found
+              No Reviews Found
             </h3>
             <p className="text-sm text-muted-foreground mt-1">
-              You haven't posted any listings yet.
+              You haven't reviewed any listings yet.
             </p>
           </div>
         )}
       </div>
+
+      {/* Update Modal
+      <UpdateReviewModal
+        open={isUpdateModalOpen}
+        review={selectedReview}
+        onClose={() => setUpdateModalOpen(false)}
+        onSave={handleSaveUpdatedReview}
+      />
+
+      {/* Delete Dialog */}
+      {/* <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this review? This action cannot be
+              undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={cancelDelete}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog> */}
 
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center">
           <Pagination>
             <PaginationContent>
-              {/* Previous Button */}
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() => {
-                    if (currentPage > 1) onPageChange(currentPage - 1);
-                  }}
+                  onClick={() =>
+                    currentPage > 1 && onPageChange(currentPage - 1)
+                  }
                   className={`transition-all duration-200 ${
                     currentPage === 1
                       ? "pointer-events-none opacity-50 cursor-not-allowed"
@@ -214,20 +220,15 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
                   }`}
                 />
               </PaginationItem>
-
-              {/* Page Indicator */}
               <PaginationItem className="px-4 flex items-center text-sm text-gray-700">
-                Page
-                <span className="mx-1 font-semibold"> {currentPage}</span>
-                of <span className="ml-1 font-semibold"> {totalPages}</span>
+                Page <span className="mx-1 font-semibold">{currentPage}</span>{" "}
+                of <span className="ml-1 font-semibold">{totalPages}</span>
               </PaginationItem>
-
-              {/* Next Button */}
               <PaginationItem>
                 <PaginationNext
-                  onClick={() => {
-                    if (currentPage < totalPages) onPageChange(currentPage + 1);
-                  }}
+                  onClick={() =>
+                    currentPage < totalPages && onPageChange(currentPage + 1)
+                  }
                   className={`transition-all duration-200 ${
                     currentPage === totalPages
                       ? "pointer-events-none opacity-50 cursor-not-allowed"
@@ -243,4 +244,4 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
   );
 };
 
-export default DashboardPropertiesTable;
+export default DashboardReviewCardTable;

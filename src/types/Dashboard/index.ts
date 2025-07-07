@@ -59,3 +59,10 @@ export interface TDashboardAdminStats {
   revenueGrowth: number;
   propertyGrowth: number;
 }
+
+export interface TDashboardUserStats {
+  myProperties: number;
+  myBookings: number;
+  totalPropertyValue: number;
+  completedBookings: number;
+}

@@ -11,33 +11,33 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Loader2, Trash2 } from "lucide-react";
-import { TProperty } from "@/types/Property";
+import { TReviewWithUser } from "@/types/Review";
 
-interface DeletePropertyModalProps {
+interface DeleteReviewModalProps {
   open: boolean;
-  property: TProperty | null;
+  review: TReviewWithUser | null;
   onClose: () => void;
-  onConfirm: (propertyId: string) => void;
+  onConfirm: (reviewId: string) => void;
 }
 
-const DeletePropertyModal = ({
+const DeleteReviewModal = ({
   open,
-  property,
+  review,
   onClose,
   onConfirm,
-}: DeletePropertyModalProps) => {
+}: DeleteReviewModalProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleDelete = () => {
     try {
       setLoading(true);
-      if (property?.id) {
-        onConfirm(property.id);
+      if (review?.id) {
+        onConfirm(review.id);
         onClose();
         setLoading(false);
       }
     } catch (error) {
-      toast.error("Failed to update property.");
+      toast.error("Failed to delete review.");
       setLoading(false);
     } finally {
       setLoading(false);
@@ -50,26 +50,21 @@ const DeletePropertyModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-red-600">
             <Trash2 className="w-5 h-5" />
-            Delete Property
+            Delete Review
           </DialogTitle>
         </DialogHeader>
 
         <div className="overflow-y-auto max-h-[300px] space-y-2 text-sm text-gray-700">
-          <p>Are you sure you want to delete this property?</p>
+          <p>Are you sure you want to delete this review?</p>
           <ul className="list-disc pl-5 space-y-1 text-gray-600">
             <li>
-              <strong>Title:</strong> {property?.title}
+              <strong>Property:</strong> {review?.property?.title}
             </li>
             <li>
-              <strong>Location:</strong> {property?.city}, {property?.state},{" "}
-              {property?.country}
+              <strong>Rating:</strong> {review?.rating} stars
             </li>
             <li>
-              <strong>Rent:</strong> ${property?.price}
-            </li>
-            <li>
-              <strong>Status:</strong>{" "}
-              {property?.availability ? "Available" : "Not Available"}
+              <strong>Comment:</strong> {review?.comment}
             </li>
           </ul>
           <p className="text-red-500 font-medium">
@@ -97,4 +92,4 @@ const DeletePropertyModal = ({
   );
 };
 
-export default DeletePropertyModal;
+export default DeleteReviewModal;

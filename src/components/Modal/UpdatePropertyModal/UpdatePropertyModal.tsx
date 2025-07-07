@@ -42,7 +42,7 @@ const UpdatePropertyModal = ({
     setUpdatedProperty(property);
   }, [property]);
 
-  const handleUpdatePost = async (values: FieldValues) => {
+  const handleUpdateProperty = async (values: FieldValues) => {
     if (!property) return;
     try {
       setLoading(true);
@@ -75,7 +75,7 @@ const UpdatePropertyModal = ({
         {/* Scrollable form area */}
         <div className="p-1 overflow-y-auto max-h-[75vh] pr-2">
           <FormContainer
-            onSubmit={handleUpdatePost}
+            onSubmit={handleUpdateProperty}
             defaultValues={{
               title: updatedProperty?.title || "",
               images: updatedProperty?.images || [],
@@ -93,7 +93,7 @@ const UpdatePropertyModal = ({
               country: updatedProperty?.country || "",
               description: updatedProperty?.description || "",
               amenities: updatedProperty?.amenities || [],
-              rent: updatedProperty?.rent || "",
+              price: updatedProperty?.price || "",
               advanceAmount: updatedProperty?.advanceAmount || "",
             }}
           >

@@ -1,21 +1,59 @@
 "use client";
 
-import { Container, Typography } from "@mui/material";
+import {
+  useGetAllReviewsQuery,
+  useUpdateReviewMutation,
+  useDeleteReviewMutation,
+  useGetUsersReviewsQuery,
+} from "@/redux/api/reviewApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import Loading from "@/components/Custom/Loading/Loading";
-import {
-  useDeleteReviewMutation,
-  useGetUsersReviewsQuery,
-  useUpdateReviewMutation,
-} from "@/redux/api/reviewApi";
-import ReviewCardTable from "@/components/Card/ReviewCardTable/ReviewCardTable";
-import { Star } from "lucide-react";
+import DashboardReviewCardTable from "@/components/Table/DashboardReviewCardTable/DashboardReviewCardTable";
+import { useMemo, useState } from "react";
+import { TReview, TReviewWithUser } from "@/types/Review";
+import UpdateReviewModal from "@/components/Modal/UpdateReviewModal/UpdateReviewModal";
+import DeleteReviewModal from "@/components/Modal/DeleteDeviewModal/DeleteReviewModal";
 
-const MyReviewsPage = () => {
-  const { data: reviews, isLoading } = useGetUsersReviewsQuery({});
+const AllReviewsPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedUpdateReview, setSelectedUpdateReview] =
+    useState<TReview | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedDeleteReview, setSelectedDeleteReview] =
+    useState<TReviewWithUser | null>(null);
+
+  const queryParams = useMemo(() => {
+    const params = new URLSearchParams();
+    params.set("page", currentPage.toString());
+    params.set("limit", itemsPerPage.toString());
+
+    return params.toString();
+  }, [currentPage, itemsPerPage]);
+
+  const { data, isLoading } = useGetUsersReviewsQuery(queryParams);
   const [updateReview] = useUpdateReviewMutation();
   const [deleteReview] = useDeleteReviewMutation();
+
+  const reviews = data?.data || [];
+  const totalItems = data?.meta?.total ?? 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const start = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const end = Math.min(currentPage * itemsPerPage, totalItems);
+
+  const paginationData = {
+    currentPage,
+    totalPages,
+    totalItems,
+    itemsPerPage,
+    start,
+    end,
+  };
+
+  const handlePageChange = (page: number) => setCurrentPage(page);
+  const handleItemsPerPageChange = (value: number) => setItemsPerPage(value);
 
   const handleUpdate = async (updatedReview: FieldValues, reviewId: string) => {
     try {
@@ -30,7 +68,7 @@ const MyReviewsPage = () => {
         toast.success("Review updated successfully!");
       }
     } catch (err) {
-      console.log(err);
+      console.error("Failed to update review", err);
     }
   };
 
@@ -45,35 +83,56 @@ const MyReviewsPage = () => {
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const handleUpdateClick = (review: TReview) => {
+    setSelectedUpdateReview(review);
+    setIsUpdateModalOpen(true);
+  };
+
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedUpdateReview(null);
+  };
+
+  const handleDeleteClick = (review: TReviewWithUser) => {
+    setSelectedDeleteReview(review);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedDeleteReview(null);
+  };
 
   return (
-    <Container sx={{ paddingBottom: "50px" }}>
-      <div>
-        <div className="text-center py-10 bg-slate-100 rounded-lg shadow-sm">
-          <div className="flex justify-center mb-2">
-            <Star className="w-10 h-10 text-muted-foreground" />
-          </div>
-          <h3 className="text-lg font-semibold text-muted-foreground">
-            No Bookings Yet
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            You haven’t booked any property yet.
-          </p>
-        </div>
+    <div className="space-y-6 mt-2">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">My Reviews</h2>
+        <div className="text-sm text-gray-600">Total Reviews: {totalItems}</div>
       </div>
-      <Typography variant="h4" component="h1" gutterBottom my={3}>
-        My Posts
-      </Typography>
-      <ReviewCardTable
-        reviews={reviews?.data}
-        handleUpdate={handleUpdate}
-        handleDelete={handleDelete}
+      <DashboardReviewCardTable
+        reviews={reviews}
+        isLoading={isLoading}
+        paginationData={paginationData}
+        onPageChange={handlePageChange}
+        onItemsPerPageChange={handleItemsPerPageChange}
+        onUpdateClick={handleUpdateClick}
+        onDeleteClick={handleDeleteClick}
       />
-    </Container>
+      <UpdateReviewModal
+        open={isUpdateModalOpen}
+        review={selectedUpdateReview}
+        onClose={handleCloseUpdateModal}
+        onSave={handleUpdate}
+      />
+      <DeleteReviewModal
+        open={isDeleteModalOpen}
+        review={selectedDeleteReview}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleDelete}
+      />
+    </div>
   );
 };
 
-export default MyReviewsPage;
+export default AllReviewsPage;

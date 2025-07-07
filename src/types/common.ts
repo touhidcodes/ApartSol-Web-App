@@ -40,3 +40,12 @@ export type TUserRegister = {
   password: string;
   role: string;
 };
+
+export interface TPaginationData {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+  start: number;
+  end: number;
+}

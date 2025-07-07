@@ -6,10 +6,8 @@ export interface TReview {
   email: string;
   rating: string; // consider number if you convert it
   comment: string;
-  isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
-  userId: string;
   propertyId?: string | null;
 }
 
