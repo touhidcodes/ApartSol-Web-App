@@ -42,7 +42,7 @@ const PaymentFailedPage: React.FC = () => {
           <div className="space-y-2">
             <h1 className="text-2xl font-bold text-gray-900">Payment Failed</h1>
             <p className="text-gray-600">
-              We couldn't process your payment. Please check your payment
+              We couldn&apos;t process your payment. Please check your payment
               details and try again.
             </p>
           </div>

@@ -28,8 +28,8 @@ import setAccessToken from "./setAccessToken";
 
 export const userRegister = async (data: FieldValues) => {
   // TODO: change URL before build
-  // const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_URL}/register`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/register`, {
+    // const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_URL}/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

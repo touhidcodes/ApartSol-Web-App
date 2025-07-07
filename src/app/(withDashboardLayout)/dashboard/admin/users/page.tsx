@@ -8,6 +8,7 @@ import {
 } from "@/redux/api/userApi";
 import Loading from "@/components/Custom/Loading/Loading";
 import DashboardUserCard from "@/components/Card/DashboardUserCard/DashboardUserCard";
+import { Loader2 } from "lucide-react";
 
 const AllUserPage = () => {
   const { data: users, isLoading } = useGetAllUserQuery({});
@@ -26,7 +27,11 @@ const AllUserPage = () => {
   };
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <Loader2 className="w-10 h-10 animate-spin" />
+      </div>
+    );
   }
 
   return (

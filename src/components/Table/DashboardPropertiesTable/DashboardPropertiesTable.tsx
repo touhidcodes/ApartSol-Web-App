@@ -190,7 +190,7 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
               No Listings Found
             </h3>
             <p className="text-sm text-muted-foreground mt-1">
-              You haven't posted any listings yet.
+              You haven&apos;t posted any listings yet.
             </p>
           </div>
         )}

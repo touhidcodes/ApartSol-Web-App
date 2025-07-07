@@ -121,7 +121,7 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
             },
           }}
         >
-          <SideBar />
+          <SideBar isCollapsed={false} onClose={handleDrawerClose} />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -134,7 +134,7 @@ const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
           }}
           open
         >
-          <SideBar />
+          <SideBar isCollapsed={false} onClose={handleDrawerClose} />
         </Drawer>
       </Box>
       <Box

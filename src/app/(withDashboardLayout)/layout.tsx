@@ -28,8 +28,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const user = useUserInfo();
 
-  console.log(user);
-
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   return (

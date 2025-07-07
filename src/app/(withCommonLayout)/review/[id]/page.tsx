@@ -178,7 +178,7 @@ const ReviewPage = () => {
                       sx={{ color: "text.secondary", mt: 1 }}
                     >
                       <AttachMoneyIcon sx={{ mr: 0.5 }} />
-                      <Typography>{flat?.rent} USD</Typography>
+                      <Typography>{flat?.price} USD</Typography>
                     </Stack>
                   </CardContent>
                 </Grid>

@@ -168,7 +168,7 @@ const DashboardReviewCardTable = ({
               No Reviews Found
             </h3>
             <p className="text-sm text-muted-foreground mt-1">
-              You haven't reviewed any listings yet.
+              You haven&apos;t reviewed any listings yet.
             </p>
           </div>
         )}

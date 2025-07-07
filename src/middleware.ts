@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtDecode } from "jwt-decode";
 
-const AuthRoutes = ["/login", "/register"];
+const AuthRoutes = ["/auth"];
 const commonPrivateRoutes = [
   "/dashboard/profile",
   "/dashboard/change-password",
@@ -81,8 +81,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/login",
-    "/register",
+    "/auth",
     "/properties/add",
     "/dashboard/:path*",
     "/booking/:path*",
