@@ -1,12 +1,12 @@
-# Flat Mate Finder Application
+# APARTSOL Living Solutions
 
-Flat Mate Finder is a platform designed to simplify the process of finding flatmates and shared accommodations. Whether you're a student looking for a flat near campus or a young professional seeking roommates in a new city, Flat Mate Finder makes it easy to connect with compatible individuals and find the perfect living arrangement.
+ApartSol is a modern platform designed to simplify the process of buying, renting, and selling properties making it easy for individuals to discover, list, and manage real estate with ease and confidence..
 
 ## Features
 
 - **User Authentication**: Secure user authentication system with login/register functionality.
-- **Flat Listings**: Browse through a wide range of flat listings with detailed information about location, price, and amenities.
-- **Search and Filter**: Easily search for flats based on location, price range, number of bedrooms, and more.
+- **Properties Listings**: Browse through a wide range of flat listings with detailed information about location, price, and amenities.
+- **Search and Filter**: Easily search for properties based on location, price range, number of bedrooms, and more.
 - **Profile Management**: Manage your profile information and preferences to find the best match.
 - **Admin Dashboard**: Admin dashboard for managing user accounts, flat listings, and reported content.
 
