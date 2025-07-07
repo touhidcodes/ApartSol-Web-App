@@ -34,6 +34,7 @@ import {
   Award,
   TrendingUp,
   Clock,
+  Loader2,
 } from "lucide-react";
 
 // Import your custom components and Redux hooks
@@ -80,7 +81,11 @@ const ProfileDashboard: React.FC = () => {
   };
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <Loader2 className="w-10 h-10 animate-spin" />
+      </div>
+    );
   }
 
   if (!profileData) {

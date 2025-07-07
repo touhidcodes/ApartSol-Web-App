@@ -29,6 +29,7 @@ export interface TUser {
   username: string;
   email: string;
   status: UserStatus;
+  role: string;
   createdAt: string;
   updatedAt: string;
 }

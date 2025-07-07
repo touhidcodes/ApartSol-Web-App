@@ -51,6 +51,7 @@ import { RenderStars } from "@/components/Custom/RenderStars/RenderStars";
 import { FeaturesAmenities } from "@/components/Custom/FeatureAmenities/FeatureAmenities";
 import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
 import Link from "next/link";
+import DynamicBreadcrumb from "@/components/Shared/Breadcrumb/DynamicBreadcrumb";
 
 type PropTypes = {
   params: {
@@ -124,22 +125,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
               {property.title}
             </h1>
             <div>
-              <Breadcrumb className="flex items-center justify-center space-x-2 text-sm lg:text-md text-white list-none">
-                <BreadcrumbLink
-                  href="/"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  Home
-                </BreadcrumbLink>
-                <BreadcrumbSeparator />
-                <BreadcrumbLink
-                  href="#"
-                  aria-current="page"
-                  className="text-white hover:text-white focus:text-white active:text-white"
-                >
-                  {property.title}
-                </BreadcrumbLink>
-              </Breadcrumb>
+              <DynamicBreadcrumb />
             </div>
           </div>
         </div>
@@ -513,7 +499,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                     className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                   <Button
-                    disabled={!userInfo}
+                    disabled={!userInfo || userInfo.role === "ADMIN"}
                     className="w-full bg-white text-slate-800 hover:bg-slate-100 font-semibold"
                   >
                     Submit Now
@@ -575,7 +561,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                     className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                   <Button
-                    disabled={!userInfo}
+                    disabled={!userInfo || userInfo.role === "ADMIN"}
                     className="w-full bg-white text-slate-800 hover:bg-slate-100 font-semibold"
                   >
                     Submit Now

@@ -1,14 +1,13 @@
 "use client";
 
-import { Box, Container, Typography } from "@mui/material";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import UserCardTable from "@/components/Card/UserCardTable/UserCardTable";
 import {
   useGetAllUserQuery,
   useUpdateUserStatusMutation,
 } from "@/redux/api/userApi";
 import Loading from "@/components/Custom/Loading/Loading";
+import DashboardUserCard from "@/components/Card/DashboardUserCard/DashboardUserCard";
 
 const AllUserPage = () => {
   const { data: users, isLoading } = useGetAllUserQuery({});
@@ -31,26 +30,13 @@ const AllUserPage = () => {
   }
 
   return (
-    <Container
-      sx={{
-        paddingBottom: "50px",
-        minHeight: "100vh",
-        paddingX: { xs: "16px", sm: "24px", md: "32px" },
-      }}
-    >
-      <Typography
-        variant="h4"
-        component="h1"
-        gutterBottom
-        my={3}
-        textAlign={{ xs: "center", sm: "left" }}
-      >
-        All Users
-      </Typography>
-      <Box>
-        <UserCardTable users={users?.data} handleUpdate={handleUpdate} />
-      </Box>
-    </Container>
+    <div className="space-y-6 mt-2">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">Users</h2>
+      </div>
+      <DashboardUserCard users={users?.data} handleUpdate={handleUpdate} />
+    </div>
   );
 };
 

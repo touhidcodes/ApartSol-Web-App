@@ -67,7 +67,7 @@ import {
 } from "@/types/Dashboard";
 import { COLORS } from "@/data/dashboard";
 
-const AdminDashboard = () => {
+const AdminDashboardOverviewPage = () => {
   const { data: regTrendsResponse } = useGetUserRegistrationTrendsQuery({}) as {
     data: { data: TDashboardRegistrationTrend[] } | undefined;
   };
@@ -611,4 +611,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminDashboardOverviewPage;

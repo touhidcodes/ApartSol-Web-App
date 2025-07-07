@@ -136,15 +136,14 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
         {
           section: "Manage",
           items: [
-            { label: "Users", href: "/dashboard/all-user", icon: Users },
             {
-              label: "Properties",
+              label: "Property Listings",
               href: "/dashboard/admin/listings",
               icon: HomeIcon,
             },
             {
               label: "Bookings",
-              href: "/dashboard/admin.bookings",
+              href: "/dashboard/admin/bookings",
               icon: ShoppingCart,
             },
             {
@@ -152,6 +151,7 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
               href: "/dashboard/admin/reviews",
               icon: Star,
             },
+            { label: "Users", href: "/dashboard/admin/users", icon: Users },
           ],
         },
         ...defaultItems,
@@ -167,28 +167,23 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
               href: "/dashboard/user/overview",
               icon: LayoutDashboard,
             },
-            {
-              label: "Profile",
-              href: "/dashboard/user/profile",
-              icon: PersonStanding,
-            },
           ],
         },
         {
           section: "My Activity",
           items: [
             {
-              label: "My Listings",
+              label: "Property Listings",
               href: "/dashboard/user/listings",
               icon: HomeIcon,
             },
             {
-              label: "My Bookings",
+              label: "Bookings",
               href: "/dashboard/user/bookings",
               icon: ShoppingCart,
             },
             {
-              label: "My Reviews",
+              label: "Reviews",
               href: "/dashboard/user/reviews",
               icon: Star,
             },

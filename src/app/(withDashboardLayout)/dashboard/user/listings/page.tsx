@@ -48,7 +48,7 @@ const sortOptions = [
   { label: "Title Z-A", value: "title-za" },
 ];
 
-const MyPropertyListings = () => {
+const UserPropertyListingsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filters, setFilters] = useState<FieldValues>(defaultValues);
@@ -257,4 +257,4 @@ const MyPropertyListings = () => {
   );
 };
 
-export default MyPropertyListings;
+export default UserPropertyListingsPage;

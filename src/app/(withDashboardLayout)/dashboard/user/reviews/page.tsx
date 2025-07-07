@@ -15,7 +15,7 @@ import { TReview, TReviewWithUser } from "@/types/Review";
 import UpdateReviewModal from "@/components/Modal/UpdateReviewModal/UpdateReviewModal";
 import DeleteReviewModal from "@/components/Modal/DeleteDeviewModal/DeleteReviewModal";
 
-const AllReviewsPage = () => {
+const UserReviewsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -137,4 +137,4 @@ const AllReviewsPage = () => {
   );
 };
 
-export default AllReviewsPage;
+export default UserReviewsPage;

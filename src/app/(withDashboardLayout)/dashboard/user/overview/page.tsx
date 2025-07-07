@@ -133,7 +133,7 @@ const getStatusColor = (status: string): string => {
   }
 };
 
-const UserDashboard = () => {
+const UserDashboardOverviewPage = () => {
   const { data: userStatsResponse } = useGetUserDashboardStatsQuery({});
   const userStats: TDashboardUserStats = userStatsResponse?.data ?? [];
 
@@ -416,4 +416,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default UserDashboardOverviewPage;

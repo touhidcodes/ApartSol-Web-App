@@ -7,21 +7,21 @@ import {
 } from "@/redux/api/reviewApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
-import Loading from "@/components/Custom/Loading/Loading";
 import DashboardReviewCardTable from "@/components/Table/DashboardReviewCardTable/DashboardReviewCardTable";
 import { useMemo, useState } from "react";
-import { TReview } from "@/types/Review";
+import { TReview, TReviewWithUser } from "@/types/Review";
+import UpdateReviewModal from "@/components/Modal/UpdateReviewModal/UpdateReviewModal";
+import DeleteReviewModal from "@/components/Modal/DeleteDeviewModal/DeleteReviewModal";
 
-const AllReviewsPage = () => {
+const AdminReviewsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState<TReview | null>(
-    null
-  );
+  const [selectedUpdateReview, setSelectedUpdateReview] =
+    useState<TReview | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedDeleteReview, setSelectedDeleteReview] =
-    useState<TReview | null>(null);
+    useState<TReviewWithUser | null>(null);
 
   const queryParams = useMemo(() => {
     const params = new URLSearchParams();
@@ -31,7 +31,7 @@ const AllReviewsPage = () => {
     return params.toString();
   }, [currentPage, itemsPerPage]);
 
-  const { data, isLoading } = useGetAllReviewsQuery({});
+  const { data, isLoading } = useGetAllReviewsQuery(queryParams);
   const [updateReview] = useUpdateReviewMutation();
   const [deleteReview] = useDeleteReviewMutation();
 
@@ -81,20 +81,17 @@ const AllReviewsPage = () => {
     }
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
   const handleUpdateClick = (review: TReview) => {
-    setSelectedProperty(review);
+    setSelectedUpdateReview(review);
     setIsUpdateModalOpen(true);
   };
 
   const handleCloseUpdateModal = () => {
     setIsUpdateModalOpen(false);
-    setSelectedProperty(null);
+    setSelectedUpdateReview(null);
   };
 
-  const handleDeleteClick = (review: TReview) => {
+  const handleDeleteClick = (review: TReviewWithUser) => {
     setSelectedDeleteReview(review);
     setIsDeleteModalOpen(true);
   };
@@ -109,7 +106,9 @@ const AllReviewsPage = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">My Reviews</h2>
-        <div className="text-sm text-gray-600">Total Reviews: {totalItems}</div>
+        <div className="hidden md:block text-sm text-gray-600">
+          Total Reviews: {totalItems}
+        </div>
       </div>
       <DashboardReviewCardTable
         reviews={reviews}
@@ -120,8 +119,20 @@ const AllReviewsPage = () => {
         onUpdateClick={handleUpdateClick}
         onDeleteClick={handleDeleteClick}
       />
+      <UpdateReviewModal
+        open={isUpdateModalOpen}
+        review={selectedUpdateReview}
+        onClose={handleCloseUpdateModal}
+        onSave={handleUpdate}
+      />
+      <DeleteReviewModal
+        open={isDeleteModalOpen}
+        review={selectedDeleteReview}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };
 
-export default AllReviewsPage;
+export default AdminReviewsPage;

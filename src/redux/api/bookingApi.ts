@@ -5,7 +5,7 @@ export const bookingApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllBookings: build.query({
       query: () => ({
-        url: "/bookings",
+        url: "/bookings/all",
         method: "GET",
       }),
       providesTags: [tagTypes.booking],
