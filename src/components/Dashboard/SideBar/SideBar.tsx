@@ -46,7 +46,7 @@ export default function Sidebar({ isCollapsed, onClose }: SidebarProps) {
   return (
     <>
       {/* Overlay shown only on mobile when sidebar is open */}
-      {isCollapsed && (
+      {!isCollapsed && (
         <div
           className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={onClose}
@@ -57,9 +57,11 @@ export default function Sidebar({ isCollapsed, onClose }: SidebarProps) {
       <aside
         ref={sidebarRef}
         className={cn(
-          "z-50 bg-white h-full shadow-md flex flex-col transition-all duration-300 ease-in-out",
-          "fixed inset-y-0 left-0",
-          isCollapsed ? "w-20" : "w-64"
+          "z-50 bg-white h-full shadow-md flex flex-col transition-all duration-300 ease-in-out fixed inset-y-0 left-0",
+          {
+            "w-64": !isCollapsed, // Expanded sidebar for all sizes if not collapsed
+            "lg:w-20 hidden lg:flex": isCollapsed, // Only show narrow sidebar on large screens
+          }
         )}
       >
         {/* Top header */}

@@ -99,6 +99,16 @@ type SidebarGroup = {
 export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
   const defaultItems = [
     {
+      section: "Profile",
+      items: [
+        {
+          label: "Profile",
+          href: "/dashboard/profile",
+          icon: PersonStanding,
+        },
+      ],
+    },
+    {
       section: "Settings",
       items: [
         {
@@ -120,11 +130,6 @@ export const getSidebarLinks = (role: UserRole): SidebarGroup[] => {
               label: "Home",
               href: "/dashboard/admin/overview",
               icon: LayoutDashboard,
-            },
-            {
-              label: "Profile",
-              href: "/dashboard/admin/profile",
-              icon: PersonStanding,
             },
           ],
         },

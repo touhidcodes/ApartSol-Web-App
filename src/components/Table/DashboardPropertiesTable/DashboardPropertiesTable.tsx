@@ -66,7 +66,7 @@ const DashboardPropertiesTable: React.FC<PropertiesTableProps> = ({
     <div className="space-y-4">
       {/* Results Info */}
       <div className="flex justify-between items-center">
-        <p className="text-gray-600">
+        <p className="hidden md:block text-gray-600">
           Showing {start} to {end} of {totalItems} properties
         </p>
         <div className="flex items-center gap-2">

@@ -212,9 +212,9 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 space-y-6">
+    <div className="min-h-screen w-full bg-gray-50 space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {userCards.map((card, i) => (
           <StatCard key={i} {...card} />
         ))}
@@ -379,8 +379,8 @@ const UserDashboard = () => {
               <CardTitle>My Bookings</CardTitle>
               <CardDescription>Your 10 most recent bookings</CardDescription>
             </CardHeader>
-            <CardContent>
-              <table className="w-full text-sm">
+            <CardContent className="overflow-x-auto">
+              <table className="w-full min-w-[600px] text-sm">
                 <thead>
                   <tr className="border-b">
                     <th className="text-left px-4 py-2">Property</th>

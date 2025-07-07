@@ -14,7 +14,6 @@ const commonPrivateRoutes = [
 const roleBasedPrivateRoutes = {
   USER: [
     /^\/dashboard\/user\/overview/,
-    /^\/dashboard\/user\/profile/,
     /^\/dashboard\/user\/bookings/,
     /^\/dashboard\/user\/listings/,
     /^\/dashboard\/user\/reviews/,

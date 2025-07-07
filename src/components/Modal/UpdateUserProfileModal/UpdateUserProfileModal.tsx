@@ -1,12 +1,23 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import { Modal, Box, Typography, Button, Stack } from "@mui/material";
-import PHInput from "@/components/Forms/PHInput";
-import PHFileUploader from "@/components/Forms/PHFileUploader";
-import PHForm from "@/components/Forms/PHForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import FormContainer from "@/components/Forms/FormContainer";
+import FormInput from "@/components/Forms/FormInput";
+import FormTextarea from "@/components/Forms/FormTextarea";
+import FormImageUploader from "@/components/Forms/FormImageUploader";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { uploadImageToImageBB } from "@/utils/uploadImageToImageBB";
 import { TUserWithProfile } from "@/types/User";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 interface TUpdateUserProfileModalProps {
   open: boolean;
@@ -14,6 +25,20 @@ interface TUpdateUserProfileModalProps {
   onClose: () => void;
   onSave: (updatedUser: FieldValues) => void;
 }
+
+// Optional: you can use zod for validation
+const updateProfileSchema = z.object({
+  username: z.string().min(1),
+  email: z.string().email(),
+  name: z.string(),
+  profession: z.string().optional(),
+  company: z.string().optional(),
+  phone: z.string().optional(),
+  street: z.string().optional(),
+  city: z.string().optional(),
+  country: z.string().optional(),
+  bio: z.string().optional(),
+});
 
 const UpdateUserProfileModal = ({
   open,
@@ -27,134 +52,62 @@ const UpdateUserProfileModal = ({
     userProfile
   );
 
-  //  set user data which going to be update
   useEffect(() => {
     setUpdatedUser(userProfile);
   }, [userProfile]);
 
-  //  pass the updated data to parent component for update
   const handleUpdateUser = async (values: FieldValues) => {
-    if (profileUrl && userProfile) {
-      onSave({ ...values, image: profileUrl });
-    } else if (userProfile) {
-      onSave(values);
-    }
+    onSave(values);
     onClose();
     setProfileUrl("");
   };
 
-  //  image upload
-  const handleImageUpload = async (files: File[]) => {
-    if (files.length > 0) {
-      setImageUploadLoading(true);
-      try {
-        const url = await uploadImageToImageBB(files[0]);
-        setProfileUrl(url);
-        toast.success("Image uploaded successfully!");
-      } catch (error) {
-        console.error("Error uploading thumbnail image:", error);
-        toast.error("Please upload image again");
-      } finally {
-        setImageUploadLoading(false);
-      }
-    }
-  };
-
   return (
-    <Modal open={open} onClose={onClose}>
-      <Stack
-        sx={{ alignItems: "center", justifyContent: "center", height: "100vh" }}
-      >
-        <Box
-          m={5}
-          sx={{
-            maxWidth: 600,
-            width: "100%",
-            height: "100%",
-            boxShadow: 1,
-            borderRadius: 1,
-            p: 5,
-            textAlign: "center",
-            background: "#EBF0F4",
-            overflowY: "auto",
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh]">
+        <DialogHeader>
+          <DialogTitle className="text-center">Update Profile</DialogTitle>
+        </DialogHeader>
+
+        <FormContainer
+          onSubmit={handleUpdateUser}
+          resolver={zodResolver(updateProfileSchema)}
+          defaultValues={{
+            username: updatedUser?.username || "",
+            email: updatedUser?.email || "",
+            name: updatedUser?.userProfile?.name || "",
+            profession: updatedUser?.userProfile?.profession || "",
+            company: updatedUser?.userProfile?.company || "",
+            phone: updatedUser?.userProfile?.phone || "",
+            street: updatedUser?.userProfile?.street || "",
+            city: updatedUser?.userProfile?.city || "",
+            country: updatedUser?.userProfile?.country || "",
+            bio: updatedUser?.userProfile?.bio || "",
           }}
         >
-          <PHForm
-            onSubmit={handleUpdateUser}
-            defaultValues={{
-              email: updatedUser?.email || "",
-              username: updatedUser?.username || "",
-              name: updatedUser?.name || "",
-              profession: updatedUser?.profession || "",
-              address: updatedUser?.address || "",
-            }}
-          >
-            <Stack spacing={4} my={1} marginBottom={5}>
-              <PHFileUploader
-                accept="image/*"
-                uploadType="single"
-                onFileUpload={handleImageUpload}
-              />
-              {imageUploadLoading && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
-                    Uploading image...
-                  </Typography>
-                </Box>
-              )}
-              {profileUrl && (
-                <Typography sx={{ color: "#ff793f", fontWeight: "500" }}>
-                  Image uploaded successfully!
-                </Typography>
-              )}
-              <PHInput
-                name="username"
-                label="Username"
-                type="text"
-                fullWidth={true}
-              />
-              <PHInput
-                name="email"
-                label="Email"
-                type="email"
-                fullWidth={true}
-              />
-              <PHInput name="name" label="Name" type="text" fullWidth={true} />
-              <PHInput
-                name="profession"
-                label="Profession"
-                type="text"
-                fullWidth={true}
-              />
-              <PHInput
-                name="address"
-                label="Address"
-                type="text"
-                fullWidth={true}
-              />
-            </Stack>
-            <Stack
-              direction="row"
-              sx={{ alignItems: "enter", justifyContent: "space-between" }}
-              spacing={5}
-            >
-              <Button fullWidth={true} type="submit">
-                Submit
-              </Button>
-              <Button fullWidth={true} onClick={() => onClose()}>
-                Cancel
-              </Button>
-            </Stack>
-          </PHForm>
-        </Box>
-      </Stack>
-    </Modal>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormInput label="Username" name="username" required />
+            <FormInput label="Email" name="email" type="email" required />
+            <FormInput label="Full Name" name="name" />
+            <FormInput label="Profession" name="profession" />
+            <FormInput label="Company" name="company" />
+            <FormInput label="Phone" name="phone" />
+            <FormInput label="Street" name="street" />
+            <FormInput label="City" name="city" />
+            <FormInput label="Country" name="country" />
+            <FormTextarea label="Bio" name="bio" />
+            <FormImageUploader name="images" label="Upload Image" required />
+          </div>
+
+          <div className="flex justify-end gap-4 mt-6">
+            <Button type="submit">Save Changes</Button>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+          </div>
+        </FormContainer>
+      </DialogContent>
+    </Dialog>
   );
 };
 

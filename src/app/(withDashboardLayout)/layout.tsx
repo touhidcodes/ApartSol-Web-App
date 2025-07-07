@@ -53,7 +53,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Button variant="ghost" size="icon" onClick={toggleSidebar}>
               <PanelRightOpen className="w-7 h-7" />
             </Button>
-            <span className="font-semibold text-lg">
+            <span className="font-semibold text-lg hidden md:block">
               <DynamicBreadcrumb />
             </span>
           </div>

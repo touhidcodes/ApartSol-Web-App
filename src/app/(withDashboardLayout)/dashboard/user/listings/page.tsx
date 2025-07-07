@@ -160,7 +160,7 @@ const MyPropertyListings = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">My Property Listings</h2>
-        <div className="text-sm text-gray-600">
+        <div className="hidden md:block text-sm text-gray-600">
           Total Properties: {totalItems}
         </div>
       </div>
@@ -169,13 +169,13 @@ const MyPropertyListings = () => {
       {isLoading ? (
         <DashboardSearchBarSkeleton />
       ) : (
-        <div className="bg-white rounded-lg shadow-md border">
+        <div className="hidden md:block bg-white rounded-lg shadow-md border">
           <div className="flex items-center justify-between">
             <div className="bg-[#1C2D37] text-white px-4 py-5 text-sm font-semibold flex items-center rounded-l-lg">
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Filter
             </div>
-            <div className="w-full mr-10">
+            <div className="w-full mr-10 overflow-hidden">
               <FormContainer
                 onSubmit={handleSubmitSearch}
                 defaultValues={filters}

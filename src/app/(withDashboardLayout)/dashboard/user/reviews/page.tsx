@@ -108,7 +108,9 @@ const AllReviewsPage = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">My Reviews</h2>
-        <div className="text-sm text-gray-600">Total Reviews: {totalItems}</div>
+        <div className="hidden md:block text-sm text-gray-600">
+          Total Reviews: {totalItems}
+        </div>
       </div>
       <DashboardReviewCardTable
         reviews={reviews}

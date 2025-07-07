@@ -65,7 +65,9 @@ export default function MyBookingsPage() {
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">My Bookings</h2>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Show:</span>
+          <span className="hidden md:block text-sm text-gray-600">
+            Total Bookings:
+          </span>
           <Select
             value={itemsPerPage.toString()}
             onValueChange={(value) => handleItemsPerPageChange(Number(value))}
