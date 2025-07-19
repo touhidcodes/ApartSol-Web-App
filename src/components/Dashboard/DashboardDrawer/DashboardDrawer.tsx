@@ -80,7 +80,7 @@ export default function DashboardDrawer({
                 Hi, {isLoading ? "Loading..." : userData?.username}
               </p>
               <h1 className="text-xl font-semibold text-[#00026E]">
-                Welcome to Flat Mate Finder
+                Welcome to APARTSOL
               </h1>
             </div>
 
