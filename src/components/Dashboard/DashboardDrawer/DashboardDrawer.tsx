@@ -1,163 +1,110 @@
 "use client";
 
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import SideBar from "../SideBar/SideBar";
-import { Avatar, Badge, Stack } from "@mui/material";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import { useState } from "react";
+import { Menu, Bell, UserCircle2, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   useGetSingleUserQuery,
   useGetUserWithProfileQuery,
 } from "@/redux/api/userApi";
+import SideBar from "../SideBar/SideBar";
 import AuthButton from "@/components/Custom/AuthButton.tsx/AuthButton";
+import clsx from "clsx";
 
 const drawerWidth = 300;
 
-const DashboardDrawer = ({ children }: { children: React.ReactNode }) => {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
-  const { data, isLoading } = useGetSingleUserQuery({});
+export default function DashboardDrawer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: userData, isLoading } = useGetSingleUserQuery({});
   const { data: userProfile } = useGetUserWithProfileQuery({});
-
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    setMobileOpen(false);
-  };
-
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false);
-  };
-
-  const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen);
-    }
-  };
-
   const placeholder =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUOdfo4lewXJYT_2xPo_Xu2Lj6XPn78X9UJA&s";
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "#EBF0F4", height: "full" }}>
-      {/* <CssBaseline /> */}
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          background: "#EBF0F4",
-          boxShadow: 0,
-          py: 1,
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon sx={{ color: "secondary.main" }} />
-          </IconButton>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
-            <Box>
-              <Typography
-                variant="body2"
-                noWrap
-                sx={{ color: "rgba(11, 17, 52, 0.6)" }}
-              >
-                Hi, {isLoading ? "Loading..." : data?.username}
-              </Typography>
-              <Typography variant="h6" noWrap sx={{ color: "#00026E" }}>
-                Welcome to Flat Mate Finder
-              </Typography>
-            </Box>
-            <Stack direction="row" gap={3} alignItems="center">
-              <Badge badgeContent={1} color="primary">
-                <IconButton sx={{ background: "#ffffff" }}>
-                  <NotificationsNoneIcon color="action" />
-                </IconButton>
-              </Badge>
-              <Avatar alt={"name"} src={userProfile?.image || placeholder} />
-              <AuthButton />
-              {/* <AccountMenu /> */}
-            </Stack>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onTransitionEnd={handleDrawerTransitionEnd}
-          onClose={handleDrawerClose}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          <SideBar isCollapsed={false} onClose={handleDrawerClose} />
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          <SideBar isCollapsed={false} onClose={handleDrawerClose} />
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
-        <Box
-          style={{
-            backgroundColor: "#EBF0F4",
-            minHeight: "100vh",
-            width: "100%",
-          }}
-        >
-          {children}
-        </Box>
-      </Box>
-    </Box>
-  );
-};
+    <div className="flex min-h-screen bg-[#EBF0F4]">
+      {/* Sidebar - Desktop */}
+      <aside className="hidden sm:block w-[300px] border-r">
+        <SideBar isCollapsed={false} onClose={() => {}} />
+      </aside>
 
-export default DashboardDrawer;
+      {/* Sidebar - Mobile */}
+      <div
+        className={clsx(
+          "fixed inset-0 z-50 bg-black bg-opacity-40 sm:hidden transition-opacity",
+          {
+            hidden: !mobileOpen,
+          }
+        )}
+        onClick={() => setMobileOpen(false)}
+      />
+      <aside
+        className={clsx(
+          "fixed top-0 left-0 z-50 h-full w-[300px] bg-white border-r shadow-md transition-transform sm:hidden",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <div className="flex items-center justify-between px-4 py-3 border-b">
+          <h2 className="text-lg font-semibold">Menu</h2>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setMobileOpen(false)}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+        <SideBar isCollapsed={false} onClose={() => setMobileOpen(false)} />
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1">
+        {/* Top App Bar */}
+        <div className="sticky top-0 z-10 bg-[#EBF0F4] border-b px-4 py-3 flex justify-between items-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(true)}
+            className="sm:hidden"
+          >
+            <Menu className="text-muted-foreground" />
+          </Button>
+
+          <div className="flex-1 flex justify-between items-center">
+            <div className="ml-2">
+              <p className="text-sm text-muted-foreground">
+                Hi, {isLoading ? "Loading..." : userData?.username}
+              </p>
+              <h1 className="text-xl font-semibold text-[#00026E]">
+                Welcome to Flat Mate Finder
+              </h1>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Button size="icon" variant="ghost" className="relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-primary" />
+              </Button>
+
+              <Avatar>
+                <AvatarImage src={userProfile?.image || placeholder} />
+                <AvatarFallback>
+                  <UserCircle2 className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
+
+              <AuthButton />
+            </div>
+          </div>
+        </div>
+
+        {/* Page Content */}
+        <div className="p-4">{children}</div>
+      </main>
+    </div>
+  );
+}
