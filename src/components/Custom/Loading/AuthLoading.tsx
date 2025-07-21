@@ -1,27 +1,18 @@
-import { Box, CircularProgress } from "@mui/material";
+"use client";
+
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const AuthLoading = () => {
   return (
-    <Box
-      sx={{
-        position: "fixed",
-        top: 0,
-        left: -17,
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(255, 255, 255, 0.2)",
-        backdropFilter: "blur(10px)",
-        zIndex: 9999,
-        margin: 0,
-        padding: 0,
-        boxSizing: "border-box",
-      }}
+    <div
+      className={cn(
+        "fixed inset-0 z-[9999] flex items-center justify-center",
+        "bg-white/20 backdrop-blur-sm"
+      )}
     >
-      <CircularProgress size={60} thickness={3} />
-    </Box>
+      <Loader2 className="w-14 h-14 animate-spin text-gray-700" />
+    </div>
   );
 };
 
