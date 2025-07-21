@@ -1,19 +1,10 @@
-import { Box } from "@mui/material";
+"use client";
 
 const Loading = () => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        background: "#EBF0F4",
-        color: "#00026E",
-      }}
-    >
+    <div className="flex justify-center items-center h-screen bg-[#EBF0F4] text-[#00026E] text-xl font-medium">
       Loading...
-    </Box>
+    </div>
   );
 };
 
