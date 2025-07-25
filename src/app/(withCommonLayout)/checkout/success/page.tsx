@@ -112,111 +112,71 @@
 
 // export default PaymentSuccessPage;
 
-"use client";
-
-import { useEffect, useState } from "react";
+// components/SuccessPage.tsx
+import { CheckCircle } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Home, PlusCircle, X } from "lucide-react";
-import Link from "next/link";
 
 const steps = [
-  { label: "Sites selected", done: true },
-  { label: "Payment received", done: true },
-  { label: "Processing report", done: false },
+  { label: "Sites selected", completed: true },
+  { label: "Payment received", completed: true },
+  { label: "Processing report", completed: false },
 ];
 
-const PaymentSuccessPage = () => {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => setShow(true), 100);
-  }, []);
-
+export default function SuccessPage() {
   return (
-    <div className="min-h-screen bg-[#0D3D2F] flex items-center justify-center px-4">
-      <div className="w-full max-w-5xl">
-        {/* Notification */}
-        <div className="bg-[#EBF4EC] text-green-900 flex items-center justify-between px-6 py-3 rounded-t-xl text-sm font-medium">
-          <span>Almost there Prasad!</span>
-          <button className="hover:text-red-500 transition-colors">
-            <X className="w-4 h-4" />
-          </button>
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-between px-6 py-12 bg-white">
+      {/* Left Side */}
+      <div className="max-w-xl space-y-6">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-green-800">
+            Payment successful
+          </h1>
+          <p className="text-sm md:text-base text-muted-foreground mt-2">
+            Thank you for choosing Croply. Your custom reports will be generated
+            within two business days.
+          </p>
         </div>
 
-        {/* Main Card */}
-        <Card className="rounded-b-xl border-t-0">
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 py-10 px-8 md:px-12">
-            {/* Left Section */}
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                Payment successful
-              </h1>
-              <p className="text-gray-600 mb-6">
-                Thank you for choosing Croply. Your custom Reports will be
-                generated within two business days.
-              </p>
-
-              {/* Stepper */}
-              <div className="flex items-center justify-between mb-8">
-                {steps.map((step, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <div
-                      className={`w-6 h-6 flex items-center justify-center text-xs rounded-full font-bold ${
-                        step.done
-                          ? "bg-green-600 text-white"
-                          : "border border-gray-400 text-gray-400"
-                      }`}
-                    >
-                      {step.done ? "✓" : "i"}
-                    </div>
-                    <span className="text-xs text-gray-600">{step.label}</span>
-                    {idx !== steps.length - 1 && (
-                      <div
-                        className={`h-0.5 w-5 ${
-                          steps[idx + 1]?.done ? "bg-green-500" : "bg-gray-300"
-                        }`}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4">
-                <Link href="/new-site">
-                  <Button className="bg-green-600 hover:bg-green-700 text-white">
-                    <PlusCircle className="w-4 h-4 mr-2" />
-                    New Site
-                  </Button>
-                </Link>
-                <Link href="/">
-                  <Button
-                    variant="outline"
-                    className="text-green-700 border-green-700 hover:bg-green-100"
-                  >
-                    <Home className="w-4 h-4 mr-2" />
-                    Back Home
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Illustration */}
-            <div className="flex justify-center items-center">
-              <img
-                src="/success-illustration.png" // Replace with your actual image
-                alt="Success Illustration"
-                className={`w-64 md:w-72 transition-all duration-1000 ${
-                  show ? "opacity-100 scale-100" : "opacity-0 scale-90"
+        {/* Timeline */}
+        <div className="space-y-8 border-l-2 border-gray-300 pl-4 mt-8 flex">
+          {steps.map((step, idx) => (
+            <div key={idx} className="relative pl-4">
+              <div
+                className={`absolute -left-6 top-0 w-4 h-4 rounded-full ${
+                  step.completed ? "bg-green-600" : "bg-gray-300"
+                } border-2 border-white`}
+              ></div>
+              <div
+                className={`flex items-center gap-2 font-medium ${
+                  step.completed ? "text-green-800" : "text-gray-500"
                 }`}
-              />
+              >
+                {step.completed && (
+                  <CheckCircle className="w-4 h-4 text-green-600" />
+                )}
+                <span>{step.label}</span>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          ))}
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-4 mt-8">
+          <Button className="bg-green-700 hover:bg-green-800">New Site</Button>
+          <Button variant="outline">Back Home</Button>
+        </div>
+      </div>
+
+      {/* Right Side Image */}
+      <div className="hidden md:block mt-12 md:mt-0">
+        <Image
+          src="/success-illustration.png" // replace with actual path
+          alt="Success Illustration"
+          width={300}
+          height={300}
+        />
       </div>
     </div>
   );
-};
-
-export default PaymentSuccessPage;
+}
