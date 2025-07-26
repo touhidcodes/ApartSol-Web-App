@@ -79,7 +79,7 @@ const AuthPageContent = () => {
     try {
       setLoading(true);
       const res = await userLogin(values);
-      console.log(res);
+      // console.log(res);
       if (res?.data?.token) {
         toast.success(res?.message);
         router.push("/");
