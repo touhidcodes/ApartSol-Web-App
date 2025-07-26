@@ -11,26 +11,17 @@ import { USER_ROLE } from "@/constants/role";
 import Image from "next/image";
 
 const Navbar = () => {
-  const user = useUserInfo();
+  const { user, loading } = useUserInfo();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const currentPath = usePathname();
   const isHomepage = currentPath === "/";
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [user]);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  // if (isLoading) {
-  //   return <AuthLoading />;
-  // }
-
   const dashboardPath =
-    user?.role === "ADMIN"
+    user?.role === USER_ROLE.ADMIN
       ? "/dashboard/admin/overview"
-      : user?.role === "USER"
+      : user?.role === USER_ROLE.USER
       ? "/dashboard/user/overview"
       : "/login";
 
@@ -51,8 +42,6 @@ const Navbar = () => {
             className="object-contain"
             priority
           />
-
-          {/* Text */}
           <span className="flex flex-col leading-4">
             <span className="text-white">APARTSOL</span>
             <span className="text-xs text-gray-400 tracking-wide pt-1">
@@ -75,18 +64,19 @@ const Navbar = () => {
           <Link href="/about" className="hover:text-gray-300">
             About Us
           </Link>
-          {user ? (
-            <Link
-              href={dashboardPath}
-              className="hover:text-gray-300 capitalize"
-            >
-              {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
-            </Link>
-          ) : (
-            <Link href="/auth?type=register" className="hover:text-gray-300">
-              Register
-            </Link>
-          )}
+          {!loading &&
+            (user ? (
+              <Link
+                href={dashboardPath}
+                className="hover:text-gray-300 capitalize"
+              >
+                {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
+              </Link>
+            ) : (
+              <Link href="/auth?type=register" className="hover:text-gray-300">
+                Register
+              </Link>
+            ))}
         </nav>
 
         {/* Action Buttons */}
@@ -137,25 +127,26 @@ const Navbar = () => {
           >
             About Us
           </Link>
-          {user ? (
-            <Link
-              href="/dashboard/home"
-              className="block hover:text-gray-300 capitalize"
-              onClick={toggleMenu}
-            >
-              {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
-            </Link>
-          ) : (
-            <Link
-              href="/register"
-              className="block hover:text-gray-300"
-              onClick={toggleMenu}
-            >
-              Register
-            </Link>
-          )}
+          {!loading &&
+            (user ? (
+              <Link
+                href={dashboardPath}
+                className="block hover:text-gray-300 capitalize"
+                onClick={toggleMenu}
+              >
+                {user?.role === USER_ROLE.ADMIN ? "Dashboard" : "My Profile"}
+              </Link>
+            ) : (
+              <Link
+                href="/auth?type=register"
+                className="block hover:text-gray-300"
+                onClick={toggleMenu}
+              >
+                Register
+              </Link>
+            ))}
           <Link
-            href="/post"
+            href="/properties/add"
             className="block hover:text-gray-300"
             onClick={toggleMenu}
           >
