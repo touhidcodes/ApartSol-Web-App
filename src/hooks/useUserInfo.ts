@@ -15,6 +15,7 @@ const useUserInfo = () => {
     const fetchUser = async () => {
       try {
         const authToken = await getCookie(authKey);
+        console.log(authToken);
 
         if (authToken) {
           const decoded = jwtDecode(authToken.value) as DecodedUser;
@@ -40,33 +41,3 @@ const useUserInfo = () => {
 };
 
 export default useUserInfo;
-
-// "use client";
-
-// import { jwtDecode, JwtPayload } from "jwt-decode";
-// import Cookies from "js-cookie";
-// import { authKey } from "@/constants/authKey";
-
-// interface DecodedData extends JwtPayload {
-//   role?: string;
-//   email?: string;
-//   username?: string;
-// }
-
-// const useUserInfo = () => {
-//   const authToken = Cookies.get(authKey);
-//   console.log(authToken);
-
-//   if (authToken) {
-//     const decodedData: DecodedData = jwtDecode<DecodedData>(authToken);
-
-//     return {
-//       ...decodedData,
-//       role: decodedData.role || "",
-//     };
-//   }
-
-//   return null; // Return null if no token found
-// };
-
-// export default useUserInfo;

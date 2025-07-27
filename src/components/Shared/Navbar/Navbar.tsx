@@ -15,7 +15,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const currentPath = usePathname();
   const isHomepage = currentPath === "/";
-
+  console.log(user);
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   const dashboardPath =

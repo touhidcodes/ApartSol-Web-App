@@ -1,8 +1,9 @@
 // "use server";
 
 import { FieldValues } from "react-hook-form";
-import setAccessToken from "./setAccessToken";
 import { toast } from "sonner";
+import { setCookie } from "@/utils/nextCookies";
+import { authKey } from "@/constants/authKey";
 
 export const userLogin = async (data: FieldValues) => {
   // TODO: change URL before build
@@ -14,7 +15,7 @@ export const userLogin = async (data: FieldValues) => {
     },
     body: JSON.stringify(data),
     credentials: "include",
-    // cache: "no-store",
+    cache: "no-store",
   });
   const userInfo = await res.json();
 
@@ -23,8 +24,7 @@ export const userLogin = async (data: FieldValues) => {
   }
 
   if (userInfo.data.token) {
-    // setToLocalStorage(authKey, userInfo.data.token);
-    setAccessToken(userInfo.data.token);
+    setCookie(authKey, userInfo.data.token);
   }
 
   return userInfo;
