@@ -6,9 +6,9 @@ import { ArrowRight, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import AuthButton from "@/components/Custom/AuthButton.tsx/AuthButton";
-import useUserInfo from "@/hooks/useUserInfo";
 import { USER_ROLE } from "@/constants/role";
 import Image from "next/image";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
 const Navbar = () => {
   const { user, loading } = useUserInfo();

@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { logoutUser } from "@/services/actions/logoutUser";
 import Link from "next/link";
 import { useState } from "react";
-import useUserInfo from "@/hooks/useUserInfo";
 import TextLoading from "../Loading/TextLoading";
 import { Button } from "@/components/ui/button";
 import { LogIn, LogOut } from "lucide-react";
+import { useUserInfo } from "@/hooks/useUserInfo";
+import { userLogout } from "@/services/actions/logoutUser";
 
 const AuthButton = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ const AuthButton = () => {
 
   const handleLogOut = async () => {
     setIsLoggingOut(true);
-    await logoutUser();
+    await userLogout();
     router.push("/auth");
   };
 
