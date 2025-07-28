@@ -16,17 +16,15 @@
 "use client";
 
 import { useState } from "react";
-import { PanelLeft, PanelRightOpen } from "lucide-react";
+import { PanelRightOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Sidebar from "@/components/Dashboard/SideBar/SideBar";
 import DynamicBreadcrumb from "@/components/Shared/Breadcrumb/DynamicDashboardBreadcrumb";
-import useUserInfo from "@/hooks/useUserInfo";
 import DashboardAuthButton from "@/components/Custom/DashboardAuthButton/DashboardAuthButton";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const user = useUserInfo();
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 

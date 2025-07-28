@@ -11,9 +11,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import useUserInfo from "@/hooks/useUserInfo";
 import { getSidebarLinks } from "./SideBarLinks";
-import useAuthUser from "../../../hooks/useAuthUserInfo";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
 type SidebarProps = {
   isCollapsed: boolean;
@@ -23,8 +22,8 @@ type SidebarProps = {
 export default function Sidebar({ isCollapsed, onClose }: SidebarProps) {
   const pathname = usePathname();
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const { user, loading } = useUserInfo();
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const { user } = useAuthUser();
 
   // const fetchUnreadCount = async () => {
   //   try {
