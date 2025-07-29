@@ -51,13 +51,13 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    getTotalFlatPostByUser: build.query({
+    getTotalPropertyPostByUser: build.query({
       query: () => ({
         url: `/dashboard/total-flats-user`,
         method: "GET",
       }),
     }),
-    getFlatPostByUser: build.query({
+    getPropertyPostByUser: build.query({
       query: () => ({
         url: `/dashboard/flats-user`,
         method: "GET",
@@ -224,8 +224,8 @@ export const {
   useGetTotalBookingsCountQuery,
   useGetTotalBookingsByUserQuery,
   useGetBookingsByUserQuery,
-  useGetTotalFlatPostByUserQuery,
-  useGetFlatPostByUserQuery,
+  useGetTotalPropertyPostByUserQuery,
+  useGetPropertyPostByUserQuery,
   useGetUserDashboardStatsQuery,
 
   // Admin

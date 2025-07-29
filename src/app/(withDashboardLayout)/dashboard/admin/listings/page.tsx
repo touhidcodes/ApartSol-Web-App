@@ -74,8 +74,8 @@ const AdminPropertyListingsPage = () => {
   }, [currentPage, itemsPerPage, filters]);
 
   const { data, isLoading } = useGetAllPropertiesQuery(queryParams);
-  const [updateFlat] = useUpdatePropertyMutation();
-  const [deleteFlat] = useDeletePropertyMutation();
+  const [updateProperty] = useUpdatePropertyMutation();
+  const [deleteProperty] = useDeletePropertyMutation();
 
   const properties = data?.data || [];
   const totalItems = data?.meta?.total ?? 0;
@@ -120,7 +120,7 @@ const AdminPropertyListingsPage = () => {
         advanceAmount: Number(updatedProperty.advanceAmount),
       };
 
-      const res = await updateFlat({ propertyId, propertyData });
+      const res = await updateProperty({ propertyId, propertyData });
       if (res?.data?.id) toast.success("Property updated successfully!");
     } catch (err) {
       console.error(err);
@@ -129,7 +129,7 @@ const AdminPropertyListingsPage = () => {
 
   const handleDelete = async (propertyId: string) => {
     try {
-      const res = await deleteFlat(propertyId);
+      const res = await deleteProperty(propertyId);
       if (res?.data?.id) toast.success("Property deleted successfully!");
     } catch (err) {
       console.error("Failed to delete property", err);
