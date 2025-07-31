@@ -42,7 +42,6 @@ import { FieldValues } from "react-hook-form";
 import { useCreateReviewMutation } from "@/redux/api/reviewApi";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
-import useUserInfo from "@/hooks/useUserInfo";
 import { TPropertyWithUserAndReviews } from "@/types/Property";
 import PropertyDetailsSkeleton from "@/components/Skeleton/PropertyDetailsSkeleton/PropertyDetailsSkeleton";
 import ThumbnailGallery from "@/components/Custom/ThumbnailGallery/ThumbnailGallery";
@@ -52,6 +51,7 @@ import { FeaturesAmenities } from "@/components/Custom/FeatureAmenities/FeatureA
 import { useGetPropertyByIdQuery } from "@/redux/api/propertiesApi";
 import Link from "next/link";
 import DynamicBreadcrumb from "@/components/Shared/Breadcrumb/DynamicBreadcrumb";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
 type PropTypes = {
   params: {
@@ -60,7 +60,7 @@ type PropTypes = {
 };
 
 export default function PropertyDetailPage({ params }: PropTypes) {
-  const userInfo = useUserInfo();
+  const { user } = useUserInfo();
   const [createReview] = useCreateReviewMutation();
   const { data, isLoading } = useGetPropertyByIdQuery(params.id);
   const [property, setProperty] = useState<
@@ -499,7 +499,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                     className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                   <Button
-                    disabled={!userInfo || userInfo.role === "ADMIN"}
+                    disabled={!user || user.role === "ADMIN"}
                     className="w-full bg-white text-slate-800 hover:bg-slate-100 font-semibold"
                   >
                     Submit Now
@@ -561,7 +561,7 @@ export default function PropertyDetailPage({ params }: PropTypes) {
                     className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                   <Button
-                    disabled={!userInfo || userInfo.role === "ADMIN"}
+                    disabled={!user || user.role === "ADMIN"}
                     className="w-full bg-white text-slate-800 hover:bg-slate-100 font-semibold"
                   >
                     Submit Now

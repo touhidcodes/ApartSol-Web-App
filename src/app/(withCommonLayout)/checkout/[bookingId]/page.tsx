@@ -111,7 +111,7 @@ const CheckoutPage = () => {
         finalAmount: total,
       };
       const res = await createPayment(paymentData);
-
+      console.log(res);
       if (res?.data?.data?.url) {
         toast.success("Redirecting to payment...");
         router.push(`${res?.data?.data?.url}`);
