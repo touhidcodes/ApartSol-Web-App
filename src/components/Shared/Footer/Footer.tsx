@@ -50,30 +50,27 @@ export default function Footer() {
         <div className="grid md:grid-cols-[2fr_1fr_1fr] gap-10">
           {/* Logo and Info */}
           <div className="flex flex-col">
-            <div>
-              {/* Logo */}
-              <Link
-                href="/"
-                className="flex items-center gap-2 text-2xl font-bold"
-              >
+            {/* Logo */}
+            <Link href="/">
+              <div className="flex gap-2 text-2xl font-bold">
+                {/* Logo */}
                 <Image
-                  src="/assets/images/logo/white.png"
+                  src="/assets/images/logo/golden.png"
                   alt="ApartSol Logo"
-                  width={50}
-                  height={50}
+                  width={40}
+                  height={40}
                   className="object-contain"
                   priority
                 />
-
-                {/* Text */}
-                <span className="flex flex-col leading-4">
+                <div className="flex flex-col justify-center items-center ml-1">
                   <span className="text-white">APARTSOL</span>
-                  <span className="text-xs text-gray-400 tracking-wide pt-1">
+                  <span className="text-xs text-gray-400 tracking-wide">
                     LIVING SOLUTIONS
                   </span>
-                </span>
-              </Link>
-            </div>
+                </div>
+              </div>
+            </Link>
+
             <p className="text-sm text-gray-400 mt-4 max-w-sm">
               ApartSol simplifies apartment renting and buying with verified
               listings, secure transactions, and expert support making your

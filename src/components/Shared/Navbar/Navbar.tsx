@@ -32,22 +32,24 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex justify-between items-center py-3 px-4 md:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 text-2xl font-bold">
-          <Image
-            src="/assets/images/logo/white.png"
-            alt="ApartSol Logo"
-            width={50}
-            height={50}
-            className="object-contain"
-            priority
-          />
-          <span className="flex flex-col leading-4">
-            <span className="text-white">APARTSOL</span>
-            <span className="text-xs text-gray-400 tracking-wide pt-1">
-              LIVING SOLUTIONS
-            </span>
-          </span>
+        <Link href="/">
+          <div className="flex items-center justify-center gap-2 text-2xl font-bold">
+            {/* Logo */}
+            <Image
+              src="/assets/images/logo/golden.png"
+              alt="ApartSol Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+              priority
+            />
+            <div className="flex flex-col justify-center items-center ml-1">
+              <span className="text-white">APARTSOL</span>
+              <span className="text-xs text-gray-400 tracking-wide">
+                LIVING SOLUTIONS
+              </span>
+            </div>
+          </div>
         </Link>
 
         {/* Desktop Nav Links */}
