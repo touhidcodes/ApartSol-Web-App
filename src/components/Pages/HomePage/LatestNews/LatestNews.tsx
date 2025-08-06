@@ -15,6 +15,7 @@ import { useGetAllBlogsQuery } from "@/redux/api/blogApi";
 import { TBlog } from "@/types/blog";
 import { calculateReadTime, formatDate, truncateText } from "@/lib/utils";
 import Link from "next/link";
+import { NewsCardSkeleton } from "@/components/Skeleton/NewsCardSkeleton/NewsCardSkeleton";
 
 const LatestNews = () => {
   const [blogs, setBlogs] = useState<TBlog[]>([]);
@@ -71,72 +72,85 @@ const LatestNews = () => {
           </div>
         </div>
 
-        {/* Blog Carousel */}
-        <Carousel
-          className="w-full"
-          plugins={[
-            Autoplay({
-              delay: 5000,
-              stopOnInteraction: true,
-            }),
-          ]}
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-        >
-          <CarouselContent className="">
-            {blogs.map((blog) => (
-              <CarouselItem key={blog.id} className="px-2 md:px-5 md:basis-1/2">
-                <Card className="bg-[#1C2D37] border-none shadow-none rounded-2xl overflow-hidden transition-transform duration-300 transform hover:scale-[1.02] h-full">
-                  {/* Image */}
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={blog.image || placeholder}
-                      alt={blog.title}
-                      fill
-                      className="object-cover rounded-2xl"
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <CardContent className="py-6">
-                    {/* Meta Info */}
-                    <div className="flex items-center gap-6 text-slate-400 text-sm mb-3">
-                      <div className="flex items-center gap-1">
-                        <CalendarDays className="w-4 h-4" />
-                        {formatDate(blog.updatedAt)}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {calculateReadTime(blog.content)}
-                      </div>
+        {/* News Carousel */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-10">
+            {[...Array(2)].map((_, index) => (
+              <div key={index} className="px-2 md:px-5">
+                <NewsCardSkeleton />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Carousel
+            className="w-full"
+            plugins={[
+              Autoplay({
+                delay: 5000,
+                stopOnInteraction: true,
+              }),
+            ]}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+          >
+            <CarouselContent className="">
+              {blogs.map((blog) => (
+                <CarouselItem
+                  key={blog.id}
+                  className="px-2 md:px-5 md:basis-1/2"
+                >
+                  <Card className="bg-[#1C2D37] border-none shadow-none rounded-2xl overflow-hidden transition-transform duration-300 transform hover:scale-[1.02] h-full">
+                    {/* Image */}
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={blog.image || placeholder}
+                        alt={blog.title}
+                        fill
+                        className="object-cover rounded-2xl"
+                      />
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-xl font-semibold text-white mb-3 line-clamp-2 leading-tight">
-                      {blog.title}
-                    </h3>
+                    {/* Content */}
+                    <CardContent className="py-6">
+                      {/* Meta Info */}
+                      <div className="flex items-center gap-6 text-slate-400 text-sm mb-3">
+                        <div className="flex items-center gap-1">
+                          <CalendarDays className="w-4 h-4" />
+                          {formatDate(blog.updatedAt)}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          {calculateReadTime(blog.content)}
+                        </div>
+                      </div>
 
-                    {/* Description */}
-                    <p className="text-slate-300 text-sm leading-relaxed mb-6 line-clamp-3">
-                      {truncateText(blog.content, 150)}
-                    </p>
+                      {/* Title */}
+                      <h3 className="text-xl font-semibold text-white mb-3 line-clamp-2 leading-tight">
+                        {blog.title}
+                      </h3>
 
-                    {/* CTA Button */}
-                    <Button
-                      variant="outline"
-                      className="bg-transparent border-slate-600 text-white hover:bg-white hover:text-slate-800 hover:border-white rounded-full px-6 py-2 font-medium transition-all duration-200 group"
-                    >
-                      Read More
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+                      {/* Description */}
+                      <p className="text-slate-300 text-sm leading-relaxed mb-6 line-clamp-3">
+                        {truncateText(blog.content, 150)}
+                      </p>
+
+                      {/* CTA Button */}
+                      <Button
+                        variant="outline"
+                        className="bg-transparent border-slate-600 text-white hover:bg-white hover:text-slate-800 hover:border-white rounded-full px-6 py-2 font-medium transition-all duration-200 group"
+                      >
+                        Read More
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        )}
       </div>
 
       {/* Clamp Utility */}
