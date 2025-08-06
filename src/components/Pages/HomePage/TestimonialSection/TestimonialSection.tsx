@@ -13,6 +13,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { useGetAllReviewsQuery } from "@/redux/api/reviewApi";
 import { TReviewWithUser } from "@/types/Review";
 import { RenderStars } from "@/components/Custom/RenderStars/RenderStars";
+import { TestimonialSkeleton } from "@/components/Skeleton/TestimonialSkeleton/TestimonialSkeleton";
 
 const TestimonialSection = () => {
   const [reviews, setReviews] = useState<TReviewWithUser[]>([]);
@@ -47,68 +48,77 @@ const TestimonialSection = () => {
             </p>
           </div>
         </div>
+        {/* Testimonial Carousel */}
+        {isLoading ? (
+          <div className="w-full overflow-hidden">
+            <div className="flex gap-0">
+              {[...Array(3)].map((_, index) => (
+                <TestimonialSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <Carousel
+            className="w-full"
+            plugins={[
+              Autoplay({
+                delay: 5000,
+                stopOnInteraction: true,
+              }),
+            ]}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+          >
+            <CarouselContent>
+              {reviews.map((review) => (
+                <CarouselItem key={review.id} className="px-3 md:basis-1/3">
+                  <Card className="bg-white text-slate-800 border-0 rounded-2xl overflow-hidden shadow-md h-full relative">
+                    <CardContent className="p-6 flex flex-col justify-between h-full">
+                      {/* Comment */}
+                      <p className="text-sm leading-relaxed mb-4 relative z-10">
+                        {review.comment}
+                      </p>
 
-        {/* Blog Carousel */}
-        <Carousel
-          className="w-full"
-          plugins={[
-            Autoplay({
-              delay: 5000,
-              stopOnInteraction: true,
-            }),
-          ]}
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-        >
-          <CarouselContent className="">
-            {reviews.map((review) => (
-              <CarouselItem key={review.id} className="px-3 md:basis-1/3">
-                <Card className="bg-white text-slate-800 border-0 rounded-2xl overflow-hidden shadow-md h-full relative">
-                  <CardContent className="p-6 flex flex-col justify-between h-full">
-                    {/* Comment */}
-                    <p className="text-sm leading-relaxed mb-4 relative z-10">
-                      {review.comment}
-                    </p>
+                      {/* Quote Icon */}
+                      <Quote className="absolute bottom-6 right-6 text-slate-200 w-12 h-12 z-0" />
 
-                    {/* Quote Icon */}
-                    <Quote className="absolute bottom-6 right-6 text-slate-200 w-12 h-12 z-0" />
-
-                    {/* Star Ratings */}
-                    <div className="flex items-center gap-1 mt-auto z-10">
-                      {RenderStars(review.rating)}
-                    </div>
-
-                    {/* User Info */}
-                    <div className="flex items-center gap-3 mt-4 z-10">
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <Image
-                          src={review.user?.UserProfile?.image || placeholder}
-                          alt={review.user?.username || "User"}
-                          width={40}
-                          height={40}
-                          className="object-cover"
-                        />
+                      {/* Star Ratings */}
+                      <div className="flex items-center gap-1 mt-auto z-10">
+                        {RenderStars(review.rating)}
                       </div>
-                      <div>
-                        <p className="text-sm font-semibold">
-                          {review.user?.UserProfile?.name ||
-                            review.user?.username}
-                        </p>
-                        <p className="text-xs text-gray-500 capitalize">
-                          {review.user?.role === "AGENT"
-                            ? "Verified Property Advisor"
-                            : "Registered Member"}
-                        </p>
+
+                      {/* User Info */}
+                      <div className="flex items-center gap-3 mt-4 z-10">
+                        <div className="w-10 h-10 rounded-full overflow-hidden">
+                          <Image
+                            src={review.user?.UserProfile?.image || placeholder}
+                            alt={review.user?.username || "User"}
+                            width={40}
+                            height={40}
+                            className="object-cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">
+                            {review.user?.UserProfile?.name ||
+                              review.user?.username}
+                          </p>
+                          <p className="text-xs text-gray-500 capitalize">
+                            {review.user?.role === "AGENT"
+                              ? "Verified Property Advisor"
+                              : "Registered Member"}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        )}
       </div>
 
       {/* Clamp Utility */}
