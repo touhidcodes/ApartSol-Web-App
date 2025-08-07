@@ -23,7 +23,7 @@ const Navbar = () => {
       ? "/dashboard/admin/overview"
       : user?.role === USER_ROLE.USER
       ? "/dashboard/user/overview"
-      : "/login";
+      : "/auth";
 
   return (
     <header
